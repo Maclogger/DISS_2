@@ -1,0 +1,87 @@
+<div class="card rounded-3 bg-dark p-4 text-white " style="width: 30rem; min-height: 50rem;">
+    <h3>@Headline</h3>
+
+    @ChildContent
+
+    <button class="btn btn-primary mt-3" @onclick="OnInitialize" >
+        @if (Generator is null)
+        {
+            <span>Initialize Generator</span>
+        }
+        else
+        {
+            <span>Reinitialize Generator</span>
+        }
+    </button>
+    <button class="btn btn-primary mt-3" @onclick="OnGenerate" disabled="@(Generator is null)">Generate</button>
+
+
+    <label class="mt-3">Count:</label>
+    <input class="form-control" type="number" @bind="CountToGenerate" min="1" step="1"/>
+
+    <label class="mt-3">Generated values:</label>
+    <textarea readonly rows="5" class="form-control">
+        @GetPrintValuesForTextArea()
+    </textarea>
+
+    <GeneratorTesterComp T="T" Generator="Generator"/>
+</div>
+
+@using DISS_2.BackEnd
+@using DISS_2.BackEnd.Generators
+@typeparam T
+
+@code {
+    [Parameter, EditorRequired] public string Headline { get; set; } = "";
+
+    [Parameter, EditorRequired] public RenderFragment? ChildContent { get; set; }
+
+    [Parameter, EditorRequired] public required Func<Generator<T>?> Initialize { get; set; }
+
+    [Parameter, EditorRequired] public required Func<bool> CouldBeInitialized { get; set; }
+
+    [Parameter, EditorRequired] public required Generator<T>? Generator { get; set; }
+
+    [Parameter] public int CountToGenerate { get; set; } = 10;
+
+    private void OnGenerate()
+    {
+        if (Generator == null)
+        {
+            throw new ArgumentException("Generator was not initialized yet!");
+        }
+
+        for (int i = 0; i < CountToGenerate; i++)
+        {
+            Generator.Generate();
+            /*
+            Console.WriteLine($"Value: {value?.ToString()}");
+            #1#
+            */
+        }
+    }
+
+    private void OnInitialize()
+    {
+        Generator = Initialize();
+    }
+
+
+    private string GetPrintValuesForTextArea()
+    {
+        List<T> data = Generator?.Data ?? new List<T>();
+        int count = data.Count;
+        int limit = Config.MaxPrintValuesInTextArea;
+        IEnumerable<T> itemsToPrint = count <= limit ? data : data.Take(limit);
+
+        if (typeof(T) == typeof(double))
+        {
+            IEnumerable<string> formatted = itemsToPrint
+                .Cast<double>()
+                .Select(x => x.ToString(Config.FloatFormat));
+            return string.Join(", ", formatted) + (count > limit ? "..." : "");
+        }
+
+        return string.Join(", ", itemsToPrint) + (count > limit ? "..." : "");
+    }
+}
