@@ -2,13 +2,10 @@
 @using DISS_2.BackEnd
 @using DISS_2.BackEnd.Generators
 @using DISS_2.BackEnd.Generators.Empiric
+@using DISS_2.BackEnd.Generators.Exponential
+@using DISS_2.BackEnd.Generators.Triangular
 @using DISS_2.BackEnd.Generators.Uniform
 @using DISS_2.Components.Basic
-@*@using DISS_2.BackEnd
-@using DISS_2.BackEnd.Generators
-@using DISS_2.BackEnd.Generators.Empiric
-@using DISS_2.BackEnd.Generators.Uniform
-@using DISS_2.Components.Basic*@
 @rendermode InteractiveServer
 
 <h1 class="">Tester</h1>
@@ -46,7 +43,7 @@
                            Initialize="@(() => InitializeEmpiricGenerator(_empiricDiscreteRows, true))"
                            Generator="MainApp.Instance.Generators.EmpiricDiscreteGenerator"
 
-                           CouldBeInitialized="() => CouldBeDiscreteEmpiricInitialized()">
+                           CouldBeInitialized="() => { return true; }">
                 <div class="container">
                     @foreach (var row in _empiricDiscreteRows)
                     {
@@ -68,7 +65,7 @@
             <GeneratorCard Headline="Real Empiric"
                            Initialize="@(() => InitializeEmpiricGenerator(_empiricRealRows, false))"
                            Generator="MainApp.Instance.Generators.EmpiricRealGenerator"
-                           CouldBeInitialized="() => CouldBeRealEmpiricInitialized()">
+                           CouldBeInitialized="() => { return true; }">
                 <div class="container">
                     @foreach (var row in _empiricRealRows)
                     {
@@ -81,15 +78,43 @@
                     </div>
                 </div>
             </GeneratorCard>
+
+            <GeneratorCard Headline="Discrete Triangular"
+                           Initialize="@(() => InitializeTriangularGenerator(MinTriangularDisc, ModTriangularDisc, MaxTriangularDisc))"
+                           Generator="MainApp.Instance.Generators.TriangularIntGenerator"
+                           CouldBeInitialized="() => { return true; }">
+                <label class="mt-3">Min:</label>
+                <input class="form-control" type="number" @bind="MinTriangularDisc" @bind:event="oninput" step="1"/>
+
+                <label class="mt-3">Mod:</label>
+                <input class="form-control" type="number" @bind="ModTriangularDisc" @bind:event="oninput" step="1"/>
+
+                <label class="mt-3">Max:</label>
+                <input class="form-control" type="number" @bind="MaxTriangularDisc" @bind:event="oninput" step="1"/>
+            </GeneratorCard>
+
+            <GeneratorCard Headline="Real Exponential"
+                           Initialize="@(() => InitializeExponentialGenerator(Lambda))"
+                           Generator="MainApp.Instance.Generators.ExponentialGenerator"
+                           CouldBeInitialized="() => { return true; }">
+                <label class="mt-3">Lambda:</label>
+                <input class="form-control" type="number" @bind="Lambda" @bind:event="oninput" step="0.1" min="0.0"/>
+            </GeneratorCard>
         </div>
     </div>
 </div>
 
 @code {
-    public int MinUniDisc = 0;
-    public int MaxUniDisc = 100;
-    public double MinUniReal = 0.0;
-    public double MaxUniReal = 1.0;
+    public int MinUniDisc { get; set; } = 0;
+    public int MaxUniDisc { get; set; } = 100;
+    public double MinUniReal { get; set; } = 0.0;
+    public double MaxUniReal { get; set; } = 1.0;
+
+    private int MinTriangularDisc { get; set; } = 0;
+    private int ModTriangularDisc { get; set; } = 25;
+    private int MaxTriangularDisc { get; set; } = 50;
+
+    private double Lambda { get; set; } = 2.0;
 
     private readonly List<EmpiricDistrModel<double>> _empiricRealRows = new();
     private readonly List<EmpiricDistrModel<int>> _empiricDiscreteRows = new();
@@ -169,32 +194,24 @@
         rows.Remove(row);
     }
 
-    private bool CouldBeDiscreteEmpiricInitialized()
+    private Generator<int> InitializeTriangularGenerator(int minTriangularDisc, int modTriangularDisc, int maxTriangularDisc)
     {
-        return true; // TODO
-        if (_empiricDiscreteRows.Count <= 0) return false;
-
-        double prob = 0.0;
-        foreach (EmpiricDistrModel<int> row in _empiricDiscreteRows)
-        {
-            prob += row.Probability;
-        }
-
-        return Math.Abs(prob - 1.0) < Config.Tolerance;
+        TriangularIntGenerator gen = new TriangularIntGenerator(
+            minTriangularDisc,
+            modTriangularDisc,
+            maxTriangularDisc
+        );
+        gen.EnableHistory();
+        MainApp.Instance.Generators.TriangularIntGenerator = gen;
+        return gen;
     }
 
-    private bool CouldBeRealEmpiricInitialized()
+    private Generator<double> InitializeExponentialGenerator(double lambda)
     {
-        return true; // TODO
-        if (_empiricRealRows.Count <= 0) return false;
-
-        double prob = 0.0;
-        foreach (EmpiricDistrModel<double> row in _empiricRealRows)
-        {
-            prob += row.Probability;
-        }
-
-        return Math.Abs(prob - 1.0) < Config.Tolerance;
+        ExponentialGenerator gen = new ExponentialGenerator(lambda);
+        gen.EnableHistory();
+        MainApp.Instance.Generators.ExponentialGenerator = gen;
+        return gen;
     }
 
 }

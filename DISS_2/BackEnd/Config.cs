@@ -8,6 +8,7 @@ public class Config
     private const double PercentToCutFromBeggingOfTheChart = 5;
     public const string FloatFormat = "F2";
     public const double Tolerance = 0.00001;
+    public const string TesterOutputDir = "Output";
 
     private int GetNthPointToDraw(int replicationCount)
     {

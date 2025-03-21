@@ -11,6 +11,7 @@ public abstract class Generator<T>
     {
         Seed = MainApp.Instance.MasterSeeder.Next();
         Random = new Random(Seed);
+        Name = GetType().Name;
     }
 
     protected abstract T GenerateValue();
@@ -18,15 +19,18 @@ public abstract class Generator<T>
     public T Generate()
     {
         T value = GenerateValue();
-        if (Data is not null)
+        bool isHistoryEnabled = Data is not null;
+        if (isHistoryEnabled)
         {
-            Data.Add(value);
+            Data!.Add(value);
         }
         return value;
     }
     public abstract IGeneratorTester<T>? GetTester();
 
     public List<T>? Data { get; set; } = null;
+    public string Name { get; }
+
     public void EnableHistory()
     {
         Data = new List<T>();
