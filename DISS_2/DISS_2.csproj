@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <Folder Include="BackEnd\BestFurnitureSro\CustomEvents\" />
-      <Folder Include="BackEnd\TicketSelling\CustomEvents\" />
       <Folder Include="Output\" />
     </ItemGroup>
 

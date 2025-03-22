@@ -13,7 +13,7 @@ public abstract class SimCore
     {
         Task.Run(() =>
         {
-            BeforeSimulationRun();
+            BeforeSimulationRun(State);
 
             while (!State.Calendar.IsEmpty())
             {
@@ -22,13 +22,13 @@ public abstract class SimCore
                 currentEvent.Execute(State);
             }
 
-            AfterSimulationRun();
+            AfterSimulationRun(State);
         });
     }
 
-    protected abstract void AfterSimulationRun();
+    protected virtual void AfterSimulationRun(SimState simState) {}
 
-    protected abstract void BeforeSimulationRun();
+    protected virtual void BeforeSimulationRun(SimState simState) {}
 
     private void UpdateAndVerifyEventTime(Event currentEvent)
     {

@@ -10,5 +10,5 @@ public abstract class Event
         StartTime = startTime;
     }
 
-    public abstract void Execute(SimState state);
+    public abstract void Execute(SimState simState);
 }
