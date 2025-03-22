@@ -1,11 +1,50 @@
 @page "/SimulationPage"
+@rendermode InteractiveServer
+@using DISS_2.BackEnd
+@using DISS_2.BackEnd.Core
+@using DISS_2.BackEnd.TicketSelling
+@implements IDelegate;
+
 <h3>SimulationPage</h3>
 
+<h4>Simulation Time: @_simTime</h4>
+<h4>People waiting in queue: @_peopleInQueue</h4>
+<h4>Window busy: @_windowIsBusy</h4>
+
+<textarea class="form-control">
+    @_eventCalendarString
+</textarea>
+
+<button class="btn btn-primary" @onclick="RunSimulation">Run Simulation</button>
+
 @code {
+    private string _eventCalendarString = "";
+    private string _simTime = "";
+    private bool _windowIsBusy;
+    private int _peopleInQueue = 0;
 
+    protected override void OnInitialized()
+    {
+        MainApp.Instance.Delegates.Add(this);
+    }
 
+    public void Refresh(SimState simState)
+    {
+        TicketSellingSimState state = (TicketSellingSimState)simState;
 
+        _simTime = TimeHandler.ToReadableTime(state.CurrentSimTime);
+        _eventCalendarString = state.Calendar.ToString();
 
+        _windowIsBusy = state.IsBusy;
+        _peopleInQueue = state.PeopleInQueue;
+        StateHasChanged();
+    }
 
+    private void RunSimulation()
+    {
+        TicketSellingSimState state = new();
+        TicketSimulation sim = new(state);
+        sim.Run();
+    }
 
 }

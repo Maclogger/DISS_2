@@ -1,8 +1,11 @@
+using DISS_2.Components;
+
 namespace DISS_2.BackEnd.Core;
 
 public abstract class SimCore
 {
     private SimState State { get; set; }
+
 
     protected SimCore(SimState state)
     {
@@ -14,16 +17,29 @@ public abstract class SimCore
         Task.Run(() =>
         {
             BeforeSimulationRun(State);
+            Console.WriteLine("zaciname");
 
-            while (!State.Calendar.IsEmpty())
+            while (!State.Calendar.IsEmpty() && State.CurrentSimTime < 10000)
             {
                 Event currentEvent = State.Calendar.PopEvent();
+                Console.WriteLine($"Current event: {currentEvent}");
                 VerifyAndUpdateEventTime(currentEvent);
                 currentEvent.Execute(State);
+
+                RefreshGui();
             }
 
+            Console.WriteLine("hotovo");
             AfterSimulationRun(State);
         });
+    }
+
+    private void RefreshGui()
+    {
+        foreach (IDelegate @delegate in MainApp.Instance.Delegates)
+        {
+            @delegate.Refresh(State);
+        }
     }
 
     protected virtual void AfterSimulationRun(SimState simState) {}
