@@ -1,3 +1,5 @@
+using DISS_2.BackEnd.BestFurnitureSro;
+
 namespace DISS_2.BackEnd;
 
 public sealed class MainApp
@@ -10,12 +12,13 @@ public sealed class MainApp
     private MainApp()
     {
         MasterSeeder = new Random(0);
-        Generators = new();
+        TesterGenerators = new();
         Config = new();
     }
 
     public Random MasterSeeder { get; set; }
     public Config Config { get; set; }
-    public List<double> CumulativeCosts { get; set; } = new();
-    public Generators.Generators Generators { get; set; }
+    public Generators.Generators TesterGenerators { get; set; }
+
+    public SimState? SimState { get; set; }
 }
