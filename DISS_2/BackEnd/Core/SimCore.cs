@@ -18,7 +18,7 @@ public abstract class SimCore
             while (!State.Calendar.IsEmpty())
             {
                 Event currentEvent = State.Calendar.PopEvent();
-                UpdateAndVerifyEventTime(currentEvent);
+                VerifyAndUpdateEventTime(currentEvent);
                 currentEvent.Execute(State);
             }
 
@@ -30,11 +30,11 @@ public abstract class SimCore
 
     protected virtual void BeforeSimulationRun(SimState simState) {}
 
-    private void UpdateAndVerifyEventTime(Event currentEvent)
+    private void VerifyAndUpdateEventTime(Event currentEvent)
     {
         if (currentEvent.StartTime < State.CurrentSimTime)
         {
-            throw new ArgumentException("Event start time is less than the simulation time!!!");
+            throw new ArgumentException("Event start time is less than the current simulation time!!!");
         }
         
         State.CurrentSimTime = currentEvent.StartTime;

@@ -2,6 +2,12 @@ namespace DISS_2.BackEnd.Core;
 
 public abstract class SimState
 {
-    public EventCalendar Calendar { get; set; } = new();
+    protected SimState()
+    {
+        Calendar = new EventCalendar(this);
+    }
+
+    public EventCalendar Calendar { get; set; }
     public int CurrentSimTime { get; set; } = 0;
+
 }
