@@ -7,12 +7,12 @@ public class TicketSimulation : SimCore
 {
     public TicketSimulation(SimState state) : base(state)
     {
-        
+
     }
 
-    public void Run()
+    public async Task Run()
     {
-        RunOneSimulation();   
+        await RunOneSimulation();
     }
 
     protected override void BeforeSimulationRun(SimState simState)

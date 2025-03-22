@@ -28,7 +28,7 @@
         MainApp.Instance.Delegates.Add(this);
     }
 
-    public void Refresh(SimState simState)
+    public void UpdateUI(SimState simState)
     {
         TicketSellingSimState state = (TicketSellingSimState)simState;
 
@@ -37,14 +37,14 @@
 
         _windowIsBusy = state.IsBusy;
         _peopleInQueue = state.PeopleInQueue;
-        StateHasChanged();
+        InvokeAsync(StateHasChanged);
     }
 
-    private void RunSimulation()
+    private async Task RunSimulation()
     {
         TicketSellingSimState state = new();
         TicketSimulation sim = new(state);
-        sim.Run();
+        await sim.Run();
     }
 
 }

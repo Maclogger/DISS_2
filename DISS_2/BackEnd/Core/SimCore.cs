@@ -12,9 +12,9 @@ public abstract class SimCore
         State = state;
     }
 
-    public void RunOneSimulation()
+    public async Task RunOneSimulation()
     {
-        Task.Run(() =>
+        await Task.Run(() =>
         {
             BeforeSimulationRun(State);
             Console.WriteLine("zaciname");
@@ -38,7 +38,7 @@ public abstract class SimCore
     {
         foreach (IDelegate @delegate in MainApp.Instance.Delegates)
         {
-            @delegate.Refresh(State);
+            @delegate.UpdateUI(State);
         }
     }
 
