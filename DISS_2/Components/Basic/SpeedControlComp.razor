@@ -15,28 +15,44 @@
                    value="1"
                    @onclick="() => ChangeSpeed(Speed.Speed2X)"/> 2x
         </label>
-        <label class="btn btn-outline-primary @(Speed == Speed.Speed3X ? "active" : "")">
+        <label class="btn btn-outline-primary @(Speed == Speed.Speed5X ? "active" : "")">
             <input type="radio"
                    name="speedOptions"
                    value="2"
-                   @onclick="() => ChangeSpeed(Speed.Speed3X)"/> 3x
+                   @onclick="() => ChangeSpeed(Speed.Speed5X)"/> 5x
+        </label>
+        <label class="btn btn-outline-primary @(Speed == Speed.Speed10X ? "active" : "")">
+            <input type="radio"
+                   name="speedOptions"
+                   value="3"
+                   @onclick="() => ChangeSpeed(Speed.Speed10X)"/> 10x
+        </label>
+        <label class="btn btn-outline-primary @(Speed == Speed.Speed100X ? "active" : "")">
+            <input type="radio"
+                   name="speedOptions"
+                   value="4"
+                   @onclick="() => ChangeSpeed(Speed.Speed100X)"/> 100x
+        </label>
+        <label class="btn btn-outline-primary @(Speed == Speed.Speed1000X ? "active" : "")">
+            <input type="radio"
+                   name="speedOptions"
+                   value="5"
+                   @onclick="() => ChangeSpeed(Speed.Speed1000X)"/> 1000x
         </label>
         <label class="btn btn-outline-primary @(Speed == Speed.FullSpeed ? "active" : "")">
             <input type="radio"
                    name="speedOptions"
-                   value="2"
+                   value="6"
                    @onclick="() => ChangeSpeed(Speed.FullSpeed)"/> Full Speed
         </label>
     </div>
 </div>
 @code {
-    [Parameter, EditorRequired] public SimCore? Simulation { get; set; }
-
-    public Speed Speed { get; set; } = Speed.Speed1X;
+    public Speed Speed { get; set; } = MainApp.Instance.SpeedControl.CurrentSpeed;
 
     public void ChangeSpeed(Speed newSpeed)
     {
         Speed = newSpeed;
-        MainApp.Instance.Config.CurrentSimSpeed = Speed;
+        MainApp.Instance.SpeedControl.CurrentSpeed = newSpeed;
     }
 }

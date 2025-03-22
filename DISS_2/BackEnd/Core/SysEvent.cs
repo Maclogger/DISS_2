@@ -9,7 +9,7 @@ public class SysEvent(int startTime) : Event(startTime)
             return;
         }
 
-        int delay = Config.GetDelayBetweenFrames();
+        int delay = MainApp.Instance.SpeedControl.GetDelayBetweenFrames();
         int nextSysEventSimTime = CalcNextSysEventSimTime(simState, delay);
         simState.Calendar.PlanNewEvent(new SysEvent(nextSysEventSimTime));
 

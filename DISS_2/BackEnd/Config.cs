@@ -11,7 +11,6 @@ public class Config
     public const string FloatFormat = "F2";
     public const double Tolerance = 0.00001;
     public const string TesterOutputDir = "Output";
-    public Speed CurrentSimSpeed { get; set; }
 
     private int GetNthPointToDraw(int replicationCount)
     {
@@ -33,10 +32,5 @@ public class Config
     public const double BrakePadsDailyStorageCostPerUnit = 0.3; // eur
     public const double LightsDailyStorageCostPerUnit = 0.25; // eur
     public const double FinePerUnit = 0.3; // eur
-    public const int Fps = 10; // 100ms delay, DELAY = 1000 / FPS
-
-    public static int GetDelayBetweenFrames()
-    {
-        return (int)(1000.0 / Fps);
-    }
+    public const int Fps = 10;
 }
