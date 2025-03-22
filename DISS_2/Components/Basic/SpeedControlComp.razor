@@ -3,46 +3,55 @@
 <div class="form-group mt-3">
     <label>Speed Control</label>
     <div class="btn-group btn-group-toggle d-block" data-toggle="buttons">
-        <label class="btn btn-outline-primary @(Speed == Speed.Speed1X ? "active" : "")">
+
+        <label class="btn btn-outline-primary @(Speed == Speed.Stopped ? "active" : "")">
             <input type="radio"
                    name="speedOptions"
                    value="0"
+                   @onclick="() => ChangeSpeed(Speed.Stopped)"/> Stop
+        </label>
+
+
+        <label class="btn btn-outline-primary @(Speed == Speed.Speed1X ? "active" : "")">
+            <input type="radio"
+                   name="speedOptions"
+                   value="1"
                    @onclick="() => ChangeSpeed(Speed.Speed1X)"/> 1x
         </label>
         <label class="btn btn-outline-primary @(Speed == Speed.Speed2X ? "active" : "")">
             <input type="radio"
                    name="speedOptions"
-                   value="1"
+                   value="2"
                    @onclick="() => ChangeSpeed(Speed.Speed2X)"/> 2x
         </label>
         <label class="btn btn-outline-primary @(Speed == Speed.Speed5X ? "active" : "")">
             <input type="radio"
                    name="speedOptions"
-                   value="2"
+                   value="3"
                    @onclick="() => ChangeSpeed(Speed.Speed5X)"/> 5x
         </label>
         <label class="btn btn-outline-primary @(Speed == Speed.Speed10X ? "active" : "")">
             <input type="radio"
                    name="speedOptions"
-                   value="3"
+                   value="4"
                    @onclick="() => ChangeSpeed(Speed.Speed10X)"/> 10x
         </label>
         <label class="btn btn-outline-primary @(Speed == Speed.Speed100X ? "active" : "")">
             <input type="radio"
                    name="speedOptions"
-                   value="4"
+                   value="5"
                    @onclick="() => ChangeSpeed(Speed.Speed100X)"/> 100x
         </label>
         <label class="btn btn-outline-primary @(Speed == Speed.Speed1000X ? "active" : "")">
             <input type="radio"
                    name="speedOptions"
-                   value="5"
+                   value="6"
                    @onclick="() => ChangeSpeed(Speed.Speed1000X)"/> 1000x
         </label>
         <label class="btn btn-outline-primary @(Speed == Speed.FullSpeed ? "active" : "")">
             <input type="radio"
                    name="speedOptions"
-                   value="6"
+                   value="7"
                    @onclick="() => ChangeSpeed(Speed.FullSpeed)"/> Full Speed
         </label>
     </div>

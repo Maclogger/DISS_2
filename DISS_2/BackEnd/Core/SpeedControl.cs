@@ -2,6 +2,7 @@ namespace DISS_2.BackEnd.Core;
 
 public enum Speed
 {
+    Stopped,
     Speed1X,
     Speed2X,
     Speed5X,
@@ -19,6 +20,8 @@ public class SpeedControl
     {
         switch (CurrentSpeed)
         {
+            case Speed.Stopped:
+                return 0.0;
             case Speed.Speed1X:
                 return 1.0;
             case Speed.Speed2X:
@@ -46,6 +49,6 @@ public class SpeedControl
             return 0;
         }
 
-        return Math.Max(1, (int)(1000.0 / (Config.Fps * multiplier.Value)));
+        return Math.Max(1, (int)(1000.0 / multiplier.Value));
     }
 }

@@ -4,7 +4,13 @@ public class SysEvent(int startTime) : Event(startTime)
 {
     public override async Task Execute(SimState simState)
     {
-        if (MainApp.Instance.SpeedControl.CurrentSpeed == Speed.FullSpeed)
+        Speed currentSpeed = MainApp.Instance.SpeedControl.CurrentSpeed;
+        if (currentSpeed == Speed.Stopped)
+        {
+            currentSpeed = await WaitForSpeedToChange();
+        }
+
+        if (currentSpeed == Speed.FullSpeed)
         {
             return;
         }
@@ -16,15 +22,32 @@ public class SysEvent(int startTime) : Event(startTime)
         await Task.Delay(delay);
     }
 
+    private async Task<Speed> WaitForSpeedToChange()
+    {
+        while (true)
+        {
+            Speed currentSpeed = MainApp.Instance.SpeedControl.CurrentSpeed;
+
+            if (currentSpeed != Speed.Stopped)
+            {
+                return currentSpeed;
+            }
+
+            await Task.Delay(100);
+        }
+    }
+
     private int CalcNextSysEventSimTime(SimState simState, int delay)
     {
         simState.CurrentActualTimeInMs += delay;
-        if (simState.CurrentActualTimeInMs >= (int)(1_000.0 / MainApp.Instance.SpeedControl.GetSpeedMultiplier()!))
+        if (simState.CurrentActualTimeInMs >=
+            (int)(1_000.0 / MainApp.Instance.SpeedControl.GetSpeedMultiplier()!))
         {
             simState.CurrentActualTimeInMs = 0;
             return simState.CurrentSimTime + 1;
         }
-        return simState.CurrentSimTime; 
+
+        return simState.CurrentSimTime;
     }
 }
 
