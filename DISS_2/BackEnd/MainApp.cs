@@ -1,5 +1,6 @@
 using DISS_2.BackEnd.Core;
 using DISS_2.Components;
+using DISS_2.Components.Basic;
 
 namespace DISS_2.BackEnd;
 
@@ -22,4 +23,6 @@ public sealed class MainApp
     public Generators.Generators TesterGenerators { get; set; }
 
     public List<IDelegate> Delegates { get; set; } = new();
+
+    public SpeedControl SpeedControl { get; set; } = new();
 }

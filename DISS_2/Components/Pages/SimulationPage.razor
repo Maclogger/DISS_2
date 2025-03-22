@@ -3,6 +3,7 @@
 @using DISS_2.BackEnd
 @using DISS_2.BackEnd.Core
 @using DISS_2.BackEnd.TicketSelling
+@using DISS_2.Components.Basic
 @implements IDelegate;
 
 <h3>SimulationPage</h3>
@@ -17,11 +18,16 @@
 
 <button class="btn btn-primary" @onclick="RunSimulation">Run Simulation</button>
 
+<SpeedControlComp/>
+
+
 @code {
     private string _eventCalendarString = "";
     private string _simTime = "";
     private bool _windowIsBusy;
     private int _peopleInQueue = 0;
+    private TicketSimulation? _simulation;
+    private TicketSellingSimState? _state;
 
     protected override void OnInitialized()
     {
@@ -42,9 +48,8 @@
 
     private async Task RunSimulation()
     {
-        TicketSellingSimState state = new();
-        TicketSimulation sim = new(state);
-        await sim.Run();
+        _state = new();
+        _simulation = new(_state);
+        await _simulation.Run();
     }
-
 }

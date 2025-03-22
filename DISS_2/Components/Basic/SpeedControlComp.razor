@@ -1,0 +1,42 @@
+@using DISS_2.BackEnd
+@using DISS_2.BackEnd.Core
+<div class="form-group mt-3">
+    <label>Speed Control</label>
+    <div class="btn-group btn-group-toggle d-block" data-toggle="buttons">
+        <label class="btn btn-outline-primary @(Speed == Speed.Speed1X ? "active" : "")">
+            <input type="radio"
+                   name="speedOptions"
+                   value="0"
+                   @onclick="() => ChangeSpeed(Speed.Speed1X)"/> 1x
+        </label>
+        <label class="btn btn-outline-primary @(Speed == Speed.Speed2X ? "active" : "")">
+            <input type="radio"
+                   name="speedOptions"
+                   value="1"
+                   @onclick="() => ChangeSpeed(Speed.Speed2X)"/> 2x
+        </label>
+        <label class="btn btn-outline-primary @(Speed == Speed.Speed3X ? "active" : "")">
+            <input type="radio"
+                   name="speedOptions"
+                   value="2"
+                   @onclick="() => ChangeSpeed(Speed.Speed3X)"/> 3x
+        </label>
+        <label class="btn btn-outline-primary @(Speed == Speed.FullSpeed ? "active" : "")">
+            <input type="radio"
+                   name="speedOptions"
+                   value="2"
+                   @onclick="() => ChangeSpeed(Speed.FullSpeed)"/> Full Speed
+        </label>
+    </div>
+</div>
+@code {
+    [Parameter, EditorRequired] public SimCore? Simulation { get; set; }
+
+    public Speed Speed { get; set; } = Speed.Speed1X;
+
+    public void ChangeSpeed(Speed newSpeed)
+    {
+        Speed = newSpeed;
+        MainApp.Instance.Config.CurrentSimSpeed = Speed;
+    }
+}

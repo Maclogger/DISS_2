@@ -1,3 +1,5 @@
+using DISS_2.BackEnd.Core;
+
 namespace DISS_2.BackEnd;
 
 public class Config
@@ -9,6 +11,7 @@ public class Config
     public const string FloatFormat = "F2";
     public const double Tolerance = 0.00001;
     public const string TesterOutputDir = "Output";
+    public Speed CurrentSimSpeed { get; set; }
 
     private int GetNthPointToDraw(int replicationCount)
     {
@@ -24,30 +27,16 @@ public class Config
                                currentReplication % nthPoint == 0);
     }
 
-
-    private int _speed = 2; // 0 = SLOW, 1 = NORMAL, 2 = MAX_SPEED
-
-    public int GetSpeedDelay()
-    {
-        switch (_speed)
-        {
-            case 0: return 100;
-            case 1: return 10;
-            default: return 0;
-        }
-    }
-
-    public void SetSpeed(int speed)
-    {
-        if (speed <= 0) _speed = 0;
-        if (speed == 1) _speed = 1;
-        if (speed >= 2) _speed = 2;
-    }
-
     public const bool PrintCompleteReplication = false;
     public const string StrategiesDirectory = "Strategies";
     public const double AbsorbersDailyStorageCostPerUnit = 0.2; // eur
     public const double BrakePadsDailyStorageCostPerUnit = 0.3; // eur
     public const double LightsDailyStorageCostPerUnit = 0.25; // eur
     public const double FinePerUnit = 0.3; // eur
+    public const int Fps = 10; // 100ms delay, DELAY = 1000 / FPS
+
+    public static int GetDelayBetweenFrames()
+    {
+        return (int)(1000.0 / Fps);
+    }
 }

@@ -14,9 +14,10 @@ public abstract class SimCore
 
     public async Task RunOneSimulation()
     {
-        await Task.Run(() =>
+        await Task.Run(async () =>
         {
             BeforeSimulationRun(State);
+            State.Calendar.PlanNewEvent(new SysEvent(0));
             Console.WriteLine("zaciname");
 
             while (!State.Calendar.IsEmpty() && State.CurrentSimTime < 10000)
@@ -24,7 +25,7 @@ public abstract class SimCore
                 Event currentEvent = State.Calendar.PopEvent();
                 Console.WriteLine($"Current event: {currentEvent}");
                 VerifyAndUpdateEventTime(currentEvent);
-                currentEvent.Execute(State);
+                await currentEvent.Execute(State);
 
                 RefreshGui();
             }

@@ -10,7 +10,7 @@ public abstract class Event : IComparable<Event>
         StartTime = startTime;
     }
 
-    public abstract void Execute(SimState simState);
+    public abstract Task Execute(SimState simState);
 
     public override string ToString()
     {

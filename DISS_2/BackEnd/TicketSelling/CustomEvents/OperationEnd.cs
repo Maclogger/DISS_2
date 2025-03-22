@@ -4,7 +4,7 @@ namespace DISS_2.BackEnd.TicketSelling.CustomEvents;
 
 public class OperationEnd(int startTime) : Event(startTime)
 {
-    public override void Execute(SimState simState)
+    public override Task Execute(SimState simState)
     {
         TicketSellingSimState state = (TicketSellingSimState)simState;
 
@@ -14,9 +14,10 @@ public class OperationEnd(int startTime) : Event(startTime)
             state.Calendar.PlanNewEvent(
                 new OperationStart(state.CurrentSimTime)
             );
-            return;
+            return Task.CompletedTask;
         }
 
         state.IsBusy = false;
+        return Task.CompletedTask;
     }
 }

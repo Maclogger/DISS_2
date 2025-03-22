@@ -9,4 +9,5 @@ public abstract class SimState
 
     public EventCalendar Calendar { get; set; }
     public int CurrentSimTime { get; set; } = 0;
+    public int CurrentActualTimeInMs { get; set; } = 0;
 }

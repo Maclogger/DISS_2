@@ -5,7 +5,7 @@ namespace DISS_2.BackEnd.TicketSelling.CustomEvents;
 
 public class CustomerArrival(int startTime) : Event(startTime)
 {
-    public override void Execute(SimState simState)
+    public override Task Execute(SimState simState)
     {
         TicketSellingSimState state = (TicketSellingSimState)simState;
 
@@ -17,9 +17,10 @@ public class CustomerArrival(int startTime) : Event(startTime)
         if (state.IsBusy)
         {
             state.PeopleInQueue++;
-            return;
+            return Task.CompletedTask;
         }
 
         state.Calendar.PlanNewEvent(new OperationStart(state.CurrentSimTime + 0));
+        return Task.CompletedTask;
     }
 }
