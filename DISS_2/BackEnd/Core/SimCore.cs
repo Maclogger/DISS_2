@@ -2,20 +2,24 @@ namespace DISS_2.BackEnd.Core;
 
 public abstract class SimCore
 {
-    public EventCalendar Calendar { get; set; } = new();
-    public int CurrentSimTime { get; set; } = 0;
+    private SimState State { get; set; }
+
+    protected SimCore(SimState state)
+    {
+        State = state;
+    }
 
     public void RunOneSimulation()
     {
-        Task.Run(async () =>
+        Task.Run(() =>
         {
             BeforeSimulationRun();
 
-            while (!Calendar.IsEmpty())
+            while (!State.Calendar.IsEmpty())
             {
-                Event currentEvent = Calendar.PopEvent();
+                Event currentEvent = State.Calendar.PopEvent();
                 UpdateAndVerifyEventTime(currentEvent);
-                currentEvent.Execute(Calendar, CurrentSimTime);
+                currentEvent.Execute(State);
             }
 
             AfterSimulationRun();
@@ -28,11 +32,11 @@ public abstract class SimCore
 
     private void UpdateAndVerifyEventTime(Event currentEvent)
     {
-        if (currentEvent.StartTime < CurrentSimTime)
+        if (currentEvent.StartTime < State.CurrentSimTime)
         {
             throw new ArgumentException("Event start time is less than the simulation time!!!");
         }
         
-        CurrentSimTime = currentEvent.StartTime;
+        State.CurrentSimTime = currentEvent.StartTime;
     }
 }
