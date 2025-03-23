@@ -14,7 +14,7 @@ public abstract class Event : IComparable<Event>
 
     public override string ToString()
     {
-        return $"{TimeHandler.ToReadableTime(StartTime)}: '{GetType().Name}'";
+        return $"{TimeHandler.ToReadableTime(StartTime)}: {GetType().Name}";
     }
     public int CompareTo(Event? other)
     {

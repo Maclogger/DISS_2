@@ -48,4 +48,15 @@ public class EventCalendar
 
         return sb.ToString();
     }
+
+    public List<Event> GetSortedEvents()
+    {
+        List<Event> events = new();
+        foreach (var item in Events.UnorderedItems)
+        {
+            events.Add(item.Element);
+        }
+        events.Sort();
+        return events;
+    }
 }

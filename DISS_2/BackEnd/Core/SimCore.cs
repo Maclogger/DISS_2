@@ -20,7 +20,7 @@ public abstract class SimCore
             State.Calendar.PlanNewEvent(new SysEvent(0));
             Console.WriteLine("zaciname");
 
-            while (!State.Calendar.IsEmpty() && State.CurrentSimTime < 10000)
+            while (!State.Calendar.IsEmpty() && State.CurrentSimTime < 100_000)
             {
                 Event currentEvent = State.Calendar.PopEvent();
                 Console.WriteLine($"Current event: {currentEvent}");
