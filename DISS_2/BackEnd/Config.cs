@@ -11,6 +11,7 @@ public class Config
     public const string FloatFormat = "F2";
     public const double Tolerance = 0.00001;
     public const string TesterOutputDir = "Output";
+    public static int MaxLogCount { get; set; } = 100_000;
 
     private int GetNthPointToDraw(int replicationCount)
     {

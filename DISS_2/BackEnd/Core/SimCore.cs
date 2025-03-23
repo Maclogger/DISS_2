@@ -27,7 +27,7 @@ public abstract class SimCore
                 VerifyAndUpdateEventTime(currentEvent);
                 await currentEvent.Execute(State);
 
-                RefreshGui();
+                RefreshGui(currentEvent);
             }
 
             Console.WriteLine("hotovo");
@@ -35,11 +35,11 @@ public abstract class SimCore
         });
     }
 
-    private void RefreshGui()
+    private void RefreshGui(Event currentEvent)
     {
         foreach (IDelegate @delegate in MainApp.Instance.Delegates)
         {
-            @delegate.UpdateUi(State);
+            @delegate.UpdateUi(State, currentEvent);
         }
     }
 
