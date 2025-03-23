@@ -28,7 +28,6 @@ public class TicketGenerators
 {
     public  UniformGenerator<int> ArrivalGen { get; set; }=
         UniformGeneratorFactory.CreateDiscreteUniformGenerator(10, 20);
-
     public UniformGenerator<int> OperationDurationGen { get; set; }=
         UniformGeneratorFactory.CreateDiscreteUniformGenerator(10, 30);
 }

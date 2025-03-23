@@ -13,7 +13,7 @@
                 </div>
                 <button class="btn btn-primary ms-4"
                         @onclick="RunSimulationImpl"
-                        disabled="@_simRunning">
+                        disabled="@MainApp.Instance.SimulationsRunning[SimulationRunningIndex]">
                     Start
                 </button>
             </div>
@@ -57,17 +57,19 @@
 
     [Parameter, EditorRequired] public Action<SimCore>? UpdateUi { get; set; }
 
+    [Parameter, EditorRequired] public int SimulationRunningIndex { get; set; }
+
     private string _simTime = "Day 1 - 06:00:00";
-    private bool _simRunning = false;
     private List<Event> _eventsInCalendar = new();
     private List<string> _logsCollection = new();
 
-    protected override void OnInitialized()
+    protected override void OnAfterRender(bool firstRender)
     {
-        MainApp.Instance.SimDelegates.Clear();
-        MainApp.Instance.SimDelegates.Add(this);
+        if (firstRender)
+        {
+            MainApp.Instance.SimDelegates.Add(this);
+        }
     }
-
 
     void ISimDelegate.UpdateUi(SimCore simCore, Event currentEvent)
     {
@@ -86,15 +88,18 @@
         }
 
         InvokeAsync(StateHasChanged);
+
     }
 
     async Task RunSimulationImpl()
     {
         _logsCollection.Clear();
-        _simRunning = true;
+
+        MainApp.Instance.SimulationsRunning[SimulationRunningIndex] = true;
         await RunSimulation!();
-        _simRunning = false;
+        MainApp.Instance.SimulationsRunning[SimulationRunningIndex] = false;
 
         await InvokeAsync(StateHasChanged);
     }
+
 }

@@ -52,9 +52,9 @@ public class EventCalendar
     public List<Event> GetSortedEvents()
     {
         List<Event> events = new();
-        foreach (var item in Events.UnorderedItems)
+        foreach ((Event element, int priority) in Events.UnorderedItems)
         {
-            events.Add(item.Element);
+            events.Add(element);
         }
         events.Sort();
         return events;

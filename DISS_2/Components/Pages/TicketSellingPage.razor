@@ -1,10 +1,16 @@
 @page "/TicketSelling"
 @rendermode InteractiveServer
+@using DISS_2.BackEnd
 @using DISS_2.BackEnd.Core
 @using DISS_2.BackEnd.TicketSelling
 @using DISS_2.Components.Basic
 
-<SimulationComp Headline="Ticket Selling" UpdateUi="UpdateUi" RunSimulation="RunSimulation">
+<SimulationComp
+    Headline="Ticket Selling"
+    UpdateUi="UpdateUi"
+    RunSimulation="RunSimulation"
+    SimulationRunningIndex="0"
+>
     <h4 class="m-0 mb-1">People waiting in queue: @_peopleInQueue</h4>
     <h4 class="m-0">Window busy: @_windowIsBusy</h4>
 </SimulationComp>
@@ -13,9 +19,9 @@
     private bool _windowIsBusy;
     private int _peopleInQueue = 0;
 
-    public void UpdateUi(SimCore simState)
+    public void UpdateUi(SimCore simCore)
     {
-        TicketSimulation sim = (TicketSimulation)simState;
+        TicketSimulation sim = (TicketSimulation)simCore;
         _windowIsBusy = sim.IsBusy;
         _peopleInQueue = sim.CustomerQueue.Count;
         InvokeAsync(StateHasChanged);
@@ -26,4 +32,5 @@
         TicketSimulation simulation = new();
         await simulation.Run();
     }
+
 }
