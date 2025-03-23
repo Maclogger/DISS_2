@@ -1,0 +1,26 @@
+@using DISS_2.BackEnd.Core
+<label class="btn btn-outline-primary @(IsActive ? "active" : "") w-100 h-100 d-flex align-items-center justify-content-center">
+  <input type="radio"
+         name="speedOptions"
+         value="@Label"
+         hidden
+         @onclick="@(() => OnSpeedChanged.InvokeAsync(Option))" />
+  @Label
+</label>
+
+
+@code {
+  [Parameter, EditorRequired]
+  public Speed Option { get; set; }
+
+  [Parameter, EditorRequired]
+  public string Label { get; set; }
+
+  [Parameter, EditorRequired]
+  public Speed CurrentSpeed { get; set; }
+
+  [Parameter, EditorRequired]
+  public EventCallback<Speed> OnSpeedChanged { get; set; }
+
+  private bool IsActive => CurrentSpeed == Option;
+}

@@ -1,0 +1,31 @@
+@page "/TicketSelling"
+@rendermode InteractiveServer
+@using DISS_2.BackEnd.Core
+@using DISS_2.BackEnd.TicketSelling
+@using DISS_2.Components.Basic
+
+<SimulationComp Headline="Ticket Selling" UpdateUi="UpdateUi" RunSimulation="RunSimulation">
+    <h4 class="m-0 mb-1">People waiting in queue: @_peopleInQueue</h4>
+    <h4 class="m-0">Window busy: @_windowIsBusy</h4>
+</SimulationComp>
+
+@code {
+    private bool _windowIsBusy;
+    private int _peopleInQueue = 0;
+
+    public void UpdateUi(SimState simState)
+    {
+        TicketSellingSimState state = (TicketSellingSimState)simState;
+        _windowIsBusy = state.IsBusy;
+        _peopleInQueue = state.PeopleInQueue;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private async Task RunSimulation()
+    {
+        TicketSellingSimState state = new();
+        TicketSimulation simulation = new(state);
+        await simulation.Run();
+    }
+
+}

@@ -49,6 +49,6 @@ public class SpeedControl
             return 0;
         }
 
-        return Math.Max(1, (int)(1000.0 / multiplier.Value));
+        return Math.Max(0, (int)(1000.0 / multiplier.Value));
     }
 }

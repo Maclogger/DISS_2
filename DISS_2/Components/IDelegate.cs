@@ -4,5 +4,5 @@ namespace DISS_2.Components;
 
 public interface IDelegate
 {
-    void UpdateUI(SimState simState);
+    void UpdateUi(SimState simState);
 }

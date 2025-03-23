@@ -1,67 +1,50 @@
 @using DISS_2.BackEnd
 @using DISS_2.BackEnd.Core
-<div class="form-group mt-3">
-    <label>Speed Control</label>
-    <div class="btn-group btn-group-toggle d-block" data-toggle="buttons">
 
-        <label class="btn btn-outline-primary @(Speed == Speed.Stopped ? "active" : "")">
-            <input type="radio"
-                   name="speedOptions"
-                   value="0"
-                   @onclick="() => ChangeSpeed(Speed.Stopped)"/> Stop
-        </label>
+<div class="container">
 
-
-        <label class="btn btn-outline-primary @(Speed == Speed.Speed1X ? "active" : "")">
-            <input type="radio"
-                   name="speedOptions"
-                   value="1"
-                   @onclick="() => ChangeSpeed(Speed.Speed1X)"/> 1x
-        </label>
-        <label class="btn btn-outline-primary @(Speed == Speed.Speed2X ? "active" : "")">
-            <input type="radio"
-                   name="speedOptions"
-                   value="2"
-                   @onclick="() => ChangeSpeed(Speed.Speed2X)"/> 2x
-        </label>
-        <label class="btn btn-outline-primary @(Speed == Speed.Speed5X ? "active" : "")">
-            <input type="radio"
-                   name="speedOptions"
-                   value="3"
-                   @onclick="() => ChangeSpeed(Speed.Speed5X)"/> 5x
-        </label>
-        <label class="btn btn-outline-primary @(Speed == Speed.Speed10X ? "active" : "")">
-            <input type="radio"
-                   name="speedOptions"
-                   value="4"
-                   @onclick="() => ChangeSpeed(Speed.Speed10X)"/> 10x
-        </label>
-        <label class="btn btn-outline-primary @(Speed == Speed.Speed100X ? "active" : "")">
-            <input type="radio"
-                   name="speedOptions"
-                   value="5"
-                   @onclick="() => ChangeSpeed(Speed.Speed100X)"/> 100x
-        </label>
-        <label class="btn btn-outline-primary @(Speed == Speed.Speed1000X ? "active" : "")">
-            <input type="radio"
-                   name="speedOptions"
-                   value="6"
-                   @onclick="() => ChangeSpeed(Speed.Speed1000X)"/> 1000x
-        </label>
-        <label class="btn btn-outline-primary @(Speed == Speed.FullSpeed ? "active" : "")">
-            <input type="radio"
-                   name="speedOptions"
-                   value="7"
-                   @onclick="() => ChangeSpeed(Speed.FullSpeed)"/> Full Speed
-        </label>
-    </div>
-</div>
-@code {
-    public Speed Speed { get; set; } = MainApp.Instance.SpeedControl.CurrentSpeed;
-
-    public void ChangeSpeed(Speed newSpeed)
+  <div class="row row-cols-8">
+    @foreach (var option in _speedOptions)
     {
-        Speed = newSpeed;
-        MainApp.Instance.SpeedControl.CurrentSpeed = newSpeed;
+      <div class="col p-2">
+        <SpeedControlItem Option="@option.Value"
+                          Label="@option.Label"
+                          CurrentSpeed="Speed"
+                          OnSpeedChanged="ChangeSpeed"/>
+      </div>
     }
+  </div>
+
+</div>
+
+@code {
+
+  private Speed Speed { get; set; } =
+    MainApp.Instance.SpeedControl.CurrentSpeed;
+
+  private record SpeedOption(Speed Value, string Label);
+
+  private List<SpeedOption> _speedOptions = new();
+
+  protected override void OnInitialized()
+  {
+    _speedOptions = new()
+    {
+      new SpeedOption(Speed.Stopped, "Stop"),
+      new SpeedOption(Speed.Speed1X, "1x"),
+      new SpeedOption(Speed.Speed2X, "2x"),
+      new SpeedOption(Speed.Speed5X, "5x"),
+      new SpeedOption(Speed.Speed10X, "10x"),
+      new SpeedOption(Speed.Speed100X, "100x"),
+      new SpeedOption(Speed.Speed1000X, "1000x"),
+      new SpeedOption(Speed.FullSpeed, "Full Speed")
+    };
+  }
+
+  private void ChangeSpeed(Speed newSpeed)
+  {
+    Speed = newSpeed;
+    MainApp.Instance.SpeedControl.CurrentSpeed = newSpeed;
+  }
+
 }

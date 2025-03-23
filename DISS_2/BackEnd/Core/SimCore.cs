@@ -39,7 +39,7 @@ public abstract class SimCore
     {
         foreach (IDelegate @delegate in MainApp.Instance.Delegates)
         {
-            @delegate.UpdateUI(State);
+            @delegate.UpdateUi(State);
         }
     }
 
