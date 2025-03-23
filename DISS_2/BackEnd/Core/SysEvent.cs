@@ -2,7 +2,7 @@ namespace DISS_2.BackEnd.Core;
 
 public class SysEvent(int startTime) : Event(startTime)
 {
-    public override async Task Execute(SimState simState)
+    public override async Task Execute(SimCore simCore)
     {
         Speed currentSpeed = MainApp.Instance.SpeedControl.CurrentSpeed;
         if (currentSpeed == Speed.Stopped)
@@ -16,8 +16,8 @@ public class SysEvent(int startTime) : Event(startTime)
         }
 
         int delay = MainApp.Instance.SpeedControl.GetDelayBetweenFrames();
-        int nextSysEventSimTime = CalcNextSysEventSimTime(simState, delay);
-        simState.Calendar.PlanNewEvent(new SysEvent(nextSysEventSimTime));
+        int nextSysEventSimTime = CalcNextSysEventSimTime(simCore, delay);
+        simCore.Calendar.PlanNewEvent(new SysEvent(nextSysEventSimTime));
 
         await Task.Delay(delay);
     }
@@ -37,17 +37,17 @@ public class SysEvent(int startTime) : Event(startTime)
         }
     }
 
-    private int CalcNextSysEventSimTime(SimState simState, int delay)
+    private int CalcNextSysEventSimTime(SimCore simCore, int delay)
     {
-        simState.CurrentActualTimeInMs += delay;
-        if (simState.CurrentActualTimeInMs >=
+        simCore.CurrentActualTimeInMs += delay;
+        if (simCore.CurrentActualTimeInMs >=
             (int)(1_000.0 / MainApp.Instance.SpeedControl.GetSpeedMultiplier()!))
         {
-            simState.CurrentActualTimeInMs = 0;
-            return simState.CurrentSimTime + 1;
+            simCore.CurrentActualTimeInMs = 0;
+            return simCore.CurrentSimTime + 1;
         }
 
-        return simState.CurrentSimTime;
+        return simCore.CurrentSimTime;
     }
 }
 

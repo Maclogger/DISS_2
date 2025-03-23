@@ -22,7 +22,8 @@ public sealed class MainApp
     public Config Config { get; set; }
     public Generators.Generators TesterGenerators { get; set; }
 
-    public List<IDelegate> Delegates { get; set; } = new();
+    public List<ISimDelegate> SimDelegates { get; set; } = new();
+    public List<IRepDelegate> RepDelegates { get; set; } = new();
 
     public SpeedControl SpeedControl { get; set; } = new();
 }

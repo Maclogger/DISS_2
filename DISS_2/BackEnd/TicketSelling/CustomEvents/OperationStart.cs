@@ -8,14 +8,14 @@ public class OperationStart(int startTime, Customer customer) : Event(startTime)
 {
     public Customer Customer { get; } = customer;
 
-    public override Task Execute(SimState simState)
+    public override Task Execute(SimCore simCore)
     {
-        TicketSellingSimState state = (TicketSellingSimState)simState;
-        state.IsBusy = true;
+        TicketSimulation sim = (TicketSimulation)simCore;
+        sim.IsBusy = true;
 
-        int operationDuration = state.Gens.OperationDurationGen.Generate();
-        state.Calendar.PlanNewEvent(
-            new OperationEnd(state.CurrentSimTime + operationDuration, Customer)
+        int operationDuration = sim.Gens.OperationDurationGen.Generate();
+        sim.Calendar.PlanNewEvent(
+            new OperationEnd(sim.CurrentSimTime + operationDuration, Customer)
         );
         return Task.CompletedTask;
     }

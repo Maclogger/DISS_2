@@ -4,17 +4,17 @@ namespace DISS_2.BackEnd.Core;
 
 public class EventCalendar
 {
-    public SimState SimState { get; }
+    public SimCore Core { get; }
     public PriorityQueue<Event, int> Events { get; set; } = new();
 
-    public EventCalendar(SimState simState)
+    public EventCalendar(SimCore core)
     {
-        SimState = simState;
+        Core = core;
     }
 
     public void PlanNewEvent(Event newEvent)
     {
-        string readableCurrentTime = TimeHandler.ToReadableTime(SimState.CurrentSimTime);
+        string readableCurrentTime = TimeHandler.ToReadableTime(Core.CurrentSimTime);
         Console.WriteLine($"[{readableCurrentTime}]: {newEvent}");
 
         Events.Enqueue(newEvent, newEvent.StartTime);

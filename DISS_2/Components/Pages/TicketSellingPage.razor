@@ -13,18 +13,17 @@
     private bool _windowIsBusy;
     private int _peopleInQueue = 0;
 
-    public void UpdateUi(SimState simState)
+    public void UpdateUi(SimCore simState)
     {
-        TicketSellingSimState state = (TicketSellingSimState)simState;
-        _windowIsBusy = state.IsBusy;
-        _peopleInQueue = state.CustomerQueue.Count;
+        TicketSimulation sim = (TicketSimulation)simState;
+        _windowIsBusy = sim.IsBusy;
+        _peopleInQueue = sim.CustomerQueue.Count;
         InvokeAsync(StateHasChanged);
     }
 
     private async Task RunSimulation()
     {
-        TicketSellingSimState state = new();
-        TicketSimulation simulation = new(state);
+        TicketSimulation simulation = new();
         await simulation.Run();
     }
 }

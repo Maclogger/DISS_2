@@ -7,20 +7,20 @@ public class OperationEnd(int startTime, Customer customer) : Event(startTime)
 {
     public Customer Customer { get; } = customer;
 
-    public override Task Execute(SimState simState)
+    public override Task Execute(SimCore simCore)
     {
-        TicketSellingSimState state = (TicketSellingSimState)simState;
+        TicketSimulation sim = (TicketSimulation)simCore;
 
-        if (state.CustomerQueue.Count > 0)
+        if (sim.CustomerQueue.Count > 0)
         {
-            Customer nextCustomerFromQueue = state.CustomerQueue.Dequeue();
-            state.Calendar.PlanNewEvent(
-                new OperationStart(state.CurrentSimTime, nextCustomerFromQueue)
+            Customer nextCustomerFromQueue = sim.CustomerQueue.Dequeue();
+            sim.Calendar.PlanNewEvent(
+                new OperationStart(sim.CurrentSimTime, nextCustomerFromQueue)
             );
             return Task.CompletedTask;
         }
 
-        state.IsBusy = false;
+        sim.IsBusy = false;
         return Task.CompletedTask;
     }
 }

@@ -1,7 +1,7 @@
 @using DISS_2.BackEnd
 @using DISS_2.BackEnd.Core
 @rendermode InteractiveServer
-@implements IDelegate;
+@implements ISimDelegate;
 
 <div class="card rounded-3 bg-dark text-white p-4">
     <h1>@Headline</h1>
@@ -55,7 +55,7 @@
 
     [Parameter, EditorRequired] public Func<Task>? RunSimulation { get; set; }
 
-    [Parameter, EditorRequired] public Action<SimState>? UpdateUi { get; set; }
+    [Parameter, EditorRequired] public Action<SimCore>? UpdateUi { get; set; }
 
     private string _simTime = "Day 1 - 06:00:00";
     private bool _simRunning = false;
@@ -64,16 +64,16 @@
 
     protected override void OnInitialized()
     {
-        MainApp.Instance.Delegates.Add(this);
+        MainApp.Instance.SimDelegates.Clear();
+        MainApp.Instance.SimDelegates.Add(this);
     }
 
 
-    void IDelegate.UpdateUi(SimState simState, Event currentEvent)
+    void ISimDelegate.UpdateUi(SimCore simCore, Event currentEvent)
     {
-        _simTime = TimeHandler.ToReadableTime(simState.CurrentSimTime);
-        UpdateUi?.Invoke(simState);
-        _eventsInCalendar = simState.Calendar.GetSortedEvents();
-
+        _simTime = TimeHandler.ToReadableTime(simCore.CurrentSimTime);
+        UpdateUi?.Invoke(simCore);
+        _eventsInCalendar = simCore.Calendar.GetSortedEvents();
 
         if (currentEvent is not SysEvent)
         {
@@ -97,5 +97,4 @@
 
         await InvokeAsync(StateHasChanged);
     }
-
 }

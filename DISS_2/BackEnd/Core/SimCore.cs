@@ -4,56 +4,95 @@ namespace DISS_2.BackEnd.Core;
 
 public abstract class SimCore
 {
-    private SimState State { get; set; }
+    public EventCalendar Calendar { get; set; }
+    public int CurrentSimTime { get; set; } = 0;
+    public int CurrentActualTimeInMs { get; set; } = 0;
+    public int CurrReplication { get; set; } = 0;
 
-
-    protected SimCore(SimState state)
+    public SimCore()
     {
-        State = state;
+        Calendar = new EventCalendar(this);
+    }
+
+
+    public async Task RunSimulation(int replicationCount)
+    {
+        await Task.Run(async () =>
+        {
+            BeforeSimulation();
+            for (CurrReplication = 0; CurrReplication < replicationCount; CurrReplication++)
+            {
+                await RunOneReplication();
+            }
+            AfterSimulation();
+        });
     }
 
     public async Task RunOneSimulation()
     {
         await Task.Run(async () =>
         {
-            BeforeSimulationRun(State);
-            State.Calendar.PlanNewEvent(new SysEvent(0));
-            Console.WriteLine("zaciname");
-
-            while (!State.Calendar.IsEmpty() && State.CurrentSimTime < 100_000)
-            {
-                Event currentEvent = State.Calendar.PopEvent();
-                Console.WriteLine($"Current event: {currentEvent}");
-                VerifyAndUpdateEventTime(currentEvent);
-                await currentEvent.Execute(State);
-
-                RefreshGui(currentEvent);
-            }
-
-            Console.WriteLine("hotovo");
-            AfterSimulationRun(State);
+            Calendar.PlanNewEvent(new SysEvent(0));
+            await RunOneReplication();
         });
     }
 
-    private void RefreshGui(Event currentEvent)
+    private async Task RunOneReplication()
     {
-        foreach (IDelegate @delegate in MainApp.Instance.Delegates)
+        BeforeReplicationRun(this);
+        while (!Calendar.IsEmpty() && CurrentSimTime < 100_000)
         {
-            @delegate.UpdateUi(State, currentEvent);
+            Event currentEvent = Calendar.PopEvent();
+            VerifyAndUpdateEventTime(currentEvent);
+            await currentEvent.Execute(this);
+            RefreshGuiAfterEvent(currentEvent);
+        }
+
+        AfterReplicationRun(this);
+    }
+
+    private void RefreshGuiAfterEvent(Event currentEvent)
+    {
+        foreach (ISimDelegate @delegate in MainApp.Instance.SimDelegates)
+        {
+            @delegate.UpdateUi(this, currentEvent);
         }
     }
 
-    protected virtual void AfterSimulationRun(SimState simState) {}
+    private void RefreshGuiAfterRep(int currentReplication)
+    {
+        /*foreach (ISimDelegate @delegate in MainApp.Instance.SimDelegates)
+        {
+            @delegate.UpdateUi(State, currentReplication);
+        }*/
+    }
 
-    protected virtual void BeforeSimulationRun(SimState simState) {}
+
+    protected virtual void BeforeSimulation()
+    {
+    }
+
+
+    protected virtual void BeforeReplicationRun(SimCore simCore)
+    {
+    }
+
+    protected virtual void AfterReplicationRun(SimCore simCore)
+    {
+    }
+
+    protected virtual void AfterSimulation()
+    {
+    }
 
     private void VerifyAndUpdateEventTime(Event currentEvent)
     {
-        if (currentEvent.StartTime < State.CurrentSimTime)
+        if (currentEvent.StartTime < CurrentSimTime)
         {
-            throw new ArgumentException("Event start time is less than the current simulation time!!!");
+            throw new ArgumentException(
+                "Event start time is less than the current simulation time!!!");
         }
-        
-        State.CurrentSimTime = currentEvent.StartTime;
+
+        CurrentSimTime = currentEvent.StartTime;
     }
 }
