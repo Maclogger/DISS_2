@@ -17,7 +17,7 @@
     {
         TicketSellingSimState state = (TicketSellingSimState)simState;
         _windowIsBusy = state.IsBusy;
-        _peopleInQueue = state.PeopleInQueue;
+        _peopleInQueue = state.CustomerQueue.Count;
         InvokeAsync(StateHasChanged);
     }
 

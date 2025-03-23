@@ -1,5 +1,6 @@
 using DISS_2.BackEnd.Core;
 using DISS_2.BackEnd.Generators.Uniform;
+using DISS_2.BackEnd.TicketSelling.Agents;
 
 namespace DISS_2.BackEnd.TicketSelling.CustomEvents;
 
@@ -9,18 +10,24 @@ public class CustomerArrival(int startTime) : Event(startTime)
     {
         TicketSellingSimState state = (TicketSellingSimState)simState;
 
-        int startTimeOfNextCustomerArrival = state.Gens.ArrivalGen.Generate();
+        Customer customer = new()
+        {
+            TimeArrival = state.CurrentSimTime,
+        };
+
+
+        int startTimeOfNextCustomerArrival = state.CurrentSimTime + state.Gens.ArrivalGen.Generate();
         state.Calendar.PlanNewEvent(
-            new CustomerArrival(state.CurrentSimTime + startTimeOfNextCustomerArrival)
+            new CustomerArrival(startTimeOfNextCustomerArrival)
         );
 
         if (state.IsBusy)
         {
-            state.PeopleInQueue++;
+            state.CustomerQueue.Enqueue(customer);
             return Task.CompletedTask;
         }
 
-        state.Calendar.PlanNewEvent(new OperationStart(state.CurrentSimTime + 0));
+        state.Calendar.PlanNewEvent(new OperationStart(state.CurrentSimTime + 0, customer));
         return Task.CompletedTask;
     }
 }
