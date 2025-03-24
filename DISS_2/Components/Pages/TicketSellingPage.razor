@@ -5,19 +5,30 @@
 @using DISS_2.BackEnd.TicketSelling
 @using DISS_2.Components.Basic
 
-<SimulationComp
-    Headline="Ticket Selling"
-    UpdateUi="UpdateUi"
-    RunSimulation="RunSimulation"
-    SimulationRunningIndex="0"
->
-    <h4 class="m-0 mb-1">People waiting in queue: @_peopleInQueue</h4>
-    <h4 class="m-0">Window busy: @_windowIsBusy</h4>
-</SimulationComp>
+@if (MainApp.Instance.TicketSimulation != null)
+{
+    <SimulationComp
+        Headline="Ticket Selling"
+        UpdateUi="UpdateUi"
+        Simulation="MainApp.Instance.TicketSimulation">
+        <h4 class="m-0 mb-1">People waiting in queue: @_peopleInQueue</h4>
+        <h4 class="m-0">Window busy: @_windowIsBusy</h4>
+    </SimulationComp>
+}
 
 @code {
-    private bool _windowIsBusy;
+    private bool _windowIsBusy = false;
     private int _peopleInQueue = 0;
+
+    protected override void OnInitialized()
+    {
+        if (MainApp.Instance.TicketSimulation == null)
+        {
+            MainApp.Instance.TicketSimulation = new();
+            _windowIsBusy = MainApp.Instance.TicketSimulation.IsBusy;
+            _peopleInQueue = MainApp.Instance.TicketSimulation.CustomerQueue.Count;
+        }
+    }
 
     public void UpdateUi(SimCore simCore)
     {
@@ -25,12 +36,6 @@
         _windowIsBusy = sim.IsBusy;
         _peopleInQueue = sim.CustomerQueue.Count;
         InvokeAsync(StateHasChanged);
-    }
-
-    private async Task RunSimulation()
-    {
-        TicketSimulation simulation = new();
-        await simulation.Run();
     }
 
 }

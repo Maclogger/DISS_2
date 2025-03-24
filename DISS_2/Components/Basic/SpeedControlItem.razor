@@ -4,23 +4,23 @@
          name="speedOptions"
          value="@Label"
          hidden
-         @onclick="@(() => OnSpeedChanged.InvokeAsync(Option))" />
+         @onclick="@(() => ChangeSpeed(Option))"/>
   @Label
 </label>
 
 
 @code {
-  [Parameter, EditorRequired]
-  public Speed Option { get; set; }
+  [Parameter, EditorRequired] public Speed Option { get; set; }
 
-  [Parameter, EditorRequired]
-  public string Label { get; set; }
+  [Parameter, EditorRequired] public string Label { get; set; } = "1x";
 
-  [Parameter, EditorRequired]
-  public Speed CurrentSpeed { get; set; }
+  [Parameter, EditorRequired] public SimCore SimCore { get; set; } = null!;
 
-  [Parameter, EditorRequired]
-  public EventCallback<Speed> OnSpeedChanged { get; set; }
+  private bool IsActive => SimCore.SpeedControl.CurrentSpeed == Option;
 
-  private bool IsActive => CurrentSpeed == Option;
+  private void ChangeSpeed(Speed option)
+  {
+      SimCore.SpeedControl.CurrentSpeed = option;
+      StateHasChanged();
+  }
 }

@@ -1,4 +1,3 @@
-@using DISS_2.BackEnd
 @using DISS_2.BackEnd.Core
 
 <div class="container">
@@ -9,8 +8,7 @@
       <div class="col p-2">
         <SpeedControlItem Option="@option.Value"
                           Label="@option.Label"
-                          CurrentSpeed="Speed"
-                          OnSpeedChanged="ChangeSpeed"/>
+                          SimCore="SimCore"/>
       </div>
     }
   </div>
@@ -18,9 +16,7 @@
 </div>
 
 @code {
-
-  private Speed Speed { get; set; } =
-    MainApp.Instance.SpeedControl.CurrentSpeed;
+  [Parameter, EditorRequired] public SimCore SimCore { get; set; } = null!;
 
   private record SpeedOption(Speed Value, string Label);
 
@@ -40,11 +36,4 @@
       new SpeedOption(Speed.FullSpeed, "Full Speed")
     };
   }
-
-  private void ChangeSpeed(Speed newSpeed)
-  {
-    Speed = newSpeed;
-    MainApp.Instance.SpeedControl.CurrentSpeed = newSpeed;
-  }
-
 }

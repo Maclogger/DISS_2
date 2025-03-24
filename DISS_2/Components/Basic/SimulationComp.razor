@@ -13,12 +13,17 @@
                 </div>
                 <button class="btn btn-primary ms-4"
                         @onclick="RunSimulationImpl"
-                        disabled="@MainApp.Instance.SimulationsRunning[SimulationRunningIndex]">
+                        disabled="@Simulation.IsRunning">
                     Start
+                </button>
+                <button class="btn btn-danger ms-4"
+                        @onclick="FinishSimulation"
+                        disabled="!@Simulation.IsRunning">
+                    Finish
                 </button>
             </div>
             <div class="card rounded-3 bg-white p-2 mt-4">
-                <SpeedControlComp/>
+                <SpeedControlComp SimCore="Simulation" />
             </div>
             <div class="card rounded-3 bg-white p-2 mt-4">
                 @ChildContent
@@ -53,11 +58,9 @@
 
     [Parameter, EditorRequired] public string Headline { get; set; } = "Moja Simululácia";
 
-    [Parameter, EditorRequired] public Func<Task>? RunSimulation { get; set; }
-
     [Parameter, EditorRequired] public Action<SimCore>? UpdateUi { get; set; }
 
-    [Parameter, EditorRequired] public int SimulationRunningIndex { get; set; }
+    [Parameter, EditorRequired] public SimCore Simulation { get; set; } = null!;
 
     private string _simTime = "Day 1 - 06:00:00";
     private List<Event> _eventsInCalendar = new();
@@ -68,6 +71,10 @@
         if (firstRender)
         {
             MainApp.Instance.SimDelegates.Add(this);
+            UpdateUi?.Invoke(Simulation);
+            _eventsInCalendar = Simulation.Calendar.GetSortedEvents();
+            _simTime = TimeHandler.ToReadableTime(Simulation.CurrentSimTime);
+            InvokeAsync(StateHasChanged);
         }
     }
 
@@ -88,18 +95,18 @@
         }
 
         InvokeAsync(StateHasChanged);
-
     }
 
     async Task RunSimulationImpl()
     {
         _logsCollection.Clear();
-
-        MainApp.Instance.SimulationsRunning[SimulationRunningIndex] = true;
-        await RunSimulation!();
-        MainApp.Instance.SimulationsRunning[SimulationRunningIndex] = false;
-
+        await Simulation.RunOneSimulation();
         await InvokeAsync(StateHasChanged);
     }
 
+    private void FinishSimulation()
+    {
+        Simulation.FinishSimulation();
+        StateHasChanged();
+    }
 }

@@ -9,39 +9,58 @@ public abstract class SimCore
     public int CurrentActualTimeInMs { get; set; } = 0;
     public int CurrReplication { get; set; } = 0;
 
+    public bool IsRunning { get; set; } = false;
+
+    public SpeedControl SpeedControl { get; set; } = new();
+
     public SimCore()
     {
         Calendar = new EventCalendar(this);
     }
 
-
     public async Task RunSimulation(int replicationCount)
     {
+        IsRunning = true;
         await Task.Run(async () =>
         {
             BeforeSimulation();
             for (CurrReplication = 0; CurrReplication < replicationCount; CurrReplication++)
             {
+                if (!IsRunning) break;
                 await RunOneReplication();
             }
             AfterSimulation();
         });
+        IsRunning = false;
     }
 
     public async Task RunOneSimulation()
     {
+        IsRunning = true;
         await Task.Run(async () =>
         {
             Calendar.PlanNewEvent(new SysEvent(0));
             await RunOneReplication();
         });
+        IsRunning = false;
     }
+
+    public void FinishSimulation()
+    {
+        IsRunning = false;
+        Console.WriteLine("Simulation finished");
+        SpeedControl.CurrentSpeed = Speed.Speed1X;
+        Console.WriteLine($"Is Running: {IsRunning}");
+    }
+
 
     private async Task RunOneReplication()
     {
         BeforeReplicationRun(this);
         while (!Calendar.IsEmpty() && CurrentSimTime < 100_000)
         {
+            Console.WriteLine($"Is Running In Cycle: {IsRunning}");
+            if (!IsRunning) break;
             Event currentEvent = Calendar.PopEvent();
             VerifyAndUpdateEventTime(currentEvent);
             await currentEvent.Execute(this);

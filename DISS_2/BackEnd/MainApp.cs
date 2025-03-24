@@ -1,4 +1,5 @@
 using DISS_2.BackEnd.Core;
+using DISS_2.BackEnd.TicketSelling;
 using DISS_2.Components;
 using DISS_2.Components.Basic;
 
@@ -22,11 +23,8 @@ public sealed class MainApp
     public Config Config { get; set; }
     public Generators.Generators TesterGenerators { get; set; }
 
-    // 0: TicketSelling 1: MainSimulation
-    public bool[] SimulationsRunning { get; set; } = [false, false];
-
     public List<ISimDelegate> SimDelegates { get; set; } = new();
     public List<IRepDelegate> RepDelegates { get; set; } = new();
 
-    public SpeedControl SpeedControl { get; set; } = new();
+    public TicketSimulation? TicketSimulation { get; set; }
 }
