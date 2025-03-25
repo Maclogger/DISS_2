@@ -5,10 +5,10 @@ public class SampleStat(string name) : Statistics(name)
     public long Sum { get; set; }
     public long Count { get; set; }
 
-    public override float CalcMean()
+    public override double CalcMean()
     {
         Console.WriteLine($"Sum: {Sum}, Count: {Count}");
-        return (float)Sum / Count;
+        return (double)Sum / Count;
     }
 
     public void AddValue(int value)
@@ -19,7 +19,7 @@ public class SampleStat(string name) : Statistics(name)
 
     public override string ToString()
     {
-        float mean = CalcMean();
+        double mean = CalcMean();
         string sol = $"Sample Statistics: [{Name}] \n ";
         sol += $"Mean: {mean}";
         sol += $"Count: {Count}";

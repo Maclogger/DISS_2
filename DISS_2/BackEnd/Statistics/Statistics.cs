@@ -4,5 +4,5 @@ public abstract class Statistics(string name)
 {
     public string Name { get; } = name;
 
-    public abstract float CalcMean();
+    public abstract double CalcMean();
 }

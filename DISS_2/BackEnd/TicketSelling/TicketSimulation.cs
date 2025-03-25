@@ -42,7 +42,7 @@ public class TicketSimulation : SimCore
 public class TicketGenerators
 {
     public  UniformGenerator<int> ArrivalGen { get; set; }=
-        UniformGeneratorFactory.CreateDiscreteUniformGenerator(5, 6);
+        UniformGeneratorFactory.CreateDiscreteUniformGenerator(5, 10);
     public UniformGenerator<int> OperationDurationGen { get; set; }=
-        UniformGeneratorFactory.CreateDiscreteUniformGenerator(6, 7);
+        UniformGeneratorFactory.CreateDiscreteUniformGenerator(5, 8);
 }

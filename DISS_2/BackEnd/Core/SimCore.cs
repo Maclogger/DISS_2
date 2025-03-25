@@ -59,7 +59,7 @@ public abstract class SimCore
     private async Task RunOneReplication()
     {
         BeforeReplicationRun(this);
-        while (!Calendar.IsEmpty() && CurrentSimTime < 60 * 60 * 8 * 40)
+        while (!Calendar.IsEmpty() && CurrentSimTime < 60 * 60 * 8 * 100)
         {
             if (!IsRunning) break;
             Event currentEvent = Calendar.PopEvent();
