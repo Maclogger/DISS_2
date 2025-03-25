@@ -6,7 +6,7 @@ public abstract class SimCore
 {
     public EventCalendar Calendar { get; set; }
     public int CurrentSimTime { get; set; } = 0;
-    public int CurrentActualTimeInMs { get; set; } = 0;
+    public int Frame { get; set; } = 0;
     public int CurrReplication { get; set; } = 0;
 
     public bool IsRunning { get; set; } = false;
@@ -50,7 +50,6 @@ public abstract class SimCore
         IsRunning = false;
         Console.WriteLine("Simulation finished");
         SpeedControl.CurrentSpeed = Speed.Speed1X;
-        Console.WriteLine($"Is Running: {IsRunning}");
     }
 
 
@@ -59,7 +58,6 @@ public abstract class SimCore
         BeforeReplicationRun(this);
         while (!Calendar.IsEmpty() && CurrentSimTime < 100_000)
         {
-            Console.WriteLine($"Is Running In Cycle: {IsRunning}");
             if (!IsRunning) break;
             Event currentEvent = Calendar.PopEvent();
             VerifyAndUpdateEventTime(currentEvent);

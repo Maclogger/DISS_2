@@ -1,26 +1,33 @@
 @using DISS_2.BackEnd.Core
-<label class="btn btn-outline-primary @(IsActive ? "active" : "") w-100 h-100 d-flex align-items-center justify-content-center">
+
+<label
+  class="btn btn-outline-primary @(IsActive ? "active" : "") w-100 h-100 d-flex align-items-center justify-content-center @ExtraCss">
   <input type="radio"
          name="speedOptions"
          value="@Label"
          hidden
-         @onclick="@(() => ChangeSpeed(Option))"/>
+         @onclick="@(() => ChangeSpeed(Option))" />
   @Label
 </label>
 
-
 @code {
-  [Parameter, EditorRequired] public Speed Option { get; set; }
+  [Parameter, EditorRequired]
+  public Speed Option { get; set; }
 
-  [Parameter, EditorRequired] public string Label { get; set; } = "1x";
+  [Parameter, EditorRequired]
+  public string Label { get; set; } = "1x";
 
-  [Parameter, EditorRequired] public SimCore SimCore { get; set; } = null!;
+  [Parameter, EditorRequired]
+  public SimCore SimCore { get; set; } = null!;
+
+  [Parameter]
+  public string ExtraCss { get; set; } = "";
 
   private bool IsActive => SimCore.SpeedControl.CurrentSpeed == Option;
 
   private void ChangeSpeed(Speed option)
   {
-      SimCore.SpeedControl.CurrentSpeed = option;
-      StateHasChanged();
+    SimCore.SpeedControl.CurrentSpeed = option;
+    StateHasChanged();
   }
 }

@@ -3,6 +3,7 @@ namespace DISS_2.BackEnd.Core;
 public class SysEvent(int startTime) : Event(startTime)
 {
     private SimCore? _sim;
+
     public override async Task Execute(SimCore simCore)
     {
         _sim = simCore;
@@ -17,9 +18,29 @@ public class SysEvent(int startTime) : Event(startTime)
             return;
         }
 
-        int simTimeToAdd = CalcHowMuchSimTimeToAdd();
+        _sim.Frame++;
+        double multiplier = (double)_sim.SpeedControl.GetSpeedMultiplier()!;
+
+        int simTimeToAdd = CalcSimTimeToAdd((int)multiplier, _sim.Frame);
+
+        if (_sim.Frame >= 10) _sim.Frame = 0;
+
         simCore.Calendar.PlanNewEvent(new SysEvent(_sim.CurrentSimTime + simTimeToAdd));
-        await Task.Delay(1000);
+        await Task.Delay(100);
+    }
+
+    private int CalcSimTimeToAdd(int multiplier, int frame)
+    {
+        Console.WriteLine($"multiplier: {multiplier}, frame: {frame}");
+        if (multiplier == 1) return frame == 9 ? 1 : 0;
+
+        if (multiplier == 2) return frame == 4 || frame == 9 ? 1 : 0;
+
+        if (multiplier == 5) return frame % 2 == 1 ? 1 : 0;
+
+        if (multiplier == 10) return 1;
+        
+        return multiplier / 10;
     }
 
     private async Task<Speed> WaitForSpeedToChange()
@@ -35,18 +56,6 @@ public class SysEvent(int startTime) : Event(startTime)
 
             await Task.Delay(100);
         }
-    }
-
-    private int CalcHowMuchSimTimeToAdd()
-    {
-        double? speedMultiplier = _sim!.SpeedControl.GetSpeedMultiplier();
-        if (speedMultiplier == null)
-        {
-            throw new Exception(
-                "Speed was FULL_SPEED in SysEvent: WaitForSpeedToChange did not work.");
-        }
-
-        return (int)speedMultiplier.Value;
     }
 }
 

@@ -9,6 +9,9 @@ public enum Speed
     Speed10X,
     Speed100X,
     Speed1000X,
+    Speed10000X,
+    Speed100000X,
+    Speed1000000X,
     FullSpeed
 }
 
@@ -33,22 +36,17 @@ public class SpeedControl
             case Speed.Speed100X:
                 return 100.0;
             case Speed.Speed1000X:
-                return 1000.0;
+                return 1_000.0;
+            case Speed.Speed10000X:
+                return 10_000.0;
+            case Speed.Speed100000X:
+                return 100_000.0;
+            case Speed.Speed1000000X:
+                return 1_000_000.0;
             case Speed.FullSpeed:
                 return null;
             default:
                 return 1.0;
         }
-    }
-
-    public int GetDelayBetweenFrames()
-    {
-        double? multiplier = GetSpeedMultiplier();
-        if (multiplier == null)
-        {
-            return 0;
-        }
-
-        return Math.Max(0, (int)(1000.0 / multiplier.Value));
     }
 }
