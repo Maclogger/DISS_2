@@ -13,6 +13,8 @@ public abstract class SimCore
 
     public SpeedControl SpeedControl { get; set; } = new();
 
+    public List<Statistics.Statistics> Statistics { get; set; } = new();
+
     public SimCore()
     {
         Calendar = new EventCalendar(this);
@@ -57,12 +59,14 @@ public abstract class SimCore
     private async Task RunOneReplication()
     {
         BeforeReplicationRun(this);
-        while (!Calendar.IsEmpty() && CurrentSimTime < 100_000_000)
+        while (!Calendar.IsEmpty() && CurrentSimTime < 60 * 60 * 8 * 40)
         {
             if (!IsRunning) break;
             Event currentEvent = Calendar.PopEvent();
             VerifyAndUpdateEventTime(currentEvent);
+            await currentEvent.BeforeEvent(this);
             await currentEvent.Execute(this);
+            await currentEvent.AfterEvent(this);
             RefreshGuiAfterEvent(currentEvent);
         }
 
@@ -112,7 +116,7 @@ public abstract class SimCore
         if (currentEvent.StartTime < CurrentSimTime)
         {
             throw new ArgumentException(
-                "Event start time is less than the current simulation time!!!");
+                $"Event start time is less than the current simulation time!!! (SimTime = {CurrentSimTime}, StartTime = {currentEvent.StartTime})");
         }
 
         CurrentSimTime = currentEvent.StartTime;
@@ -124,5 +128,6 @@ public abstract class SimCore
         CurrentSimTime = 0;
         Frame = 0;
         IsRunning = false;
+        Statistics.Clear();
     }
 }

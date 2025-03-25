@@ -31,7 +31,7 @@ public class SysEvent(int startTime) : Event(startTime)
 
     private int CalcSimTimeToAdd(int multiplier, int frame)
     {
-        Console.WriteLine($"multiplier: {multiplier}, frame: {frame}");
+        //Console.WriteLine($"multiplier: {multiplier}, frame: {frame}");
         if (multiplier == 1) return frame == 9 ? 1 : 0;
 
         if (multiplier == 2) return frame == 4 || frame == 9 ? 1 : 0;

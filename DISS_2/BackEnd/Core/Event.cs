@@ -16,10 +16,21 @@ public abstract class Event : IComparable<Event>
     {
         return $"{TimeHandler.ToReadableTime(StartTime)}: {GetType().Name}";
     }
+
     public int CompareTo(Event? other)
     {
         if (ReferenceEquals(this, other)) return 0;
         if (other is null) return 1;
         return StartTime.CompareTo(other.StartTime);
+    }
+
+    public virtual Task BeforeEvent(SimCore sim)
+    {
+        return Task.CompletedTask;
+    }
+
+    public virtual Task AfterEvent(SimCore sim)
+    {
+        return Task.CompletedTask;
     }
 }

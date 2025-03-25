@@ -1,4 +1,5 @@
 using DISS_2.BackEnd.Core;
+using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TicketSelling.Agents;
 
 namespace DISS_2.BackEnd.TicketSelling.CustomEvents;
@@ -22,5 +23,11 @@ public class OperationEnd(int startTime, Customer customer) : Event(startTime)
 
         sim.IsBusy = false;
         return Task.CompletedTask;
+    }
+
+    public override Task AfterEvent(SimCore sim)
+    {
+        ((SampleStat)sim.Statistics[0]).AddValue(sim.CurrentSimTime - Customer.TimeArrival);
+        return base.AfterEvent(sim);
     }
 }

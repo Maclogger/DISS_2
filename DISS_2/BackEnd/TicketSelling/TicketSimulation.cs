@@ -1,5 +1,6 @@
 using DISS_2.BackEnd.Core;
 using DISS_2.BackEnd.Generators.Uniform;
+using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TicketSelling.Agents;
 using DISS_2.BackEnd.TicketSelling.CustomEvents;
 
@@ -19,6 +20,7 @@ public class TicketSimulation : SimCore
 
     protected override void BeforeReplicationRun(SimCore simCore)
     {
+        simCore.Statistics.Add(new SampleStat("Average time in system"));
         simCore.Calendar.PlanNewEvent(new CustomerArrival(0));
     }
 
@@ -27,7 +29,12 @@ public class TicketSimulation : SimCore
         base.ResetSimulation();
         CustomerQueue.Clear();
         IsBusy = false;
-        Gens = new();
+    }
+
+    protected override void AfterReplicationRun(SimCore simCore)
+    {
+        Console.WriteLine(simCore.Statistics[0]);
+        base.AfterReplicationRun(simCore);
     }
 }
 
@@ -35,7 +42,7 @@ public class TicketSimulation : SimCore
 public class TicketGenerators
 {
     public  UniformGenerator<int> ArrivalGen { get; set; }=
-        UniformGeneratorFactory.CreateDiscreteUniformGenerator(10, 20);
+        UniformGeneratorFactory.CreateDiscreteUniformGenerator(5, 6);
     public UniformGenerator<int> OperationDurationGen { get; set; }=
-        UniformGeneratorFactory.CreateDiscreteUniformGenerator(10, 30);
+        UniformGeneratorFactory.CreateDiscreteUniformGenerator(6, 7);
 }

@@ -6,16 +6,15 @@ namespace DISS_2.BackEnd.TicketSelling.CustomEvents;
 
 public class CustomerArrival(int startTime) : Event(startTime)
 {
+
     public override Task Execute(SimCore simCore)
     {
         TicketSimulation sim = (TicketSimulation)simCore;
-
 
         Customer customer = new()
         {
             TimeArrival = sim.CurrentSimTime,
         };
-
 
         int startTimeOfNextCustomerArrival = sim.CurrentSimTime + sim.Gens.ArrivalGen
             .Generate();
