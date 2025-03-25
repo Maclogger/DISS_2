@@ -12,13 +12,15 @@
                     <h4 class="text-center m-0">@_simTime</h4>
                 </div>
                 <button class="btn btn-primary ms-4"
+                        style="width: 6rem;"
                         @onclick="RunSimulationImpl"
                         disabled="@Simulation.IsRunning">
                     Start
                 </button>
                 <button class="btn btn-danger ms-4"
+                        style="width: 6rem;"
                         @onclick="FinishSimulation"
-                        disabled="!@Simulation.IsRunning">
+                        disabled="@CouldNotBeFinished()">
                     Finish
                 </button>
             </div>
@@ -59,9 +61,11 @@
 @code {
     [Parameter, EditorRequired] public RenderFragment? ChildContent { get; set; }
 
-    [Parameter, EditorRequired] public string Headline { get; set; } = "Moja Simululácia";
+    [Parameter, EditorRequired] public string Headline { get; set; } = "Simulation";
 
     [Parameter, EditorRequired] public Action<SimCore>? UpdateUi { get; set; }
+
+    [Parameter, EditorRequired] public Action? InitializeSimulation { get; set; }
 
     [Parameter, EditorRequired] public SimCore Simulation { get; set; } = null!;
 
@@ -103,6 +107,7 @@
     async Task RunSimulationImpl()
     {
         _logsCollection.Clear();
+        InitializeSimulation!();
         await Simulation.RunOneSimulation();
         await InvokeAsync(StateHasChanged);
     }
@@ -112,4 +117,10 @@
         Simulation.FinishSimulation();
         StateHasChanged();
     }
+
+    private bool CouldNotBeFinished()
+    {
+        return !Simulation.IsRunning;
+    }
+
 }

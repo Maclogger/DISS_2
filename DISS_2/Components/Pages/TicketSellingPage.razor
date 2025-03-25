@@ -10,7 +10,7 @@
     <SimulationComp
         Headline="Ticket Selling"
         UpdateUi="UpdateUi"
-        Simulation="MainApp.Instance.TicketSimulation">
+        Simulation="MainApp.Instance.TicketSimulation" InitializeSimulation="ResetSimulation">
         <h4 class="m-0 mb-1">People waiting in queue: @_peopleInQueue</h4>
         <h4 class="m-0">Window busy: @_windowIsBusy</h4>
     </SimulationComp>
@@ -25,8 +25,7 @@
         if (MainApp.Instance.TicketSimulation == null)
         {
             MainApp.Instance.TicketSimulation = new();
-            _windowIsBusy = MainApp.Instance.TicketSimulation.IsBusy;
-            _peopleInQueue = MainApp.Instance.TicketSimulation.CustomerQueue.Count;
+            ResetSimulation();
         }
     }
 
@@ -36,6 +35,12 @@
         _windowIsBusy = sim.IsBusy;
         _peopleInQueue = sim.CustomerQueue.Count;
         InvokeAsync(StateHasChanged);
+    }
+
+    private void ResetSimulation()
+    {
+        MainApp.Instance.TicketSimulation!.ResetSimulation();
+        UpdateUi(MainApp.Instance.TicketSimulation);
     }
 
 }

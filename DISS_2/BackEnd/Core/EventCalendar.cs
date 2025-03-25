@@ -59,4 +59,9 @@ public class EventCalendar
         events.Sort();
         return events;
     }
+
+    public void Reset()
+    {
+        Events.Clear();
+    }
 }

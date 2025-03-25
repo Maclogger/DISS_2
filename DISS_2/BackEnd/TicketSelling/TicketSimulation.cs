@@ -21,6 +21,14 @@ public class TicketSimulation : SimCore
     {
         simCore.Calendar.PlanNewEvent(new CustomerArrival(0));
     }
+
+    public override void ResetSimulation()
+    {
+        base.ResetSimulation();
+        CustomerQueue.Clear();
+        IsBusy = false;
+        Gens = new();
+    }
 }
 
 

@@ -29,6 +29,7 @@ public abstract class SimCore
                 if (!IsRunning) break;
                 await RunOneReplication();
             }
+
             AfterSimulation();
         });
         IsRunning = false;
@@ -68,13 +69,17 @@ public abstract class SimCore
         AfterReplicationRun(this);
     }
 
+
     private void RefreshGuiAfterEvent(Event currentEvent)
     {
-        foreach (ISimDelegate @delegate in MainApp.Instance.SimDelegates)
+        List<ISimDelegate> delegates = MainApp.Instance.SimDelegates.ToList();
+
+        foreach (ISimDelegate @delegate in delegates)
         {
             @delegate.UpdateUi(this, currentEvent);
         }
     }
+
 
     private void RefreshGuiAfterRep(int currentReplication)
     {
@@ -111,5 +116,13 @@ public abstract class SimCore
         }
 
         CurrentSimTime = currentEvent.StartTime;
+    }
+
+    public virtual void ResetSimulation()
+    {
+        Calendar.Reset();
+        CurrentSimTime = 0;
+        Frame = 0;
+        IsRunning = false;
     }
 }
