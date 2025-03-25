@@ -1,0 +1,66 @@
+@using DISS_2.BackEnd.Core
+
+<div class="container">
+  <div class="row">
+    <div class="col-10">
+      <input
+        type="range"
+        class="w-100 h-100"
+        id="speedSlider"
+        min="0"
+        max="@(_speedOptions.Count - 1)"
+        step="1"
+        value="@_currentIndex"
+        @oninput="OnSliderChange"/>
+    </div>
+    <div class="col-2 rounded-3 bg-primary text-white"
+         style="height: 3rem; display: flex; justify-content: center; align-items: center;">
+      <h5 class="w-100 m-0 text-center" style="font-size: 1.2em;">
+        @_speedOptions[_currentIndex].Label
+      </h5>
+    </div>
+  </div>
+</div>
+
+
+@code {
+  [Parameter, EditorRequired] public SimCore SimCore { get; set; } = null!;
+
+  private record SpeedOption(Speed Value, string Label);
+
+  private List<SpeedOption> _speedOptions = new();
+  private int _currentIndex = 0;
+
+  protected override void OnInitialized()
+  {
+    _speedOptions = new List<SpeedOption>
+    {
+      new SpeedOption(Speed.Stopped, "Stop"),
+      new SpeedOption(Speed.Speed1X, "1x"),
+      new SpeedOption(Speed.Speed2X, "2x"),
+      new SpeedOption(Speed.Speed5X, "5x"),
+      new SpeedOption(Speed.Speed10X, "10x"),
+      new SpeedOption(Speed.Speed100X, "100x"),
+      new SpeedOption(Speed.Speed1000X, "1 000x"),
+      new SpeedOption(Speed.Speed10000X, "10 000x"),
+      new SpeedOption(Speed.Speed100000X, "100 000x"),
+      new SpeedOption(Speed.Speed1000000X, "1 000 000x"),
+      new SpeedOption(Speed.FullSpeed, "Full Speed")
+    };
+
+    var currentSpeed = SimCore.SpeedControl.CurrentSpeed;
+    var index = _speedOptions.FindIndex(x => x.Value.Equals(currentSpeed));
+    _currentIndex = index != -1 ? index : 0;
+  }
+
+  private void OnSliderChange(ChangeEventArgs e)
+  {
+    if (int.TryParse(e.Value?.ToString(), out int index))
+    {
+      _currentIndex = index;
+      SimCore.SpeedControl.CurrentSpeed = _speedOptions[index].Value;
+      StateHasChanged();
+    }
+  }
+
+}
