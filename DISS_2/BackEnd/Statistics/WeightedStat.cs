@@ -7,6 +7,10 @@ namespace DISS_2.BackEnd.Statistics
         private long _prevSimTime = 0;
 
         public override double CalcMean() => Mean;
+        public override string GetTypeString()
+        {
+            return "Weighted statistics";
+        }
 
         public void AddValue(int value, long simTime)
         {

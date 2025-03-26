@@ -7,4 +7,9 @@ public abstract class Statistics(string name)
     public double Mean { get; set; }
 
     public abstract double CalcMean();
+
+    public virtual string GetTypeString()
+    {
+        return "Statistic";
+    }
 }

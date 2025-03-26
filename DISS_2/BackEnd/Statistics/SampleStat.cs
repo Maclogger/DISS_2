@@ -5,6 +5,10 @@ namespace DISS_2.BackEnd.Statistics
         private double _mean = 0.0;
 
         public override double CalcMean() => _mean;
+        public override string GetTypeString()
+        {
+            return "Sample statistics";
+        }
 
         public void AddValue(int value)
         {
