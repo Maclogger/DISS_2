@@ -11,14 +11,22 @@ namespace DISS_2.BackEnd.TopFurniture;
 
 public class TopFurnitureSimulation : SimCore
 {
-    public int A { get; }
-    public int B { get; }
-    public int C { get; }
+    public int A { get; private set; }
+    public int B { get; private set; }
+    public int C { get; private set; }
     public List<FifoQueue<Order>> Queues { get; set; }
 
     public int BusyA { get; set; } = 0;
     public int BusyB { get; set; } = 0;
     public int BusyC { get; set; } = 0;
+
+    public void Reinitialize(int a, int b, int c)
+    {
+        ResetSimulation();
+        A = a;
+        B = b;
+        C = c;
+    }
 
     public bool IsAvailable(char group)
     {
@@ -33,11 +41,11 @@ public class TopFurnitureSimulation : SimCore
 
     public FurnitureGenerators Generators { get; } = new();
 
-    public TopFurnitureSimulation(int a, int b, int c)
+    public TopFurnitureSimulation()
     {
-        A = a;
-        B = b;
-        C = c;
+        A = 1;
+        B = 1;
+        C = 1;
         Queues =
         [
             new FifoQueue<Order>(this), // DUMMY -> just to index from 1

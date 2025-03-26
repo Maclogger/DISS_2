@@ -1,5 +1,6 @@
 using DISS_2.BackEnd.Core;
 using DISS_2.BackEnd.TicketSelling;
+using DISS_2.BackEnd.TopFurniture;
 using DISS_2.Components;
 using DISS_2.Components.Basic;
 
@@ -27,4 +28,5 @@ public sealed class MainApp
     public List<IRepDelegate> RepDelegates { get; set; } = new();
 
     public TicketSimulation? TicketSimulation { get; set; }
+    public TopFurnitureSimulation? TopFurnitureSimulation { get; set; }
 }

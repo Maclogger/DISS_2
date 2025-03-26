@@ -4,6 +4,7 @@ public class FifoQueue<T>
 {
     private Queue<T> _queue = new();
     private SimCore _sim;
+    public Dictionary<string, int> TypeCounts = new();
 
     public FifoQueue(SimCore core)
     {
@@ -49,5 +50,10 @@ public class FifoQueue<T>
     public bool IsEmpty()
     {
         return _queue.Count <= 0;
+    }
+
+    public int GetCount()
+    {
+        return _queue.Count;
     }
 }
