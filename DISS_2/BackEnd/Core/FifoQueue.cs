@@ -15,6 +15,14 @@ public class FifoQueue<T>
     {
         BeforeEnqueue(item);
         _queue.Enqueue(item);
+        if (TypeCounts.ContainsKey(item?.GetType().Name!))
+        {
+            TypeCounts[item?.GetType().Name!]++;
+        }
+        else
+        {
+            TypeCounts.Add(item?.GetType().Name!, 1);
+        }
         AfterEnqueue(item);
     }
 
@@ -22,6 +30,16 @@ public class FifoQueue<T>
     {
         BeforeDequeue();
         T item = _queue.Dequeue();
+
+        if (TypeCounts[item?.GetType().Name!] <= 1)
+        {
+            TypeCounts.Remove(item?.GetType().Name!);
+        }
+        else
+        {
+            TypeCounts[item?.GetType().Name!]--;
+        }
+
         AfterDequeue(item);
         return item;
     }
@@ -29,6 +47,7 @@ public class FifoQueue<T>
     public void Clear()
     {
         _queue.Clear();
+        TypeCounts.Clear();
     }
 
     protected virtual void BeforeEnqueue(T item)

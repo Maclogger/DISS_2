@@ -14,6 +14,14 @@ public class Step3End(int startTime, Order order) : OrderEvent(startTime, order)
         {
             PlanStep4(sim, wardrobe);
         }
+        else if (order is Chair)
+        {
+            sim.ChairsInSystem--;
+        }
+        else if (order is Table)
+        {
+            sim.TablesInSystem--;
+        }
 
         return Task.CompletedTask;
     }

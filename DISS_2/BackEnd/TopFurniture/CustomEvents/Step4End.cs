@@ -11,6 +11,18 @@ public class Step4End(int startTime, Order order) : OrderEvent(startTime, order)
 
         PlanStep4OrStep2(sim);
 
+        if (order is Chair)
+        {
+            sim.ChairsInSystem--;
+        } else if (order is Table)
+        {
+            sim.TablesInSystem--;
+        } else if (order is Wardrobe)
+        {
+            sim.WardrobesInSystem--;
+        }
+
+
         return Task.CompletedTask;
     }
 

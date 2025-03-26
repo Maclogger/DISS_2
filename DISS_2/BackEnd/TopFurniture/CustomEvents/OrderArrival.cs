@@ -11,6 +11,17 @@ public class OrderArrival(int startTime) : Event(startTime)
 
         Order order = Order.CreateRandomOrder(sim.Generators.OrderTypeGen, sim.CurrentSimTime);
 
+        if (order is Chair)
+        {
+            sim.ChairsInSystem++;
+        } else if (order is Table)
+        {
+            sim.TablesInSystem++;
+        } else if (order is Wardrobe)
+        {
+            sim.WardrobesInSystem++;
+        }
+
         PlanNextArrival(sim);
         PlanStep1StartOrQueue(sim, order);
 

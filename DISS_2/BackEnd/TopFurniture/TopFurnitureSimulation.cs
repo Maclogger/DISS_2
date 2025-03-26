@@ -20,6 +20,10 @@ public class TopFurnitureSimulation : SimCore
     public int BusyB { get; set; } = 0;
     public int BusyC { get; set; } = 0;
 
+    public int ChairsInSystem { get; set; } = 0;
+    public int TablesInSystem { get; set; } = 0;
+    public int WardrobesInSystem { get; set; } = 0;
+
     public void Reinitialize(int a, int b, int c)
     {
         ResetSimulation();
@@ -36,6 +40,7 @@ public class TopFurnitureSimulation : SimCore
             case 'B': return BusyB < B;
             case 'C': return BusyC < C;
         }
+
         throw new Exception("Invalid group");
     }
 
@@ -68,6 +73,10 @@ public class TopFurnitureSimulation : SimCore
         BusyA = 0;
         BusyB = 0;
         BusyC = 0;
+
+        ChairsInSystem = 0;
+        TablesInSystem = 0;
+        WardrobesInSystem = 0;
     }
 
     protected override void BeforeReplicationRun(SimCore simCore)

@@ -30,11 +30,61 @@
             </div>
         </div>
 
-        <div class="card rounded-3 m-2 bg-dark text-white">
-            <p class="fs-4">Queue 1: @Queue1Count</p>
-            <p class="fs-4">Queue 2: @Queue2Count</p>
-            <p class="fs-4">Queue 3: @Queue3Count</p>
-            <p class="fs-4">Queue 4: @Queue4Count</p>
+
+        <div class="card rounded-3 bg-white">
+            <p>Chairs in system: @_chairsInSystem</p>
+            <p>Tables in system: @_tablesInSystem</p>
+            <p>Wardrobes in system: @_wardrobesInSystem</p>
+        </div>
+
+
+        <div class="card rounded-3 m-2 p-3 bg-light">
+            <h5 class="card-title mb-3">Queues</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="table-primary">
+                    <tr>
+                        <th>Item Type</th>
+                        <th>Queue 1</th>
+                        <th>Queue 2</th>
+                        <th>Queue 3</th>
+                        <th>Queue 4</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td class="fw-bold">Chair</td>
+                        <td>@GetQueueCount(_queue1CountsByTypes, "Chair")</td>
+                        <td>@GetQueueCount(_queue2CountsByTypes, "Chair")</td>
+                        <td>@GetQueueCount(_queue3CountsByTypes, "Chair")</td>
+                        <td>@GetQueueCount(_queue4CountsByTypes, "Chair")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Table</td>
+                        <td>@GetQueueCount(_queue1CountsByTypes, "Table")</td>
+                        <td>@GetQueueCount(_queue2CountsByTypes, "Table")</td>
+                        <td>@GetQueueCount(_queue3CountsByTypes, "Table")</td>
+                        <td>@GetQueueCount(_queue4CountsByTypes, "Table")</td>
+                    </tr>
+                    <tr>
+                        <td class="fw-bold">Wardrobe</td>
+                        <td>@GetQueueCount(_queue1CountsByTypes, "Wardrobe")</td>
+                        <td>@GetQueueCount(_queue2CountsByTypes, "Wardrobe")</td>
+                        <td>@GetQueueCount(_queue3CountsByTypes, "Wardrobe")</td>
+                        <td>@GetQueueCount(_queue4CountsByTypes, "Wardrobe")</td>
+                    </tr>
+                    </tbody>
+                    <tfoot class="table-secondary">
+                    <tr>
+                        <th>Total</th>
+                        <th>@_queue1CountsByTypes.Values.Sum()</th>
+                        <th>@_queue2CountsByTypes.Values.Sum()</th>
+                        <th>@_queue3CountsByTypes.Values.Sum()</th>
+                        <th>@_queue4CountsByTypes.Values.Sum()</th>
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
         </div>
 
     </SimulationComp>
@@ -45,11 +95,14 @@
     public int B { get; set; } = 1;
     public int C { get; set; } = 1;
 
-    private int Queue1Count { get; set; } = 0;
-    private int Queue2Count { get; set; } = 0;
-    private int Queue3Count { get; set; } = 0;
-    private int Queue4Count { get; set; } = 0;
+    private Dictionary<string, int> _queue1CountsByTypes = new();
+    private Dictionary<string, int> _queue2CountsByTypes = new();
+    private Dictionary<string, int> _queue3CountsByTypes = new();
+    private Dictionary<string, int> _queue4CountsByTypes = new();
 
+    private int _chairsInSystem = 0;
+    private int _tablesInSystem = 0;
+    private int _wardrobesInSystem = 0;
 
     protected override void OnInitialized()
     {
@@ -64,10 +117,14 @@
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
-        Queue1Count = sim.Queues[1].GetCount();
-        Queue2Count = sim.Queues[2].GetCount();
-        Queue3Count = sim.Queues[3].GetCount();
-        Queue4Count = sim.Queues[4].GetCount();
+        _queue1CountsByTypes = sim.Queues[1].TypeCounts;
+        _queue2CountsByTypes = sim.Queues[2].TypeCounts;
+        _queue3CountsByTypes = sim.Queues[3].TypeCounts;
+        _queue4CountsByTypes = sim.Queues[4].TypeCounts;
+
+        _chairsInSystem = sim.ChairsInSystem;
+        _tablesInSystem = sim.TablesInSystem;
+        _wardrobesInSystem = sim.WardrobesInSystem;
 
         InvokeAsync(StateHasChanged);
     }
@@ -76,6 +133,11 @@
     {
         MainApp.Instance.TopFurnitureSimulation!.Reinitialize(A, B, C);
         UpdateUi(MainApp.Instance.TopFurnitureSimulation);
+    }
+
+    private int GetQueueCount(Dictionary<string, int> queue, string itemType)
+    {
+        return queue.GetValueOrDefault(itemType, 0);
     }
 
 }
