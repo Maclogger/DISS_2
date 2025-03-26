@@ -1,28 +1,23 @@
-namespace DISS_2.BackEnd.Statistics;
-
-public class SampleStat(string name) : Statistics(name)
+namespace DISS_2.BackEnd.Statistics
 {
-    public long Sum { get; set; }
-    public long Count { get; set; }
-
-    public override double CalcMean()
+    public class SampleStat(string name) : Statistics(name)
     {
-        Console.WriteLine($"Sum: {Sum}, Count: {Count}");
-        return (double)Sum / Count;
-    }
+        public long Count { get; private set; } = 0;
+        private double _mean = 0.0;
 
-    public void AddValue(int value)
-    {
-        Sum += value;
-        Count++;
-    }
+        public override double CalcMean() => _mean;
 
-    public override string ToString()
-    {
-        double mean = CalcMean();
-        string sol = $"Sample Statistics: [{Name}] \n ";
-        sol += $"Mean: {mean}";
-        sol += $"Count: {Count}";
-        return sol;
+        public void AddValue(int value)
+        {
+            Count++;
+            _mean += (value - _mean) / Count;
+        }
+
+        public override string ToString()
+        {
+            return $"Sample Statistics: [{Name}]\n" +
+                   $"Mean: {CalcMean()}\n" +
+                   $"Count: {Count}";
+        }
     }
 }
