@@ -2,7 +2,6 @@ namespace DISS_2.BackEnd.Statistics
 {
     public class SampleStat(string name) : Statistics(name)
     {
-        public long Count { get; private set; } = 0;
         private double _mean = 0.0;
 
         public override double CalcMean() => _mean;

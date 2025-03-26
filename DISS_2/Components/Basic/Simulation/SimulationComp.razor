@@ -1,12 +1,13 @@
 @using DISS_2.BackEnd
 @using DISS_2.BackEnd.Core
+@using DISS_2.BackEnd.Statistics
 @rendermode InteractiveServer
 @implements ISimDelegate;
 
 <div class="card rounded-3 bg-dark text-white p-4">
-    <h1>@Headline</h1>
+    <h1 class="mb-4">@Headline</h1>
     <div class="row">
-        <div class="col-6">
+        <div class="col-6 d-flex flex-column">
             <div class="d-flex">
                 <div class="card rounded-3 bg-white p-2 d-flex align-items-center justify-content-center p-3">
                     <h4 class="text-center m-0">@_simTime</h4>
@@ -24,38 +25,20 @@
                     Finish
                 </button>
             </div>
-            <div class="card rounded-3 bg-white p-2 mt-4">
+            <div class="card rounded-3 bg-white mt-4 p-2 ">
                 @*
                 <SpeedControlComp SimCore="Simulation" />
                 *@
                 <Slider SimCore="Simulation"/>
             </div>
-            <div class="card rounded-3 bg-white p-2 mt-4">
+            <div class="card rounded-3 bg-white mt-4 p-2 flex-grow-1" style="height: max-content;">
                 @ChildContent
             </div>
         </div>
-        <div class="col-3 pb-4">
-            <div class="card rounded-3 bg-white p-2 mt-4 h-100">
-                <h4>Event Calendar</h4>
-                @foreach (Event eventVar in _eventsInCalendar)
-                {
-                    <div class="card rounded-3 bg-primary p-2 text-white mt-1 mb-1">
-                        <p class="m-0 p-0">
-                            @eventVar.ToString()
-                        </p>
-                    </div>
-                }
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="card rounded-3 bg-white p-2 mt-4">
-                <h4>History</h4>
-                <textarea class="form-control" readonly="readonly" rows="13">
-                    @string.Join("\n", _logsCollection)
-                </textarea>
-            </div>
-        </div>
+        <EventCalendarComp SortedEventList="_eventsInCalendar"/>
+        <HistoryComp LogsCollection="_logsCollection"/>
     </div>
+    <StatisticsComp Statistics="_statistics"/>
 </div>
 
 @code {
@@ -72,6 +55,7 @@
     private string _simTime = "Day 1 - 06:00:00";
     private List<Event> _eventsInCalendar = new();
     private List<string> _logsCollection = new();
+    private List<Statistics> _statistics = new();
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -90,6 +74,7 @@
         _simTime = TimeHandler.ToReadableTime(simCore.CurrentSimTime);
         UpdateUi?.Invoke(simCore);
         _eventsInCalendar = simCore.Calendar.GetSortedEvents();
+        _statistics = simCore.Statistics;
 
         if (currentEvent is not SysEvent)
         {

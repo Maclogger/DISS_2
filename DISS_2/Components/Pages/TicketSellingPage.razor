@@ -3,7 +3,7 @@
 @using DISS_2.BackEnd
 @using DISS_2.BackEnd.Core
 @using DISS_2.BackEnd.TicketSelling
-@using DISS_2.Components.Basic
+@using DISS_2.Components.Basic.Simulation
 
 @if (MainApp.Instance.TicketSimulation != null)
 {
@@ -11,7 +11,7 @@
         Headline="Ticket Selling"
         UpdateUi="UpdateUi"
         Simulation="MainApp.Instance.TicketSimulation" InitializeSimulation="ResetSimulation">
-        <h4 class="m-0 mb-1">People waiting in queue: @_peopleInQueue</h4>
+        <h4 class="m-0">People waiting in queue: @_peopleInQueue</h4>
         <h4 class="m-0">Window busy: @_windowIsBusy</h4>
     </SimulationComp>
 }

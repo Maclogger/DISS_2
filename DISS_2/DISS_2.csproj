@@ -11,4 +11,9 @@
       <Folder Include="Output\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Components\Basic\Simulation\SpeedControl\SpeedControlComp.razor" />
+      <_ContentIncludedByDefault Remove="Components\Basic\Simulation\SpeedControl\SpeedControlItem.razor" />
+    </ItemGroup>
+
 </Project>

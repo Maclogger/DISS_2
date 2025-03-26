@@ -2,12 +2,11 @@ namespace DISS_2.BackEnd.Statistics
 {
     public class WeightedStat(string name) : Statistics(name)
     {
-        private double _weightedMean = 0.0;
         private long _totalTime = 0;
         private int _prevValue = 0;
         private long _prevSimTime = 0;
 
-        public override double CalcMean() => _weightedMean;
+        public override double CalcMean() => Mean;
 
         public void AddValue(int value, long simTime)
         {
@@ -15,18 +14,19 @@ namespace DISS_2.BackEnd.Statistics
 
             if (_totalTime > 0 && deltaTime > 0)
             {
-                _weightedMean += (deltaTime * 1.0 / (_totalTime + deltaTime)) *
-                                 (_prevValue - _weightedMean);
+                Mean += (deltaTime * 1.0 / (_totalTime + deltaTime)) *
+                                 (_prevValue - Mean);
             }
             else if (_totalTime == 0)
             {
-                _weightedMean = _prevValue;
+                Mean = _prevValue;
             }
 
             _totalTime += deltaTime;
 
             _prevValue = value;
             _prevSimTime = simTime;
+            Count++;
         }
 
         private long ValidateAndGetDeltaTime(long simTime)
@@ -35,7 +35,7 @@ namespace DISS_2.BackEnd.Statistics
             if (deltaTime < 0)
             {
                 throw new ArgumentException(
-                    "Nový simulačný čas musí byť väčší alebo rovný predchádzajúcemu.");
+                    "The new simulation time must be greater than or equal to the previous one.");
             }
 
             return deltaTime;

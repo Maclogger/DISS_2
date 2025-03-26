@@ -1,6 +1,4 @@
-using DISS_2.BackEnd.Core;
-
-namespace DISS_2.Components;
+namespace DISS_2.BackEnd.Core;
 
 public interface ISimDelegate
 {
