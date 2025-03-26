@@ -45,4 +45,9 @@ public class FifoQueue<T>
     protected virtual void AfterDequeue(T item)
     {
     }
+
+    public bool IsEmpty()
+    {
+        return _queue.Count <= 0;
+    }
 }

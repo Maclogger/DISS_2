@@ -1,11 +1,45 @@
 using DISS_2.BackEnd.Core;
+using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture.CustomEvents;
 
-public class Step3End(int startTime) : Event(startTime)
+public class Step3End(int startTime, Order order) : OrderEvent(startTime, order)
 {
-    public override Task Execute(SimCore sim)
+    public override Task Execute(SimCore simCore)
     {
-        throw new NotImplementedException();
+        TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
+
+        PlanStep3IfInQueue(sim);
+        if (Order is Wardrobe wardrobe)
+        {
+            PlanStep4(sim, wardrobe);
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private void PlanStep4(TopFurnitureSimulation sim, Wardrobe wardrobe)
+    {
+        if (sim.IsAvailable('C'))
+        {
+            sim.Calendar.PlanNewEvent(new Step4Start(sim.CurrentSimTime, wardrobe));
+        }
+        else
+        {
+            sim.Queues[4].Enqueue(wardrobe);
+        }
+    }
+
+    private void PlanStep3IfInQueue(TopFurnitureSimulation sim)
+    {
+        if (!sim.Queues[3].IsEmpty())
+        {
+            Order orderFromQueue3 = sim.Queues[3].Dequeue();
+            sim.Calendar.PlanNewEvent(new Step3Start(sim.CurrentSimTime, orderFromQueue3));
+        }
+        else
+        {
+            sim.BusyB--;
+        }
     }
 }

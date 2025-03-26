@@ -1,11 +1,25 @@
 using DISS_2.BackEnd.Core;
+using DISS_2.BackEnd.Generators;
+using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture.CustomEvents;
 
-public class Step2Start(int startTime) : Event(startTime)
+public class Step2Start(int startTime, Order order) : OrderEvent(startTime, order)
 {
-    public override Task Execute(SimCore sim)
+    public override Task Execute(SimCore simCore)
     {
-        throw new NotImplementedException();
+        TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
+
+        sim.BusyC++;
+        PlanStep2End(sim);
+
+        return Task.CompletedTask;
+    }
+
+    private void PlanStep2End(TopFurnitureSimulation sim)
+    {
+        Generator<double> gen = sim.Generators.GetStepGenerator(Order, 2);
+        int timeToFinishStep2 = (int)Math.Round(gen.Generate());
+        sim.Calendar.PlanNewEvent(new Step2End(sim.CurrentSimTime + timeToFinishStep2, Order));
     }
 }

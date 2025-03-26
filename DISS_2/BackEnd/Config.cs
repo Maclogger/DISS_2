@@ -12,4 +12,8 @@ public class Config
     public const double Tolerance = 0.00001;
     public const string TesterOutputDir = "Output";
     public static int MaxLogCount { get; set; } = 1000;
+
+    public const double ProbOfTable = 0.5;
+    public const double ProbOfChair = 0.15;
+    public const double ProbOfWardrobe = 0.35;
 }
