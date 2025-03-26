@@ -21,6 +21,7 @@ public class TicketSimulation : SimCore
     protected override void BeforeReplicationRun(SimCore simCore)
     {
         simCore.Statistics.Add(new SampleStat("Average time in system"));
+        simCore.Statistics.Add(new WeightedStat("Weighted average time in queue"));
         simCore.Calendar.PlanNewEvent(new CustomerArrival(0));
     }
 
@@ -34,6 +35,7 @@ public class TicketSimulation : SimCore
     protected override void AfterReplicationRun(SimCore simCore)
     {
         Console.WriteLine(simCore.Statistics[0]);
+        Console.WriteLine(simCore.Statistics[1]);
         base.AfterReplicationRun(simCore);
     }
 }

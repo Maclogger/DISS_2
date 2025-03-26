@@ -15,6 +15,8 @@ public class OperationEnd(int startTime, Customer customer) : Event(startTime)
         if (sim.CustomerQueue.Count > 0)
         {
             Customer nextCustomerFromQueue = sim.CustomerQueue.Dequeue();
+            ((WeightedStat)sim.Statistics[1]).AddValue(sim.CustomerQueue.Count, sim.CurrentSimTime);
+
             sim.Calendar.PlanNewEvent(
                 new OperationStart(sim.CurrentSimTime, nextCustomerFromQueue)
             );

@@ -8,6 +8,7 @@ public class WeightedStat(string name) : Statistics(name)
 
     public override double CalcMean()
     {
+        if (_prevSimTime == 0) return 0;
         return _area / _prevSimTime;
     }
 
@@ -16,5 +17,13 @@ public class WeightedStat(string name) : Statistics(name)
         _area += (simTime - _prevSimTime) * _prevValue;
         _prevSimTime = simTime;
         _prevValue = value;
+    }
+
+    public override string ToString()
+    {
+        double mean = CalcMean();
+        string sol = $"Weighted Statistics: [{Name}] \n ";
+        sol += $"Weighted mean: {mean}";
+        return sol;
     }
 }

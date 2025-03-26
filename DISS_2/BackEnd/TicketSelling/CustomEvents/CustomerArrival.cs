@@ -1,5 +1,6 @@
 using DISS_2.BackEnd.Core;
 using DISS_2.BackEnd.Generators.Uniform;
+using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TicketSelling.Agents;
 
 namespace DISS_2.BackEnd.TicketSelling.CustomEvents;
@@ -26,6 +27,7 @@ public class CustomerArrival(int startTime) : Event(startTime)
         if (sim.IsBusy)
         {
             sim.CustomerQueue.Enqueue(customer);
+            ((WeightedStat)sim.Statistics[1]).AddValue(sim.CustomerQueue.Count, sim.CurrentSimTime);
             return Task.CompletedTask;
         }
 
