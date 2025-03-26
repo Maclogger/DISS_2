@@ -8,6 +8,15 @@ namespace DISS_2.BackEnd.TicketSelling;
 
 public class TicketSimulation : SimCore
 {
+    public TicketSimulation()
+    {
+        Statistics =
+        [
+            new SampleStat("Average time in system"),
+            new WeightedStat("Weighted average time in queue")
+        ];
+    }
+
     public Queue<Customer> CustomerQueue { get; set; } = new();
     public bool IsBusy { get; set; } = false;
 
@@ -20,8 +29,6 @@ public class TicketSimulation : SimCore
 
     protected override void BeforeReplicationRun(SimCore simCore)
     {
-        simCore.Statistics.Add(new SampleStat("Average time in system"));
-        simCore.Statistics.Add(new WeightedStat("Weighted average time in queue"));
         simCore.Calendar.PlanNewEvent(new CustomerArrival(0));
     }
 

@@ -128,6 +128,9 @@ public abstract class SimCore
         CurrentSimTime = 0;
         Frame = 0;
         IsRunning = false;
-        Statistics.Clear();
+        foreach (Statistics.Statistics statistic in Statistics)
+        {
+            statistic.Clear();
+        }
     }
 }

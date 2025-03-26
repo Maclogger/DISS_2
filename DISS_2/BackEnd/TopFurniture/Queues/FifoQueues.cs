@@ -3,18 +3,10 @@ using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture.Queues;
 
-public class Queue1 : FifoQueue<Order>
-{
-}
+public class Queue1(SimCore core) : FifoQueue<Order>(core);
 
-public class Queue2 : FifoQueue<Order>
-{
-}
+public class Queue2(SimCore core) : FifoQueue<Order>(core);
 
-public class Queue3 : FifoQueue<Order>
-{
-}
+public class Queue3(SimCore core) : FifoQueue<Order>(core);
 
-public class Queue4 : FifoQueue<Order>
-{
-}
+public class Queue4(SimCore core) : FifoQueue<Order>(core);

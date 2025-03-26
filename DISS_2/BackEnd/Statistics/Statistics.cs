@@ -12,4 +12,10 @@ public abstract class Statistics(string name)
     {
         return "Statistic";
     }
+
+    public virtual void Clear()
+    {
+        Count = 0;
+        Mean = 0;
+    }
 }

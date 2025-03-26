@@ -7,6 +7,7 @@ namespace DISS_2.BackEnd.Statistics
         private long _prevSimTime = 0;
 
         public override double CalcMean() => Mean;
+
         public override string GetTypeString()
         {
             return "Weighted statistics";
@@ -19,7 +20,7 @@ namespace DISS_2.BackEnd.Statistics
             if (_totalTime > 0 && deltaTime > 0)
             {
                 Mean += (deltaTime * 1.0 / (_totalTime + deltaTime)) *
-                                 (_prevValue - Mean);
+                        (_prevValue - Mean);
             }
             else if (_totalTime == 0)
             {
@@ -51,6 +52,14 @@ namespace DISS_2.BackEnd.Statistics
             string sol = $"Weighted Statistics: [{Name}]\n";
             sol += $"Weighted mean: {mean}";
             return sol;
+        }
+
+        public override void Clear()
+        {
+            _totalTime = 0;
+            _prevValue = 0;
+            _prevSimTime = 0;
+            base.Clear();
         }
     }
 }

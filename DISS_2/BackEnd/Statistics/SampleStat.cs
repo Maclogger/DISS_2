@@ -22,5 +22,11 @@ namespace DISS_2.BackEnd.Statistics
                    $"Mean: {CalcMean()}\n" +
                    $"Count: {Count}";
         }
+
+        public override void Clear()
+        {
+            _mean = 0.0;
+            base.Clear();
+        }
     }
 }
