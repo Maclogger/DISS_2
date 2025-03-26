@@ -2,8 +2,24 @@
 
 <div class="container">
   <div class="row">
-    <div class="col-10">
+    <button class="col-1 rounded-3 bg-primary text-white"
+            style="height: 3rem; display: flex; justify-content: center; align-items: center;" @onclick="PauseToggle">
+      @if (IsPaused)
+      {
+        <h5 class="w-100 m-0 text-center" style="font-size: 1.2em;">
+          ▶
+        </h5>
+      }
+      else
+      {
+        <h5 class="w-100 m-0 text-center" style="font-size: 1.2em;">
+          | |
+        </h5>
+      }
+    </button>
+    <div class="col-9">
       <input
+        disabled="@IsPaused"
         type="range"
         class="w-100 h-100"
         id="speedSlider"
@@ -31,11 +47,15 @@
   private List<SpeedOption> _speedOptions = new();
   private int _currentIndex = 0;
 
+  private bool IsPaused => SimCore.SpeedControl.CurrentSpeed == Speed.Stopped;
+
   protected override void OnInitialized()
   {
     _speedOptions = new List<SpeedOption>
     {
+      /*
       new SpeedOption(Speed.Stopped, "Stop"),
+      */
       new SpeedOption(Speed.Speed1X, "1x"),
       new SpeedOption(Speed.Speed2X, "2x"),
       new SpeedOption(Speed.Speed5X, "5x"),
@@ -48,8 +68,8 @@
       new SpeedOption(Speed.FullSpeed, "Full Speed")
     };
 
-    var currentSpeed = SimCore.SpeedControl.CurrentSpeed;
-    var index = _speedOptions.FindIndex(x => x.Value.Equals(currentSpeed));
+    Speed currentSpeed = SimCore.SpeedControl.CurrentSpeed;
+    int index = _speedOptions.FindIndex(x => x.Value.Equals(currentSpeed));
     _currentIndex = index != -1 ? index : 0;
   }
 
@@ -58,9 +78,20 @@
     if (int.TryParse(e.Value?.ToString(), out int index))
     {
       _currentIndex = index;
-      SimCore.SpeedControl.CurrentSpeed = _speedOptions[index].Value;
-      StateHasChanged();
+      ChangeSpeed(_speedOptions[index].Value);
     }
   }
 
+  private void ChangeSpeed(Speed value)
+  {
+    SimCore.SpeedControl.CurrentSpeed = value;
+    StateHasChanged();
+  }
+
+
+  private void PauseToggle()
+  {
+    Speed newSpeed = IsPaused ? _speedOptions[_currentIndex].Value : Speed.Stopped;
+    ChangeSpeed(newSpeed);
+  }
 }
