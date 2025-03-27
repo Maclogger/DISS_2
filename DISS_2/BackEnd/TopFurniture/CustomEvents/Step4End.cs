@@ -1,4 +1,5 @@
 using DISS_2.BackEnd.Core;
+using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture.CustomEvents;
@@ -9,6 +10,7 @@ public class Step4End(int startTime, Order order) : OrderEvent(startTime, order)
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
+        sim.BusyC--;
         PlanStep4OrStep2(sim);
 
         if (order is Chair)
@@ -37,9 +39,12 @@ public class Step4End(int startTime, Order order) : OrderEvent(startTime, order)
             Order orderFromQueue2 = sim.Queues[2].Dequeue();
             sim.Calendar.PlanNewEvent(new Step2Start(startTime, orderFromQueue2));
         }
-        else
-        {
-            sim.BusyC--;
-        }
+    }
+
+
+    public override Task AfterEvent(SimCore sim)
+    {
+        ((SampleStat)sim.Statistics[0]).AddValue(sim.CurrentSimTime - Order.TimeArrival);
+        return base.AfterEvent(sim);
     }
 }

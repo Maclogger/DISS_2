@@ -9,6 +9,8 @@ public class Step3End(int startTime, Order order) : OrderEvent(startTime, order)
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
+        sim.BusyB--;
+
         PlanStep3IfInQueue(sim);
         if (Order is Wardrobe wardrobe)
         {
@@ -44,10 +46,6 @@ public class Step3End(int startTime, Order order) : OrderEvent(startTime, order)
         {
             Order orderFromQueue3 = sim.Queues[3].Dequeue();
             sim.Calendar.PlanNewEvent(new Step3Start(sim.CurrentSimTime, orderFromQueue3));
-        }
-        else
-        {
-            sim.BusyB--;
         }
     }
 }

@@ -9,6 +9,7 @@ public class Step2End(int startTime, Order order) : OrderEvent(startTime, order)
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
+        sim.BusyC--;
         PlanStep3(sim);
         PlanStep4Or2(sim);
 
@@ -26,10 +27,6 @@ public class Step2End(int startTime, Order order) : OrderEvent(startTime, order)
         {
             Order orderFromQueue2 = sim.Queues[2].Dequeue();
             sim.Calendar.PlanNewEvent(new Step2Start(sim.CurrentSimTime, orderFromQueue2));
-        }
-        else
-        {
-            sim.BusyC--;
         }
     }
 

@@ -3,6 +3,7 @@ using DISS_2.BackEnd.Generators;
 using DISS_2.BackEnd.Generators.Empiric;
 using DISS_2.BackEnd.Generators.Exponential;
 using DISS_2.BackEnd.Generators.Uniform;
+using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TopFurniture.Agents;
 using DISS_2.BackEnd.TopFurniture.CustomEvents;
 using DISS_2.BackEnd.TopFurniture.Queues;
@@ -23,6 +24,25 @@ public class TopFurnitureSimulation : SimCore
     public int ChairsInSystem { get; set; } = 0;
     public int TablesInSystem { get; set; } = 0;
     public int WardrobesInSystem { get; set; } = 0;
+
+    public TopFurnitureSimulation()
+    {
+        A = 1;
+        B = 1;
+        C = 1;
+        Queues =
+        [
+            new FifoQueue<Order>(this), // DUMMY -> just to index from 1
+            new Queue1(this),
+            new Queue2(this),
+            new Queue3(this),
+            new Queue4(this),
+        ];
+        Statistics =
+        [
+            new SampleStat("Average time of Wardrobes in system"),
+        ];
+    }
 
     public void Reinitialize(int a, int b, int c)
     {
@@ -45,21 +65,6 @@ public class TopFurnitureSimulation : SimCore
     }
 
     public FurnitureGenerators Generators { get; } = new();
-
-    public TopFurnitureSimulation()
-    {
-        A = 1;
-        B = 1;
-        C = 1;
-        Queues =
-        [
-            new FifoQueue<Order>(this), // DUMMY -> just to index from 1
-            new Queue1(this),
-            new Queue2(this),
-            new Queue3(this),
-            new Queue4(this),
-        ];
-    }
 
     public override void ResetSimulation()
     {
