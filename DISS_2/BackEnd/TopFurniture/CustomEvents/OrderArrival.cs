@@ -9,6 +9,16 @@ public class OrderArrival(int startTime) : Event(startTime)
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
+        Order order = CreateOrder(sim);
+
+        PlanNextArrival(sim);
+        PlanStep1StartOrQueue(sim, order);
+
+        return Task.CompletedTask;
+    }
+
+    private static Order CreateOrder(TopFurnitureSimulation sim)
+    {
         Order order = Order.CreateRandomOrder(sim.Generators.OrderTypeGen, sim.CurrentSimTime);
 
         if (order is Chair)
@@ -22,10 +32,7 @@ public class OrderArrival(int startTime) : Event(startTime)
             sim.WardrobesInSystem++;
         }
 
-        PlanNextArrival(sim);
-        PlanStep1StartOrQueue(sim, order);
-
-        return Task.CompletedTask;
+        return order;
     }
 
     private void PlanStep1StartOrQueue(TopFurnitureSimulation sim, Order order)

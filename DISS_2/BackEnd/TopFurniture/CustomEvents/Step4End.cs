@@ -13,18 +13,6 @@ public class Step4End(int startTime, Order order) : OrderEvent(startTime, order)
         sim.BusyC--;
         PlanStep4OrStep2(sim);
 
-        if (order is Chair)
-        {
-            sim.ChairsInSystem--;
-        } else if (order is Table)
-        {
-            sim.TablesInSystem--;
-        } else if (order is Wardrobe)
-        {
-            sim.WardrobesInSystem--;
-        }
-
-
         return Task.CompletedTask;
     }
 
@@ -41,10 +29,10 @@ public class Step4End(int startTime, Order order) : OrderEvent(startTime, order)
         }
     }
 
-
     public override Task AfterEvent(SimCore sim)
     {
-        ((SampleStat)sim.Statistics[0]).AddValue(sim.CurrentSimTime - Order.TimeArrival);
+        Console.WriteLine($"Step4End - after: {Order.GetType().Name}");
+        ((TopFurnitureSimulation)sim).Sink.SinkItem(Order);
         return base.AfterEvent(sim);
     }
 }

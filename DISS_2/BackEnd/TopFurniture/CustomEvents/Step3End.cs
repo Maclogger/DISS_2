@@ -10,19 +10,16 @@ public class Step3End(int startTime, Order order) : OrderEvent(startTime, order)
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
         sim.BusyB--;
-
         PlanStep3IfInQueue(sim);
+
         if (Order is Wardrobe wardrobe)
         {
             PlanStep4(sim, wardrobe);
         }
-        else if (order is Chair)
+        else
         {
-            sim.ChairsInSystem--;
-        }
-        else if (order is Table)
-        {
-            sim.TablesInSystem--;
+            Console.WriteLine($"Step3End - after: {Order.GetType().Name}");
+            sim.Sink.SinkItem(Order);
         }
 
         return Task.CompletedTask;

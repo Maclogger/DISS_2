@@ -1,4 +1,4 @@
-namespace DISS_2.BackEnd.Core;
+namespace DISS_2.BackEnd.Core.Objects;
 
 public class FifoQueue<T>
 {

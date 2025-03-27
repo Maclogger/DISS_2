@@ -1,4 +1,5 @@
 using DISS_2.BackEnd.Core;
+using DISS_2.BackEnd.Core.Objects;
 using DISS_2.BackEnd.Generators;
 using DISS_2.BackEnd.Generators.Empiric;
 using DISS_2.BackEnd.Generators.Exponential;
@@ -6,6 +7,7 @@ using DISS_2.BackEnd.Generators.Uniform;
 using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TopFurniture.Agents;
 using DISS_2.BackEnd.TopFurniture.CustomEvents;
+using DISS_2.BackEnd.TopFurniture.CustomObjects;
 using DISS_2.BackEnd.TopFurniture.Queues;
 
 namespace DISS_2.BackEnd.TopFurniture;
@@ -25,6 +27,8 @@ public class TopFurnitureSimulation : SimCore
     public int TablesInSystem { get; set; } = 0;
     public int WardrobesInSystem { get; set; } = 0;
 
+    public FurnitureSink Sink { get; set; }
+
     public TopFurnitureSimulation()
     {
         A = 1;
@@ -38,8 +42,11 @@ public class TopFurnitureSimulation : SimCore
             new Queue3(this),
             new Queue4(this),
         ];
+        Sink = new FurnitureSink(this);
         Statistics =
         [
+            new SampleStat("Average time of Chairs in system"),
+            new SampleStat("Average time of Tables in system"),
             new SampleStat("Average time of Wardrobes in system"),
         ];
     }
