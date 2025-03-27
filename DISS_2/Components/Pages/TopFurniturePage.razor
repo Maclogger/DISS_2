@@ -12,33 +12,65 @@
         UpdateUi="UpdateUi"
         Simulation="MainApp.Instance.TopFurnitureSimulation" InitializeSimulation="ResetSimulation">
 
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="d-flex align-items-center">
-                <label class="card bg-primary text-white me-2 fs-4 text-center" style="width: 2.5rem;">A</label>
-                <input @bind="A" class="form-control flex-grow-1" type="number" min="1" step="1"
-                       disabled="@MainApp.Instance.TopFurnitureSimulation.IsRunning"/>
-            </div>
-            <div class="d-flex align-items-center">
-                <label class="card bg-primary text-white mx-2 fs-4 text-center" style="width: 2.5rem;">B</label>
-                <input @bind="B" class="form-control flex-grow-1" type="number" min="1" step="1"
-                       disabled="@MainApp.Instance.TopFurnitureSimulation.IsRunning"/>
-            </div>
-            <div class="d-flex align-items-center">
-                <label class="card bg-primary text-white mx-2 fs-4 text-center" style="width: 2.5rem;">C</label>
-                <input @bind="C" class="form-control flex-grow-1" type="number" min="1" step="1"
-                       disabled="@MainApp.Instance.TopFurnitureSimulation.IsRunning"/>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3 d-flex justify-content-between flex-column p-0 gap-3">
+                    <div class="d-flex align-items-center">
+                        <label class="card bg-primary text-white me-2 fs-4 text-center" style="width: 3rem;">A</label>
+                        <input @bind="A" class="form-control flex-grow-1" type="number" min="1" step="1"
+                               disabled="@MainApp.Instance.TopFurnitureSimulation.IsRunning"/>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <label class="card bg-primary text-white me-2 fs-4 text-center" style="width: 3rem;">B</label>
+                        <input @bind="B" class="form-control flex-grow-1" type="number" min="1" step="1"
+                               disabled="@MainApp.Instance.TopFurnitureSimulation.IsRunning"/>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <label class="card bg-primary text-white me-2 fs-4 text-center" style="width: 3rem;">C</label>
+                        <input @bind="C" class="form-control flex-grow-1" type="number" min="1" step="1"
+                               disabled="@MainApp.Instance.TopFurnitureSimulation.IsRunning"/>
+                    </div>
+                </div>
+
+                <div class="col-9 p-0">
+                    <div class="card bg-dark d-flex flex-row gap-4 text-center align-items-center p-4  ms-4">
+                        <div class="card bg-white flex-grow-1 d-flex justify-content-center align-items-center"
+                             style="aspect-ratio: 1/1; width: 20%;">
+                            <div>
+                                <h4>Chairs</h4>
+                                <h3>@_chairsInSystem</h3>
+                            </div>
+                        </div>
+                        <div class="card flex-grow-1 d-flex justify-content-center align-items-center"
+                             style="aspect-ratio: 1/1; width: 20%;">
+                            <div>
+                                <h4>Tables</h4>
+                                <h3>@_tablesInSystem</h3>
+                            </div>
+                        </div>
+                        <div class="card flex-grow-1 d-flex justify-content-center align-items-center"
+                             style="aspect-ratio: 1/1; width: 20%;">
+                            <div>
+                                <h6>Wardrobes</h6>
+                                <h3>@_wardrobesInSystem</h3>
+                            </div>
+                        </div>
+                        <div class="card bg-white flex-grow-1 d-flex justify-content-center align-items-center"
+                             style="aspect-ratio: 1/1; width: 20%;">
+                            <div>
+                                <h4>Sum</h4>
+                                <h3>@(_chairsInSystem + _tablesInSystem + _wardrobesInSystem)</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
 
-        <div class="card rounded-3 bg-white">
-            <p>Chairs in system: @_chairsInSystem</p>
-            <p>Tables in system: @_tablesInSystem</p>
-            <p>Wardrobes in system: @_wardrobesInSystem</p>
-        </div>
-
-
-        <div class="card rounded-3 m-2 p-3 bg-light">
+        <div class="card rounded-3  p-3 bg-light mt-4">
             <h5 class="card-title mb-3">Queues</h5>
             <div class="table-responsive">
                 <table class="table table-bordered">
