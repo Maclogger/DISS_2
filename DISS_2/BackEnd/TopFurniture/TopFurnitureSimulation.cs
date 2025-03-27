@@ -73,6 +73,7 @@ public class TopFurnitureSimulation : SimCore
     }
 
     public FurnitureGenerators Generators { get; } = new();
+    public int CompletedOrders { get; set; } = 0;
 
     public override void ResetSimulation()
     {
@@ -90,6 +91,8 @@ public class TopFurnitureSimulation : SimCore
         ChairsInSystem = 0;
         TablesInSystem = 0;
         WardrobesInSystem = 0;
+
+        CompletedOrders = 0;
     }
 
     protected override void BeforeReplicationRun(SimCore simCore)

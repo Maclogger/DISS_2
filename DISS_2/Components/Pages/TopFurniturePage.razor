@@ -122,6 +122,57 @@
             </div>
         </div>
 
+        <div class="container-fluid mt-4">
+            <div class="row">
+                <div class="col-8 p-0">
+                    <div class="card rounded-3 p-4 bg-light">
+                        <h3 class="card-title mb-3">Workers</h3>
+                        <div class="table-responsive">
+                            <table class="table table-bordered custom-rounded m-0">
+                                <thead class="table-dark">
+                                <tr>
+                                    <th>Worker Group</th>
+                                    <th>Busy</th>
+                                    <th>Available</th>
+                                    <th>Total</th>
+                                </tr>
+                                </thead>
+                                <tbody class="table-dark">
+                                <tr>
+                                    <td class="fw-bold">A</td>
+                                    <td>@_aBusy</td>
+                                    <td>@(A - _aBusy)</td>
+                                    <td>@A</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">B</td>
+                                    <td>@_bBusy</td>
+                                    <td>@(B - _bBusy)</td>
+                                    <td>@B</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">C</td>
+                                    <td>@_cBusy</td>
+                                    <td>@(C - _cBusy)</td>
+                                    <td>@C</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 p-0 ps-4 d-flex flex-grow-1 flex-column">
+                    <div class="card rounded-3 p-4 bg-light h-100">
+                        <h3 class="card-title mb-3">Completed Orders</h3>
+                        <div class="card rounded-3 bg-primary h-100 d-flex justify-content-center text-center">
+                            <h1 class="text-white">@_completedOrders</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
     </SimulationComp>
 }
 
@@ -139,6 +190,11 @@
     private int _chairsInSystem = 0;
     private int _tablesInSystem = 0;
     private int _wardrobesInSystem = 0;
+
+    private int _aBusy = 0;
+    private int _bBusy = 0;
+    private int _cBusy = 0;
+    private int _completedOrders = 0;
 
     protected override void OnInitialized()
     {
@@ -162,6 +218,12 @@
         _tablesInSystem = sim.TablesInSystem;
         _wardrobesInSystem = sim.WardrobesInSystem;
 
+        _aBusy = sim.BusyA;
+        _bBusy = sim.BusyB;
+        _cBusy = sim.BusyC;
+
+        _completedOrders = sim.CompletedOrders;
+
         InvokeAsync(StateHasChanged);
     }
 
@@ -175,4 +237,5 @@
     {
         return queue.GetValueOrDefault(itemType, 0);
     }
+
 }
