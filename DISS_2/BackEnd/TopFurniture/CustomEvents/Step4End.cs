@@ -1,5 +1,4 @@
 using DISS_2.BackEnd.Core;
-using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture.CustomEvents;
@@ -31,7 +30,6 @@ public class Step4End(int startTime, Order order) : OrderEvent(startTime, order)
 
     public override Task AfterEvent(SimCore sim)
     {
-        Console.WriteLine($"Step4End - after: {Order.GetType().Name}");
         ((TopFurnitureSimulation)sim).Sink.SinkItem(Order);
         return base.AfterEvent(sim);
     }

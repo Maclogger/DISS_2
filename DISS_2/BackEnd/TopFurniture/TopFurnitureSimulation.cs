@@ -103,8 +103,7 @@ public class FurnitureGenerators
     public UniformGenerator<double> OrderTypeGen { get; } = UniformGeneratorFactory
         .CreateRealUniformGenerator(0.0, 1.0);
 
-    public ExponentialGenerator ArrivalGen { get; } =
-        new ExponentialGenerator((double)1 / (30 * 60)); // 2 order per hour -> 30 min interval
+    public ExponentialGenerator ArrivalGen { get; } = new((double)1 / (30 * 60)); // 2 order per hour -> 30 min interval
 
     private EmpiricGenerator<double> Table1Gen { get; } =
         EmpiricGeneratorFactory.CreateRealGenerator([

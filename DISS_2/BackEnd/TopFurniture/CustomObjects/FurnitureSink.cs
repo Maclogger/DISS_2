@@ -1,24 +1,34 @@
 using DISS_2.BackEnd.Core;
 using DISS_2.BackEnd.Core.Objects;
+using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture.CustomObjects;
 
 public class FurnitureSink(SimCore core) : Sink<Order>(core)
 {
-    public TopFurnitureSimulation Sim { get; set; } = (TopFurnitureSimulation)core;
+    private TopFurnitureSimulation Sim { get; } = (TopFurnitureSimulation)core;
 
     protected override void AfterSink(Order item)
     {
         if (item is Chair)
         {
             Sim.ChairsInSystem--;
-        } else if (item is Table)
+            ((SampleStat)Sim.Statistics[0]).AddValue(Sim.CurrentSimTime - item.TimeArrival);
+        }
+        else if (item is Table)
         {
             Sim.TablesInSystem--;
-        } else if (item is Wardrobe)
+            ((SampleStat)Sim.Statistics[1]).AddValue(Sim.CurrentSimTime - item.TimeArrival);
+        }
+        else if (item is Wardrobe)
         {
             Sim.WardrobesInSystem--;
+            ((SampleStat)Sim.Statistics[2]).AddValue(Sim.CurrentSimTime - item.TimeArrival);
+        }
+        else
+        {
+            throw new Exception("Unknown ORDER TYPE in sink!");
         }
     }
 }

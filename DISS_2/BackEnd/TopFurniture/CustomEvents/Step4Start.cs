@@ -8,6 +8,11 @@ public class Step4Start(int startTime, Order order) : OrderEvent(startTime, orde
 {
     public override Task Execute(SimCore simCore)
     {
+        if (Order is not Wardrobe)
+        {
+            throw new Exception("Only Wardrobe is supported in STEP 4!!!");
+        }
+
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
         sim.BusyC++;

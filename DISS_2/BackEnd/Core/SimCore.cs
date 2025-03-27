@@ -55,11 +55,10 @@ public abstract class SimCore
         SpeedControl.CurrentSpeed = Speed.Speed1X;
     }
 
-
     private async Task RunOneReplication()
     {
         BeforeReplicationRun(this);
-        while (!Calendar.IsEmpty() && CurrentSimTime < 60 * 60 * 8 * 100)
+        while (!Calendar.IsEmpty() && CurrentSimTime < 60 * 60 * 8 * 500)
         {
             if (!IsRunning) break;
             Event currentEvent = Calendar.PopEvent();

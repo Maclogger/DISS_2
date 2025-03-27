@@ -18,7 +18,6 @@ public class Step3End(int startTime, Order order) : OrderEvent(startTime, order)
         }
         else
         {
-            Console.WriteLine($"Step3End - after: {Order.GetType().Name}");
             sim.Sink.SinkItem(Order);
         }
 
