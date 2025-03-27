@@ -13,7 +13,6 @@
           <th scope="col">Type</th>
           <th scope="col">Name</th>
           <th scope="col">Mean</th>
-          <th scope="col">MeanReadable</th>
           <th scope="col">Count</th>
         </tr>
         </thead>
@@ -23,8 +22,14 @@
           <tr>
             <td>@statistic.GetTypeString()</td>
             <td>@statistic.Name</td>
-            <td>@statistic.CalcMean().ToString(Config.StatisticFloatFormat)</td>
-            <td>@(TimeHandler.ToReadableTime(statistic.CalcMean()))</td>
+            @if (statistic is SampleStat)
+            {
+              <td>@(TimeHandler.ToReadableTime(statistic.CalcMean()))</td>
+            }
+            else
+            {
+              <td>@statistic.CalcMean().ToString(Config.StatisticFloatFormat)</td>
+            }
             <td>@statistic.Count</td>
           </tr>
         }

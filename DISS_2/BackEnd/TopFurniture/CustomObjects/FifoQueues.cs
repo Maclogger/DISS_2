@@ -13,10 +13,17 @@ public class Queue1(SimCore core) : FifoQueue<Order>(core)
         base.BeforeEnqueue(item);
     }
 
+    protected override void AfterEnqueue(Order item)
+    {
+        base.AfterEnqueue(item);
+        ((WeightedStat)Sim.Statistics[7]).AddValue(GetCount(), Sim.CurrentSimTime);
+    }
+
     protected override void AfterDequeue(Order item)
     {
-        ((SampleStat)Sim.Statistics[3]).AddValue(Sim.CurrentSimTime - item.TimeArrivalAtQueue1);
         base.AfterDequeue(item);
+        ((SampleStat)Sim.Statistics[3]).AddValue(Sim.CurrentSimTime - item.TimeArrivalAtQueue1);
+        ((WeightedStat)Sim.Statistics[7]).AddValue(GetCount(), Sim.CurrentSimTime);
     }
 }
 
@@ -28,10 +35,17 @@ public class Queue2(SimCore core) : FifoQueue<Order>(core)
         base.BeforeEnqueue(item);
     }
 
+    protected override void AfterEnqueue(Order item)
+    {
+        base.AfterEnqueue(item);
+        ((WeightedStat)Sim.Statistics[8]).AddValue(GetCount(), Sim.CurrentSimTime);
+    }
+
     protected override void AfterDequeue(Order item)
     {
-        ((SampleStat)Sim.Statistics[4]).AddValue(Sim.CurrentSimTime - item.TimeArrivalAtQueue2);
         base.AfterDequeue(item);
+        ((SampleStat)Sim.Statistics[4]).AddValue(Sim.CurrentSimTime - item.TimeArrivalAtQueue2);
+        ((WeightedStat)Sim.Statistics[8]).AddValue(GetCount(), Sim.CurrentSimTime);
     }
 }
 
@@ -43,10 +57,17 @@ public class Queue3(SimCore core) : FifoQueue<Order>(core)
         base.BeforeEnqueue(item);
     }
 
+    protected override void AfterEnqueue(Order item)
+    {
+        base.AfterEnqueue(item);
+        ((WeightedStat)Sim.Statistics[9]).AddValue(GetCount(), Sim.CurrentSimTime);
+    }
+
     protected override void AfterDequeue(Order item)
     {
-        ((SampleStat)Sim.Statistics[5]).AddValue(Sim.CurrentSimTime - item.TimeArrivalAtQueue3);
         base.AfterDequeue(item);
+        ((SampleStat)Sim.Statistics[5]).AddValue(Sim.CurrentSimTime - item.TimeArrivalAtQueue3);
+        ((WeightedStat)Sim.Statistics[9]).AddValue(GetCount(), Sim.CurrentSimTime);
     }
 }
 
@@ -59,9 +80,16 @@ public class Queue4(SimCore core) : FifoQueue<Order>(core)
         base.BeforeEnqueue(item);
     }
 
+    protected override void AfterEnqueue(Order item)
+    {
+        base.AfterEnqueue(item);
+        ((WeightedStat)Sim.Statistics[10]).AddValue(GetCount(), Sim.CurrentSimTime);
+    }
+
     protected override void AfterDequeue(Order item)
     {
-        ((SampleStat)Sim.Statistics[6]).AddValue(Sim.CurrentSimTime - item.TimeArrivalAtQueue4);
         base.AfterDequeue(item);
+        ((SampleStat)Sim.Statistics[6]).AddValue(Sim.CurrentSimTime - item.TimeArrivalAtQueue4);
+        ((WeightedStat)Sim.Statistics[10]).AddValue(GetCount(), Sim.CurrentSimTime);
     }
 }

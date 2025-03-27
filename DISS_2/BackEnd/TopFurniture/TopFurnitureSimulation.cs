@@ -44,14 +44,19 @@ public class TopFurnitureSimulation : SimCore
         Sink = new FurnitureSink(this);
         Statistics =
         [
-            new SampleStat("Average time of Chairs in system"),
-            new SampleStat("Average time of Tables in system"),
-            new SampleStat("Average time of Wardrobes in system"),
+            new SampleStat("Average time of Chairs in system"), // 0
+            new SampleStat("Average time of Tables in system"), // 1
+            new SampleStat("Average time of Wardrobes in system"), // 2
 
-            new SampleStat("Average waiting time in queue before technological STEP 1"),
-            new SampleStat("Average waiting time in queue before technological STEP 2"),
-            new SampleStat("Average waiting time in queue before technological STEP 3"),
-            new SampleStat("Average waiting time in queue before technological STEP 4"),
+            new SampleStat("Average waiting time in queue before technological STEP 1"), // 3
+            new SampleStat("Average waiting time in queue before technological STEP 2"), // 4
+            new SampleStat("Average waiting time in queue before technological STEP 3"), // 5
+            new SampleStat("Average waiting time in queue before technological STEP 4"), // 6
+
+            new WeightedStat("Weighted average queue length before technological STEP 1"), // 7
+            new WeightedStat("Weighted average queue length before technological STEP 2"), // 8
+            new WeightedStat("Weighted average queue length before technological STEP 3"), // 9
+            new WeightedStat("Weighted average queue length before technological STEP 4"), // 10
         ];
     }
 
