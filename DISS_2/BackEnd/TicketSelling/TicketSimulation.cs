@@ -17,6 +17,8 @@ public class TicketSimulation : SimCore
         ];
     }
 
+
+
     public Queue<Customer> CustomerQueue { get; set; } = new();
     public bool IsBusy { get; set; } = false;
 

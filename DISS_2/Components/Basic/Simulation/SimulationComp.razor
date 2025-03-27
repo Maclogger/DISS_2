@@ -72,7 +72,7 @@
     {
         if (firstRender)
         {
-            MainApp.Instance.SimDelegates.Add(this);
+            Simulation.SimDelegates.Add(this);
             UpdateUi?.Invoke(Simulation);
             _eventsInCalendar = Simulation.Calendar.GetSortedEvents();
             _simTime = TimeHandler.ToReadableDateTime(Simulation.CurrentSimTime);

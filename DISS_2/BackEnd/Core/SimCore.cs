@@ -4,6 +4,9 @@ namespace DISS_2.BackEnd.Core;
 
 public abstract class SimCore
 {
+    public List<ISimDelegate> SimDelegates { get; set; } = new();
+
+    public List<IRepDelegate> RepDelegates { get; set; } = new();
     public EventCalendar Calendar { get; set; }
     public int CurrentSimTime { get; set; } = 0;
     public int Frame { get; set; } = 0;
@@ -76,7 +79,7 @@ public abstract class SimCore
 
     private void RefreshGuiAfterEvent(Event currentEvent)
     {
-        List<ISimDelegate> delegates = MainApp.Instance.SimDelegates.ToList();
+        List<ISimDelegate> delegates = SimDelegates.ToList(); // thread safe
 
         foreach (ISimDelegate @delegate in delegates)
         {

@@ -24,8 +24,6 @@ public sealed class MainApp
     public Config Config { get; set; }
     public Generators.Generators TesterGenerators { get; set; }
 
-    public List<ISimDelegate> SimDelegates { get; set; } = new();
-    public List<IRepDelegate> RepDelegates { get; set; } = new();
 
     public TicketSimulation? TicketSimulation { get; set; }
     public TopFurnitureSimulation? TopFurnitureSimulation { get; set; }
