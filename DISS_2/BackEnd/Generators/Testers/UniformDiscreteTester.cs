@@ -26,8 +26,8 @@ public class UniformDiscreteTester : IGeneratorTester<int>
 
         string sol = "Expected: \n";
         sol += $"Minimum: {gen.Min}\n";
-        sol += $"Maximum: {gen.Max}\n";
-        sol += $"Average: {(double)(gen.Max - gen.Min) / 2 + gen.Min}\n";
+        sol += $"Maximum: {gen.Max - 1}\n";
+        sol += $"Average: {(double)(gen.Max - 1 - gen.Min) / 2 + gen.Min}\n";
         sol += "Actual: \n";
         sol += $"Minimum: {minimum}\n";
         sol += $"Maximum: {maximum}\n";
