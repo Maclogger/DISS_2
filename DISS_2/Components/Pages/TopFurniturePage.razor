@@ -12,10 +12,9 @@
         UpdateUi="UpdateUi"
         Simulation="MainApp.Instance.TopFurnitureSimulation" InitializeSimulation="ResetSimulation">
 
-
         <div class="container-fluid">
             <div class="row">
-                <div class="col-3 d-flex justify-content-between flex-column p-0 gap-3">
+                <div class="col-3 d-flex justify-content-between flex-column p-0 gap-2">
                     <div class="d-flex align-items-center">
                         <label class="card bg-primary text-white me-2 fs-4 text-center" style="width: 3rem;">A</label>
                         <input @bind="A" class="form-control flex-grow-1" type="number" min="1" step="1"
@@ -29,6 +28,11 @@
                     <div class="d-flex align-items-center">
                         <label class="card bg-primary text-white me-2 fs-4 text-center" style="width: 3rem;">C</label>
                         <input @bind="C" class="form-control flex-grow-1" type="number" min="1" step="1"
+                               disabled="@MainApp.Instance.TopFurnitureSimulation.IsRunning"/>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <label class="card bg-primary text-white me-2 fs-4 text-center" style="width: 8rem;">Days</label>
+                        <input @bind="Days" class="form-control flex-grow-1" type="number" min="1" step="1"
                                disabled="@MainApp.Instance.TopFurnitureSimulation.IsRunning"/>
                     </div>
                 </div>
@@ -75,7 +79,7 @@
                 <table class="table table-bordered custom-rounded m-0">
                     <thead class="table-dark">
                     <tr>
-                        <th>Item Type</th>
+                        <th>Order Type</th>
                         <th>Queue 1</th>
                         <th>Queue 2</th>
                         <th>Queue 3</th>
@@ -125,6 +129,7 @@
     public int A { get; set; } = 1;
     public int B { get; set; } = 1;
     public int C { get; set; } = 1;
+    public int Days { get; set; } = 249;
 
     private Dictionary<string, int> _queue1CountsByTypes = new();
     private Dictionary<string, int> _queue2CountsByTypes = new();
