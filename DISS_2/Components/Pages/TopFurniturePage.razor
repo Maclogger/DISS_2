@@ -38,28 +38,28 @@
                         <div class="card bg-white flex-grow-1 d-flex justify-content-center align-items-center"
                              style="aspect-ratio: 1/1; width: 20%;">
                             <div>
-                                <h4>Chairs</h4>
+                                <p class="m-0 mb-2 " style="font-size: 1vw;">Chairs</p>
                                 <h3>@_chairsInSystem</h3>
                             </div>
                         </div>
                         <div class="card flex-grow-1 d-flex justify-content-center align-items-center"
                              style="aspect-ratio: 1/1; width: 20%;">
                             <div>
-                                <h4>Tables</h4>
+                                <p class="m-0 mb-2 " style="font-size: 1vw;">Tables</p>
                                 <h3>@_tablesInSystem</h3>
                             </div>
                         </div>
                         <div class="card flex-grow-1 d-flex justify-content-center align-items-center"
                              style="aspect-ratio: 1/1; width: 20%;">
                             <div>
-                                <h6>Wardrobes</h6>
+                                <p class="m-0 mb-2 " style="font-size: 1vw;">Wardrobes</p>
                                 <h3>@_wardrobesInSystem</h3>
                             </div>
                         </div>
                         <div class="card bg-white flex-grow-1 d-flex justify-content-center align-items-center"
                              style="aspect-ratio: 1/1; width: 20%;">
                             <div>
-                                <h4>Sum</h4>
+                                <p class="m-0 mb-2 " style="font-size: 1vw;">Sum</p>
                                 <h3>@(_chairsInSystem + _tablesInSystem + _wardrobesInSystem)</h3>
                             </div>
                         </div>
@@ -69,12 +69,11 @@
             </div>
         </div>
 
-
-        <div class="card rounded-3  p-3 bg-light mt-4">
-            <h5 class="card-title mb-3">Queues</h5>
+        <div class="card rounded-3  p-4 bg-light mt-4">
+            <h3 class="card-title mb-3">Queues</h3>
             <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead class="table-primary">
+                <table class="table table-bordered custom-rounded m-0">
+                    <thead class="table-dark">
                     <tr>
                         <th>Item Type</th>
                         <th>Queue 1</th>
@@ -83,7 +82,7 @@
                         <th>Queue 4</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody class="table-dark">
                     <tr>
                         <td class="fw-bold">Chair</td>
                         <td>@GetQueueCount(_queue1CountsByTypes, "Chair")</td>
@@ -106,7 +105,7 @@
                         <td>@GetQueueCount(_queue4CountsByTypes, "Wardrobe")</td>
                     </tr>
                     </tbody>
-                    <tfoot class="table-secondary">
+                    <tfoot class="table-dark">
                     <tr>
                         <th>Total</th>
                         <th>@_queue1CountsByTypes.Values.Sum()</th>
@@ -171,5 +170,4 @@
     {
         return queue.GetValueOrDefault(itemType, 0);
     }
-
 }
