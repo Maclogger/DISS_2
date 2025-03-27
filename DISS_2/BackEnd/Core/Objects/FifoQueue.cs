@@ -3,12 +3,12 @@ namespace DISS_2.BackEnd.Core.Objects;
 public class FifoQueue<T>
 {
     private Queue<T> _queue = new();
-    private SimCore _sim;
+    protected SimCore Sim;
     public Dictionary<string, int> TypeCounts = new();
 
     public FifoQueue(SimCore core)
     {
-        _sim = core;
+        Sim = core;
     }
 
     public void Enqueue(T item)

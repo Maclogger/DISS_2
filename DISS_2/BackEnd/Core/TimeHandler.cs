@@ -6,7 +6,7 @@ namespace DISS_2.BackEnd.Core
 
         public const int RealStartHour = 6;
 
-        public static string ToReadableTime(int timeInSeconds)
+        public static string ToReadableDateTime(int timeInSeconds)
         {
             int day = timeInSeconds / SecondsPerDay + 1;
 
@@ -19,6 +19,29 @@ namespace DISS_2.BackEnd.Core
             hours = (RealStartHour + hours) % 24;
 
             return $"Day {day} - {hours:D2}:{minutes:D2}:{seconds:D2}";
+        }
+
+        public static string ToReadableTime(double timeInSeconds)
+        {
+            if (timeInSeconds < 0.0)
+            {
+                timeInSeconds = 0.0;
+            }
+
+            int totalHours = (int)Math.Floor(timeInSeconds / 3600);
+            int minutes = (int)Math.Floor(timeInSeconds / 60) % 60;
+            double seconds = timeInSeconds % 60.0;
+
+            string formattedSeconds = seconds.ToString("00.0000");
+
+            if (totalHours == 0)
+            {
+                return $"{minutes:D2}:{formattedSeconds}";
+            }
+            else
+            {
+                return $"{totalHours:D2}:{minutes:D2}:{formattedSeconds}";
+            }
         }
     }
 }

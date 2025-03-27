@@ -1,4 +1,5 @@
 @using DISS_2.BackEnd
+@using DISS_2.BackEnd.Core
 @using DISS_2.BackEnd.Statistics
 
 <div class="col-12 p-0 pe-4">
@@ -12,6 +13,7 @@
           <th scope="col">Type</th>
           <th scope="col">Name</th>
           <th scope="col">Mean</th>
+          <th scope="col">MeanReadable</th>
           <th scope="col">Count</th>
         </tr>
         </thead>
@@ -22,6 +24,7 @@
             <td>@statistic.GetTypeString()</td>
             <td>@statistic.Name</td>
             <td>@statistic.CalcMean().ToString(Config.StatisticFloatFormat)</td>
+            <td>@(TimeHandler.ToReadableTime(statistic.CalcMean()))</td>
             <td>@statistic.Count</td>
           </tr>
         }

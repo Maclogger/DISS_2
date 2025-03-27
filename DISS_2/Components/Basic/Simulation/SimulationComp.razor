@@ -75,14 +75,14 @@
             MainApp.Instance.SimDelegates.Add(this);
             UpdateUi?.Invoke(Simulation);
             _eventsInCalendar = Simulation.Calendar.GetSortedEvents();
-            _simTime = TimeHandler.ToReadableTime(Simulation.CurrentSimTime);
+            _simTime = TimeHandler.ToReadableDateTime(Simulation.CurrentSimTime);
             InvokeAsync(StateHasChanged);
         }
     }
 
     void ISimDelegate.UpdateUi(SimCore simCore, Event currentEvent)
     {
-        _simTime = TimeHandler.ToReadableTime(simCore.CurrentSimTime);
+        _simTime = TimeHandler.ToReadableDateTime(simCore.CurrentSimTime);
         UpdateUi?.Invoke(simCore);
         _eventsInCalendar = simCore.Calendar.GetSortedEvents();
         _statistics = simCore.Statistics;

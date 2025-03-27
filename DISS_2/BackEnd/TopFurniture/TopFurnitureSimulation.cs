@@ -8,7 +8,6 @@ using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TopFurniture.Agents;
 using DISS_2.BackEnd.TopFurniture.CustomEvents;
 using DISS_2.BackEnd.TopFurniture.CustomObjects;
-using DISS_2.BackEnd.TopFurniture.Queues;
 
 namespace DISS_2.BackEnd.TopFurniture;
 
@@ -48,6 +47,11 @@ public class TopFurnitureSimulation : SimCore
             new SampleStat("Average time of Chairs in system"),
             new SampleStat("Average time of Tables in system"),
             new SampleStat("Average time of Wardrobes in system"),
+
+            new SampleStat("Average waiting time in queue before technological STEP 1"),
+            new SampleStat("Average waiting time in queue before technological STEP 2"),
+            new SampleStat("Average waiting time in queue before technological STEP 3"),
+            new SampleStat("Average waiting time in queue before technological STEP 4"),
         ];
     }
 

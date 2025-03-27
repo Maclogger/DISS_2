@@ -14,7 +14,7 @@ public class EventCalendar
 
     public void PlanNewEvent(Event newEvent)
     {
-        string readableCurrentTime = TimeHandler.ToReadableTime(Core.CurrentSimTime);
+        string readableCurrentTime = TimeHandler.ToReadableDateTime(Core.CurrentSimTime);
         //Console.WriteLine($"[{readableCurrentTime}]: {newEvent}");
 
         Events.Enqueue(newEvent, newEvent.StartTime);
