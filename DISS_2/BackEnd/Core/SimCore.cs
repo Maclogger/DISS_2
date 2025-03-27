@@ -10,6 +10,7 @@ public abstract class SimCore
     public int CurrReplication { get; set; } = 0;
 
     public bool IsRunning { get; set; } = false;
+    public int OneReplicationLengthInSeconds { get; set; } = 60 * 60 * 8 * 100;
 
     public SpeedControl SpeedControl { get; set; } = new();
 
@@ -58,7 +59,7 @@ public abstract class SimCore
     private async Task RunOneReplication()
     {
         BeforeReplicationRun(this);
-        while (!Calendar.IsEmpty() && CurrentSimTime < 60 * 60 * 8 * 500)
+        while (!Calendar.IsEmpty() && CurrentSimTime < OneReplicationLengthInSeconds)
         {
             if (!IsRunning) break;
             Event currentEvent = Calendar.PopEvent();

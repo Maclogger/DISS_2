@@ -51,12 +51,13 @@ public class TopFurnitureSimulation : SimCore
         ];
     }
 
-    public void Reinitialize(int a, int b, int c)
+    public void Reinitialize(int a, int b, int c, int days)
     {
         ResetSimulation();
         A = a;
         B = b;
         C = c;
+        OneReplicationLengthInSeconds = 60 * 60 * 8 * days;
     }
 
     public bool IsAvailable(char group)

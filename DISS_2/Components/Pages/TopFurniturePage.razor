@@ -153,10 +153,10 @@
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
-        _queue1CountsByTypes = sim.Queues[1].TypeCounts;
-        _queue2CountsByTypes = sim.Queues[2].TypeCounts;
-        _queue3CountsByTypes = sim.Queues[3].TypeCounts;
-        _queue4CountsByTypes = sim.Queues[4].TypeCounts;
+        _queue1CountsByTypes = new(sim.Queues[1].TypeCounts);
+        _queue2CountsByTypes = new(sim.Queues[2].TypeCounts);
+        _queue3CountsByTypes = new(sim.Queues[3].TypeCounts);
+        _queue4CountsByTypes = new(sim.Queues[4].TypeCounts);
 
         _chairsInSystem = sim.ChairsInSystem;
         _tablesInSystem = sim.TablesInSystem;
@@ -167,7 +167,7 @@
 
     private void ResetSimulation()
     {
-        MainApp.Instance.TopFurnitureSimulation!.Reinitialize(A, B, C);
+        MainApp.Instance.TopFurnitureSimulation!.Reinitialize(A, B, C, Days);
         UpdateUi(MainApp.Instance.TopFurnitureSimulation);
     }
 
