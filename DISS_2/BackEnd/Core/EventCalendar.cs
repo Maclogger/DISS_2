@@ -5,7 +5,7 @@ namespace DISS_2.BackEnd.Core;
 public class EventCalendar
 {
     public SimCore Core { get; }
-    public PriorityQueue<Event, int> Events { get; set; } = new();
+    public PriorityQueue<Event, int> Events { get; } = new();
 
     public EventCalendar(SimCore core)
     {
@@ -14,10 +14,11 @@ public class EventCalendar
 
     public void PlanNewEvent(Event newEvent)
     {
-        string readableCurrentTime = TimeHandler.ToReadableDateTime(Core.CurrentSimTime);
-        //Console.WriteLine($"[{readableCurrentTime}]: {newEvent}");
-
-        Events.Enqueue(newEvent, newEvent.StartTime);
+        //string readableCurrentTime = TimeHandler.ToReadableDateTime(Core.CurrentSimTime);
+        if (newEvent.StartTime <= Core.OneReplicationLengthInSeconds)
+        {
+            Events.Enqueue(newEvent, newEvent.StartTime);
+        }
     }
 
     public Event PopEvent()
