@@ -218,9 +218,9 @@
         _tablesInSystem = sim.TablesInSystem;
         _wardrobesInSystem = sim.WardrobesInSystem;
 
-        _aBusy = sim.BusyA;
-        _bBusy = sim.BusyB;
-        _cBusy = sim.BusyC;
+        _aBusy = sim.GetBusyWorkerCount(WorkerType.A);
+        _bBusy = sim.GetBusyWorkerCount(WorkerType.B);
+        _cBusy = sim.GetBusyWorkerCount(WorkerType.C);
 
         _completedOrders = sim.CompletedOrders;
 

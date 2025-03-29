@@ -4,13 +4,18 @@ using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture.CustomEvents;
 
-public class Step3Start(int startTime, Order order) : OrderEvent(startTime, order)
+public class Step3Start(int startTime, Order order, Worker worker) : OrderEvent(startTime, order)
 {
+    public Worker Worker { get; } = worker;
+
     public override Task Execute(SimCore simCore)
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
+        if (!Worker.IsBusy)
+        {
+            throw new Exception($"Worker is not busy at start!: {GetType().Name}");
+        }
 
-        sim.BusyB++;
         PlanStep3End(sim);
 
         return Task.CompletedTask;
@@ -20,6 +25,6 @@ public class Step3Start(int startTime, Order order) : OrderEvent(startTime, orde
     {
         Generator<double> gen = sim.Generators.GetStepGenerator(Order, 3);
         int timeToFinishStep3 = (int)Math.Round(gen.Generate());
-        sim.Calendar.PlanNewEvent(new Step3End(sim.CurrentSimTime + timeToFinishStep3, Order));
+        sim.Calendar.PlanNewEvent(new Step3End(sim.CurrentSimTime + timeToFinishStep3, Order, Worker));
     }
 }

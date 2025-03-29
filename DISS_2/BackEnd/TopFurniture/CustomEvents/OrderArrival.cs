@@ -37,9 +37,10 @@ public class OrderArrival(int startTime) : Event(startTime)
 
     private void PlanStep1StartOrQueue(TopFurnitureSimulation sim, Order order)
     {
-        if (sim.IsAvailable('A'))
+        if (sim.IsAvailable(WorkerType.A))
         {
-            sim.Calendar.PlanNewEvent(new Step1Start(sim.CurrentSimTime, order));
+            Worker worker = sim.GetFirstAvailableWorkerAndMakeHimBusy(WorkerType.A);
+            sim.Calendar.PlanNewEvent(new Step1Start(sim.CurrentSimTime, order, worker));
         }
         else
         {

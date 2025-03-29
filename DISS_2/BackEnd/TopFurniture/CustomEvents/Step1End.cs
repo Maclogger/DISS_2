@@ -4,25 +4,27 @@ using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture.CustomEvents;
 
-public class Step1End(int startTime, Order order) : OrderEvent(startTime, order)
+public class Step1End(int startTime, Order order, Worker worker) : OrderEvent(startTime, order)
 {
+    public Worker Worker { get; } = worker;
+
     public override Task Execute(SimCore simCore)
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
-        sim.BusyA--;
+        sim.ReleaseWorker(Worker);
         PlanStep1StartIfInQueue(sim);
         PlanStep2(sim);
-
 
         return Task.CompletedTask;
     }
 
     private void PlanStep2(TopFurnitureSimulation sim)
     {
-        if (sim.IsAvailable('C'))
+        if (sim.IsAvailable(WorkerType.C))
         {
-            sim.Calendar.PlanNewEvent(new Step2Start(sim.CurrentSimTime, Order));
+            Worker worker = sim.GetFirstAvailableWorkerAndMakeHimBusy(WorkerType.C);
+            sim.Calendar.PlanNewEvent(new Step2Start(sim.CurrentSimTime, Order, worker));
         }
         else
         {
@@ -30,12 +32,13 @@ public class Step1End(int startTime, Order order) : OrderEvent(startTime, order)
         }
     }
 
-    private static void PlanStep1StartIfInQueue(TopFurnitureSimulation sim)
+    private void PlanStep1StartIfInQueue(TopFurnitureSimulation sim)
     {
         if (!sim.Queues[1].IsEmpty())
         {
             Order orderFromQueue = sim.Queues[1].Dequeue();
-            sim.Calendar.PlanNewEvent(new Step1Start(sim.CurrentSimTime, orderFromQueue));
+            Worker worker = sim.GetFirstAvailableWorkerAndMakeHimBusy(WorkerType.A);
+            sim.Calendar.PlanNewEvent(new Step1Start(sim.CurrentSimTime, orderFromQueue, worker));
         }
     }
 }

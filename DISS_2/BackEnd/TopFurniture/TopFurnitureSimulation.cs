@@ -1,9 +1,5 @@
 using DISS_2.BackEnd.Core;
 using DISS_2.BackEnd.Core.Objects;
-using DISS_2.BackEnd.Generators;
-using DISS_2.BackEnd.Generators.Empiric;
-using DISS_2.BackEnd.Generators.Exponential;
-using DISS_2.BackEnd.Generators.Uniform;
 using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TopFurniture.Agents;
 using DISS_2.BackEnd.TopFurniture.CustomEvents;
@@ -13,26 +9,24 @@ namespace DISS_2.BackEnd.TopFurniture;
 
 public class TopFurnitureSimulation : SimCore
 {
-    public int A { get; private set; }
-    public int B { get; private set; }
-    public int C { get; private set; }
     public List<FifoQueue<Order>> Queues { get; set; }
-
-    public int BusyA { get; set; } = 0;
-    public int BusyB { get; set; } = 0;
-    public int BusyC { get; set; } = 0;
-
     public int ChairsInSystem { get; set; } = 0;
     public int TablesInSystem { get; set; } = 0;
     public int WardrobesInSystem { get; set; } = 0;
+
+    public Worker[] WorkersA { get; set; }
+    private int _busyA = 0;
+    public Worker[] WorkersB { get; set; }
+    private int _busyB = 0;
+    public Worker[] WorkersC { get; set; }
+    private int _busyC = 0;
 
     public FurnitureSink Sink { get; set; }
 
     public TopFurnitureSimulation()
     {
-        A = 1;
-        B = 1;
-        C = 1;
+        InitializeWorkers(1, 1, 1);
+
         Queues =
         [
             new FifoQueue<Order>(this), // DUMMY -> just to index from 1
@@ -60,22 +54,90 @@ public class TopFurnitureSimulation : SimCore
         ];
     }
 
+    private void InitializeWorkers(int a, int b, int c)
+    {
+        WorkersA = new Worker[a];
+        WorkersB = new Worker[b];
+        WorkersC = new Worker[c];
+        _busyA = 0;
+        _busyB = 0;
+        _busyC = 0;
+
+        int idWorker = 0;
+        for (int i = 0; i < WorkersA.Length; i++)
+        {
+            WorkersA[i] = new Worker(idWorker, WorkerType.A);
+        }
+
+        for (int i = 0; i < WorkersB.Length; i++)
+        {
+            WorkersB[i] = new Worker(idWorker, WorkerType.B);
+        }
+
+        for (int i = 0; i < WorkersC.Length; i++)
+        {
+            WorkersC[i] = new Worker(idWorker, WorkerType.C);
+        }
+    }
+
     public void Reinitialize(int a, int b, int c, int days)
     {
         ResetSimulation();
-        A = a;
-        B = b;
-        C = c;
+        InitializeWorkers(a, b, c);
         OneReplicationLengthInSeconds = 60 * 60 * 8 * days;
     }
 
-    public bool IsAvailable(char group)
+    public bool IsAvailable(WorkerType group)
+    {
+        return WorkersA.Length - GetBusyWorkerCount(group) > 0;
+    }
+
+    public int GetBusyWorkerCount(WorkerType group)
     {
         switch (group)
         {
-            case 'A': return BusyA < A;
-            case 'B': return BusyB < B;
-            case 'C': return BusyC < C;
+            case WorkerType.A: return _busyA;
+            case WorkerType.B: return _busyB;
+            case WorkerType.C: return _busyC;
+        }
+
+        throw new Exception("Unknown worker type");
+    }
+
+    public Worker GetFirstAvailableWorker(WorkerType group)
+    {
+        Worker? worker = TryToGetFirstAvailableWorker(group);
+
+        if (worker == null)
+        {
+            throw new Exception("Worker was not available!!!");
+        }
+
+        return worker;
+    }
+
+    private Worker? TryToGetFirstAvailableWorker(WorkerType group)
+    {
+        Worker[] workersOfThatGroup = GetWorkerArrBasedOnGroupType(group);
+
+        foreach (Worker worker in workersOfThatGroup)
+        {
+            if (!worker.IsBusy) return worker;
+        }
+
+        return null;
+    }
+
+    private Worker[] GetWorkerArrBasedOnGroupType(WorkerType group)
+    {
+        switch (group)
+        {
+            case WorkerType.A:
+                return WorkersA;
+            case WorkerType.B:
+                return WorkersB;
+            case WorkerType.C:
+                return WorkersC;
         }
 
         throw new Exception("Invalid group");
@@ -93,9 +155,7 @@ public class TopFurnitureSimulation : SimCore
             queue.Clear();
         }
 
-        BusyA = 0;
-        BusyB = 0;
-        BusyC = 0;
+        InitializeWorkers(1, 1, 1);
 
         ChairsInSystem = 0;
         TablesInSystem = 0;
@@ -109,83 +169,61 @@ public class TopFurnitureSimulation : SimCore
         base.BeforeReplicationRun(simCore);
         simCore.Calendar.PlanNewEvent(new OrderArrival(0));
     }
-}
 
-public class FurnitureGenerators
-{
-    public UniformGenerator<double> OrderTypeGen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(0.0, 1.0);
-
-    public ExponentialGenerator ArrivalGen { get; } = new((double)1 / (30 * 60)); // 2 order per hour -> 30 min interval
-
-    private EmpiricGenerator<double> Table1Gen { get; } =
-        EmpiricGeneratorFactory.CreateRealGenerator([
-            (10, 25, 0.6),
-            (25, 50, 0.4),
-        ]);
-
-    private UniformGenerator<double> Table2Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(200, 610);
-
-    private UniformGenerator<double> Table3Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(30, 60);
-
-
-    private UniformGenerator<double> Chair1Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(12, 16);
-
-    private UniformGenerator<double> Chair2Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(210, 540);
-
-    private UniformGenerator<double> Chair3Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(14, 24);
-
-
-    private UniformGenerator<double> Wardrobe1Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(15, 80);
-
-    private UniformGenerator<double> Wardrobe2Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(600, 700);
-
-    private UniformGenerator<double> Wardrobe3Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(35, 75);
-
-    private UniformGenerator<double> Wardrobe4Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(15, 25);
-
-    public Generator<double> GetStepGenerator(Order order, int step)
+    public Worker GetFirstAvailableWorkerAndMakeHimBusy(WorkerType workerType)
     {
-        if (order is Chair)
+        Worker worker = GetFirstAvailableWorker(workerType);
+        MakeWorkerBusy(worker, workerType);
+        return worker;
+    }
+
+    public void MakeWorkerBusy(Worker worker, WorkerType workerType)
+    {
+        if (workerType != worker.Type)
         {
-            switch (step)
-            {
-                case 1: return Chair1Gen;
-                case 2: return Chair2Gen;
-                case 3: return Chair3Gen;
-            }
+            throw new Exception($"Worker's type doesn't match workerType." +
+                                $" workerType: {workerType} Worker.Type: {worker.Type}");
+        }
+        ref int busy = ref GetBusyWorkerCountRef(workerType);
+        busy++;
+        worker.IsBusy = true;
+    }
+
+
+    public void PrintBusy()
+    {
+        Console.WriteLine($"BusyA: {_busyA}");
+        Console.WriteLine($"BusyB: {_busyB}");
+        Console.WriteLine($"BusyC: {_busyC}");
+    }
+
+    public void ReleaseWorker(Worker worker)
+    {
+        if (!worker.IsBusy)
+        {
+            throw new Exception("Worker is already set to AVAILABLE!!!");
+        }
+        worker.IsBusy = false;
+        ref int busy = ref GetBusyWorkerCountRef(worker.Type);
+        busy--;
+        if (busy < 0)
+        {
+            throw new Exception("Busy count is < 0!!!");
+        }
+    }
+
+    private ref int GetBusyWorkerCountRef(WorkerType workerType)
+    {
+        switch (workerType)
+        {
+            case WorkerType.A:
+                return ref _busyA;
+            case WorkerType.B:
+                return ref _busyB;
+            case WorkerType.C:
+                return ref _busyC;
         }
 
-        if (order is Table)
-        {
-            switch (step)
-            {
-                case 1: return Table1Gen;
-                case 2: return Table2Gen;
-                case 3: return Table3Gen;
-            }
-        }
-
-        if (order is Wardrobe)
-        {
-            switch (step)
-            {
-                case 1: return Wardrobe1Gen;
-                case 2: return Wardrobe2Gen;
-                case 3: return Wardrobe3Gen;
-                case 4: return Wardrobe4Gen;
-            }
-        }
-
-        throw new Exception($"Combination of Order and technological step is not supported!");
+        throw new Exception("Unknown worker type");
     }
 }

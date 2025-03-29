@@ -10,7 +10,7 @@ public class ExponentialGenerator : Generator<double>
     {
         if (lambda <= 0)
         {
-            throw new ArgumentException("Lambda musí byť väčšia ako nula.");
+            throw new ArgumentException("Lambda has to be greater than zero.");
         }
 
         Lambda = lambda;

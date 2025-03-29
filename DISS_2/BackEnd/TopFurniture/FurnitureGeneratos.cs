@@ -1,0 +1,98 @@
+using DISS_2.BackEnd.Generators;
+using DISS_2.BackEnd.Generators.Empiric;
+using DISS_2.BackEnd.Generators.Exponential;
+using DISS_2.BackEnd.Generators.Triangular;
+using DISS_2.BackEnd.Generators.Uniform;
+using DISS_2.BackEnd.TopFurniture.Agents;
+
+namespace DISS_2.BackEnd.TopFurniture;
+
+public class FurnitureGenerators
+{
+    public UniformGenerator<double> OrderTypeGen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(0.0, 1.0);
+
+    public ExponentialGenerator ArrivalGen { get; } =
+        new((double)1 / (30 * 60)); // 2 order per hour -> 30 min interval
+
+    private EmpiricGenerator<double> Table1Gen { get; } =
+        EmpiricGeneratorFactory.CreateRealGenerator([
+            (10, 25, 0.6),
+            (25, 50, 0.4),
+        ]);
+
+    private UniformGenerator<double> Table2Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(200, 610);
+
+    private UniformGenerator<double> Table3Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(30, 60);
+
+
+    private UniformGenerator<double> Chair1Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(12, 16);
+
+    private UniformGenerator<double> Chair2Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(210, 540);
+
+    private UniformGenerator<double> Chair3Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(14, 24);
+
+
+    private UniformGenerator<double> Wardrobe1Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(15, 80);
+
+    private UniformGenerator<double> Wardrobe2Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(600, 700);
+
+    private UniformGenerator<double> Wardrobe3Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(35, 75);
+
+    private UniformGenerator<double> Wardrobe4Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(15, 25);
+
+    private TriangularIntGenerator WarehouseTravelTimeGen { get; } =
+        new TriangularIntGenerator(60, 120, 480);
+
+    private TriangularIntGenerator WarehouseMaterialPrepTimeGen { get; } =
+        new TriangularIntGenerator(300, 500, 900);
+
+    private TriangularIntGenerator InterLocationTravelTimeGen { get; } =
+        new TriangularIntGenerator(120, 150, 500);
+
+
+    public Generator<double> GetStepGenerator(Order order, int step)
+    {
+        if (order is Chair)
+        {
+            switch (step)
+            {
+                case 1: return Chair1Gen;
+                case 2: return Chair2Gen;
+                case 3: return Chair3Gen;
+            }
+        }
+
+        if (order is Table)
+        {
+            switch (step)
+            {
+                case 1: return Table1Gen;
+                case 2: return Table2Gen;
+                case 3: return Table3Gen;
+            }
+        }
+
+        if (order is Wardrobe)
+        {
+            switch (step)
+            {
+                case 1: return Wardrobe1Gen;
+                case 2: return Wardrobe2Gen;
+                case 3: return Wardrobe3Gen;
+                case 4: return Wardrobe4Gen;
+            }
+        }
+
+        throw new Exception($"Combination of Order and technological step is not supported!");
+    }
+}
