@@ -80,7 +80,7 @@
             </GeneratorCard>
 
             <GeneratorCard Headline="Discrete Triangular"
-                           Initialize="@(() => InitializeTriangularGenerator(MinTriangularDisc, ModTriangularDisc, MaxTriangularDisc))"
+                           Initialize="@(() => InitializeTriangularIntGenerator(MinTriangularDisc, ModTriangularDisc, MaxTriangularDisc))"
                            Generator="MainApp.Instance.TesterGenerators.TriangularIntGenerator"
                            CouldBeInitialized="() => { return true; }">
                 <label class="mt-3">Min:</label>
@@ -91,6 +91,20 @@
 
                 <label class="mt-3">Max:</label>
                 <input class="form-control" type="number" @bind="MaxTriangularDisc" @bind:event="oninput" step="1"/>
+            </GeneratorCard>
+
+            <GeneratorCard Headline="Real Triangular"
+                           Initialize="@(() => InitializeTriangularRealGenerator(MinTriangularReal, ModTriangularReal, MaxTriangularReal))"
+                           Generator="MainApp.Instance.TesterGenerators.TriangularRealGenerator"
+                           CouldBeInitialized="() => { return true; }">
+                <label class="mt-3">Min:</label>
+                <input class="form-control" type="number" @bind="MinTriangularReal" @bind:event="oninput" step="0.1"/>
+
+                <label class="mt-3">Mod:</label>
+                <input class="form-control" type="number" @bind="ModTriangularReal" @bind:event="oninput" step="0.1"/>
+
+                <label class="mt-3">Max:</label>
+                <input class="form-control" type="number" @bind="MaxTriangularReal" @bind:event="oninput" step="0.1"/>
             </GeneratorCard>
 
             <GeneratorCard Headline="Real Exponential"
@@ -113,6 +127,10 @@
     private int MinTriangularDisc { get; set; } = 0;
     private int ModTriangularDisc { get; set; } = 25;
     private int MaxTriangularDisc { get; set; } = 50;
+
+    private double MinTriangularReal { get; set; } = 0;
+    private double ModTriangularReal { get; set; } = 25;
+    private double MaxTriangularReal { get; set; } = 50;
 
     private double Lambda { get; set; } = 2.0;
 
@@ -194,15 +212,23 @@
         rows.Remove(row);
     }
 
-    private Generator<int> InitializeTriangularGenerator(int minTriangularDisc, int modTriangularDisc, int maxTriangularDisc)
+    private Generator<int> InitializeTriangularIntGenerator(int min, int mode, int max)
     {
         TriangularIntGenerator gen = new TriangularIntGenerator(
-            minTriangularDisc,
-            modTriangularDisc,
-            maxTriangularDisc
+            min, mode, max
         );
         gen.EnableHistory();
         MainApp.Instance.TesterGenerators.TriangularIntGenerator = gen;
+        return gen;
+    }
+
+    private Generator<double> InitializeTriangularRealGenerator(double min, double mode, double max)
+    {
+        TriangularRealGenerator gen = new TriangularRealGenerator(
+            min, mode, max
+        );
+        gen.EnableHistory();
+        MainApp.Instance.TesterGenerators.TriangularRealGenerator = gen;
         return gen;
     }
 

@@ -8,6 +8,7 @@ public class Worker
     public WorkerType Type { get; set; }
 
     public bool IsBusy { get; set; }
+    public Location? CurrentLocation { get; set; }
 
     public Worker(int id, WorkerType type)
     {

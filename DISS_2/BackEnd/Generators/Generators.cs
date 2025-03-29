@@ -14,5 +14,6 @@ public class Generators
     public EmpiricGenerator<double>?  EmpiricRealGenerator { get; set; }
 
     public TriangularIntGenerator? TriangularIntGenerator { get; set; }
+    public TriangularRealGenerator? TriangularRealGenerator { get; set; }
     public ExponentialGenerator? ExponentialGenerator { get; set; }
 }

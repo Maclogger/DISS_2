@@ -38,7 +38,7 @@ namespace DISS_2.BackEnd.Generators.Triangular
 
         public override IGeneratorTester<int>? GetTester()
         {
-            return new TriangularDiscreteTester();
+            return new TriangularIntTester();
         }
     }
 }

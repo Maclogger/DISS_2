@@ -17,8 +17,6 @@ public class TicketSimulation : SimCore
         ];
     }
 
-
-
     public Queue<Customer> CustomerQueue { get; set; } = new();
     public bool IsBusy { get; set; } = false;
 
@@ -52,8 +50,8 @@ public class TicketSimulation : SimCore
 
 public class TicketGenerators
 {
-    public  UniformGenerator<int> ArrivalGen { get; set; }=
+    public  UniformGenerator<int> ArrivalGen { get; }=
         UniformGeneratorFactory.CreateDiscreteUniformGenerator(5, 10);
-    public UniformGenerator<int> OperationDurationGen { get; set; }=
+    public UniformGenerator<int> OperationDurationGen { get; }=
         UniformGeneratorFactory.CreateDiscreteUniformGenerator(5, 8);
 }
