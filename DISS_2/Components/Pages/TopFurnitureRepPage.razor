@@ -121,6 +121,7 @@
 
     private void Stop()
     {
+        Sim.IsRepsRunning = false;
         Sim.IsRunning = false;
     }
 
@@ -129,6 +130,10 @@
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
         Sim = sim;
         _currentReplication = Sim.CurrReplication + 1;
+        if (Sim.IsRunning)
+        {
+            _replicationCount = Sim.ReplicationCount;
+        }
         _statistics = simCore.RepStatistics;
         await InvokeAsync(StateHasChanged);
     }

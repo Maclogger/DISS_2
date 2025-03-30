@@ -7,7 +7,6 @@ public class SysEvent(int startTime) : Event(startTime)
     public override async Task Execute(SimCore simCore)
     {
         _sim = simCore;
-        Console.WriteLine("SYSTEM EVENT WAS EXECUTED!");
         Speed currentSpeed = _sim.SpeedControl.CurrentSpeed;
         if (currentSpeed == Speed.Stopped)
         {

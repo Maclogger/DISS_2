@@ -11,8 +11,10 @@ public abstract class SimCore
     public int CurrentSimTime { get; set; } = 0;
     public int Frame { get; set; } = 0;
     public int CurrReplication { get; set; } = 0;
+    public int ReplicationCount { get; set; }
 
     public bool IsRunning { get; set; } = false;
+    public bool IsRepsRunning { get; set; } = true;
     public int OneReplicationLengthInSeconds { get; set; } = 60 * 60 * 8 * 100;
 
     public SpeedControl SpeedControl { get; set; } = new();
@@ -28,20 +30,24 @@ public abstract class SimCore
 
     public async Task RunSimulation(int replicationCount)
     {
+        ReplicationCount = replicationCount;
+        IsRepsRunning = true;
         IsRunning = true;
         await Task.Run(async () =>
         {
             BeforeSimulation();
             for (CurrReplication = 0; CurrReplication < replicationCount; CurrReplication++)
             {
-                if (!IsRunning) break;
+                if (!IsRepsRunning) break;
                 await RunOneReplication();
             }
 
             AfterSimulation();
         });
         IsRunning = false;
+        IsRepsRunning = false;
     }
+
 
     public async Task RunOneSimulation()
     {
@@ -63,11 +69,10 @@ public abstract class SimCore
 
     private async Task RunOneReplication()
     {
-        ResetSimulation();
         BeforeReplicationRun();
         while (!Calendar.IsEmpty() && CurrentSimTime < OneReplicationLengthInSeconds)
         {
-            if (!IsRunning) break;
+            if (!IsRunning || !IsRepsRunning) break;
             Event currentEvent = Calendar.PopEvent();
             VerifyAndUpdateEventTime(currentEvent);
             await currentEvent.BeforeEvent(this);
@@ -78,6 +83,7 @@ public abstract class SimCore
 
         RefreshGuiAfterRep();
         AfterReplicationRun();
+        ResetSimulation();
     }
 
     private void ResetSimStatistics()

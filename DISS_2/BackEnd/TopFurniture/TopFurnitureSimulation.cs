@@ -79,6 +79,10 @@ public class TopFurnitureSimulation : SimCore
 
     private void InitializeWorkersAndLocations(int a, int b, int c)
     {
+        a = Math.Max(a, 1);
+        b = Math.Max(b, 1);
+        c = Math.Max(c, 1);
+
         WorkersA = new Worker[a];
         WorkersB = new Worker[b];
         WorkersC = new Worker[c];
@@ -200,7 +204,7 @@ public class TopFurnitureSimulation : SimCore
 
     public FurnitureGenerators Generators { get; } = new();
     public int CompletedOrders { get; set; } = 0;
-    public List<Order> Orders { get; set; } = new(); // ONLY USED IN DEBUG MODE
+    public List<Order> Orders { get; set; } = new();
 
     public override void ResetSimulation()
     {
@@ -211,7 +215,7 @@ public class TopFurnitureSimulation : SimCore
             queue.Clear();
         }
 
-        InitializeWorkersAndLocations(2, 2, 18);
+        InitializeWorkersAndLocations(WorkersA.Length, WorkersB.Length, WorkersC.Length);
 
         ChairsInSystem = 0;
         TablesInSystem = 0;
