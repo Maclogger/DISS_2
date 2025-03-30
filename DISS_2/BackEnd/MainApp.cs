@@ -27,4 +27,5 @@ public sealed class MainApp
 
     public TicketSimulation? TicketSimulation { get; set; }
     public TopFurnitureSimulation? TopFurnitureSimulation { get; set; }
+    public TopFurnitureSimulation? TopFurnitureRepSimulation { get; set; }
 }

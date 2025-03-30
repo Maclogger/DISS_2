@@ -27,7 +27,7 @@ public class TopFurnitureSimulation : SimCore
 
     public TopFurnitureSimulation()
     {
-        InitializeWorkersAndLocations(1, 1, 1);
+        InitializeWorkersAndLocations(2, 2, 18);
 
         Queues =
         [
@@ -175,7 +175,7 @@ public class TopFurnitureSimulation : SimCore
             queue.Clear();
         }
 
-        InitializeWorkersAndLocations(1, 1, 1);
+        InitializeWorkersAndLocations(2, 2, 18);
 
         ChairsInSystem = 0;
         TablesInSystem = 0;

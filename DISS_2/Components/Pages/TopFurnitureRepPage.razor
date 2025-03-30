@@ -1,0 +1,115 @@
+@page "/TopFurnitureRepPage"
+@using DISS_2.BackEnd
+@using DISS_2.BackEnd.Core
+@using DISS_2.BackEnd.TopFurniture
+@*
+@using DISS_2.Components.Basic.Chart
+*@
+@implements DISS_2.BackEnd.Core.IRepDelegate
+@rendermode InteractiveServer
+<div class="card rounded-3 bg-dark text-white p-4 w-100">
+    <div class="container-fluid">
+        <div class="row">
+            <h1 class="m-0 p-0">Top Furniture, LCC - Replications</h1>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 p-0">
+                <div class="d-flex justify-content-between flex-column p-0 ">
+                    <div class="d-flex align-items-center mt-3">
+                        <label class="card bg-primary text-white me-2 fs-4 text-center" style="min-width: 15rem;">Replication Count</label>
+                        <input class="form-control flex-grow-1" type="number" @bind="_replicationCount" min="1" step="10"/>
+                    </div>
+                    <div class="d-flex align-items-center mt-3">
+                        <label class="card bg-primary text-white me-2 fs-4 text-center" style="min-width: 3rem;">A</label>
+                        <input @bind="A" class="form-control flex-grow-1" type="number" min="1" step="1"
+                               disabled="@IsRunning()"/>
+                    </div>
+                    <div class="d-flex align-items-center mt-3">
+                        <label class="card bg-primary text-white me-2 fs-4 text-center" style="min-width: 3rem;">B</label>
+                        <input @bind="B" class="form-control flex-grow-1" type="number" min="1" step="1"
+                               disabled="@IsRunning()"/>
+                    </div>
+                    <div class="d-flex align-items-center mt-3">
+                        <label class="card bg-primary text-white me-2 fs-4 text-center" style="min-width: 3rem;">C</label>
+                        <input @bind="C" class="form-control flex-grow-1" type="number" min="1" step="1"
+                               disabled="@IsRunning()"/>
+                    </div>
+                </div>
+
+                <div class="d-flex flex-row gap-3 mt-3">
+                    <button @onclick="Run" class="btn btn-primary w-100" disabled="@IsRunning()">Run</button>
+                    <button @onclick="Stop" class="btn btn-danger w-100" disabled="@IsNotRunning()">Stop</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            @*
+            <RealTimeChart @ref="_chart" Title="Average time of Order in system" XAxisLabel="Replication" YAxisLabel="Time"/>
+        *@
+        </div>
+    </div>
+</div>
+
+
+
+
+@code {
+
+    /*
+    RealTimeChart _chart = new();
+    */
+    public TopFurnitureSimulation Sim { get; set; } = MainApp.Instance.TopFurnitureRepSimulation ?? new();
+    private int _replicationCount = 0;
+    public int A { get; set; }
+    public int B { get; set; }
+    public int C { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (MainApp.Instance.TopFurnitureRepSimulation == null)
+            {
+                MainApp.Instance.TopFurnitureRepSimulation = Sim;
+            }
+            else
+            {
+                Sim = MainApp.Instance.TopFurnitureRepSimulation;
+            }
+
+            Sim.RepDelegates.Add(this);
+            UpdateUi(Sim);
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+
+    private bool IsRunning()
+    {
+        return Sim.IsRunning;
+    }
+
+    private bool IsNotRunning()
+    {
+        return !IsRunning();
+    }
+
+    public async Task Run()
+    {
+        Sim.Reinitialize(A, B, C, Config.DayCount);
+        await Sim.RunSimulation(_replicationCount);
+    }
+
+    private void Stop()
+    {
+        Sim.IsRunning = false;
+    }
+
+    public void UpdateUi(SimCore simCore)
+    {
+        TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
+        Sim = sim;
+    }
+
+}

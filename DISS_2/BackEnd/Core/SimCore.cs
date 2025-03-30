@@ -73,6 +73,7 @@ public abstract class SimCore
             RefreshGuiAfterEvent(currentEvent);
         }
 
+        RefreshGuiAfterRep();
         AfterReplicationRun(this);
     }
 
@@ -88,12 +89,14 @@ public abstract class SimCore
     }
 
 
-    private void RefreshGuiAfterRep(int currentReplication)
+    private void RefreshGuiAfterRep()
     {
-        /*foreach (ISimDelegate @delegate in MainApp.Instance.SimDelegates)
+        List<IRepDelegate> delegates = RepDelegates.ToList(); // thread safe
+
+        foreach (IRepDelegate @delegate in delegates)
         {
-            @delegate.UpdateUi(State, currentReplication);
-        }*/
+            @delegate.UpdateUi(this);
+        }
     }
 
 
