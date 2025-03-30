@@ -12,6 +12,7 @@ public class FurnitureSink(SimCore core) : Sink<Order>(core)
     protected override void AfterSink(Order item)
     {
         Sim.CompletedOrders++;
+        Sim.Orders.Remove(item);
 
         if (item is Chair)
         {

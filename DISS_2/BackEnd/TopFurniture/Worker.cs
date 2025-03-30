@@ -16,6 +16,19 @@ public class Worker
         Type = type;
         IsBusy = false;
     }
+
+    public void LeaveLocation()
+    {
+        if (CurrentLocation != null)
+        {
+            CurrentLocation.Leave(this);
+        }
+    }
+
+    public override string ToString()
+    {
+        return $"WORKER: {Id} - {Type} - IsBusy:{IsBusy} - CurrentLocation:{CurrentLocation?.Id}";
+    }
 }
 
 public enum WorkerType

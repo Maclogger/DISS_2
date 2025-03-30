@@ -136,4 +136,6 @@ public abstract class SimCore
             statistic.Clear();
         }
     }
+
+    public abstract void PrintState(Event @event);
 }

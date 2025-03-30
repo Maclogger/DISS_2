@@ -39,6 +39,10 @@ public class TicketSimulation : SimCore
         IsBusy = false;
     }
 
+    public override void PrintState(Event @event)
+    {
+    }
+
     protected override void AfterReplicationRun(SimCore simCore)
     {
         Console.WriteLine(simCore.Statistics[0]);

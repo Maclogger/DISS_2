@@ -2,12 +2,11 @@ using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture;
 
-public class Location
+public class Location(int id)
 {
-    public int Id { get; set; }
+    public int Id { get; set; } = id;
     public HashSet<Worker> Workers { get; set; } = new();
     public Order? CurrentOrder { get; set; }
-    public Location? CurrentLocation { get; set; } = null;
 
     public bool IsOccupied()
     {
@@ -21,7 +20,7 @@ public class Location
 
     public void Occupy(Worker worker, Order order)
     {
-        if (CurrentOrder != null)
+        if (CurrentOrder != null && CurrentOrder != order)
         {
             throw new Exception($"Location {ToString()} is already occupied");
         }
@@ -31,7 +30,21 @@ public class Location
             Workers.Add(worker);
         }
 
+        worker.LeaveLocation();
+        worker.CurrentLocation = this;
+        order.Location = this;
         CurrentOrder = order;
+    }
+
+    public void Leave(Worker worker)
+    {
+        if (!IsWorkerPresent(worker))
+        {
+            throw new Exception($"Location {ToString()} is not occupied by " +
+                                $"the worker in Leave: {worker}");
+        }
+
+        Workers.Remove(worker);
     }
 
 
@@ -39,6 +52,6 @@ public class Location
     {
         return
             $"Location: {Id} - {CurrentOrder} - " +
-            $"{string.Join(", ", Workers.Select(w => w.ToString()))}";
+            $"Workers: {string.Join(", ", Workers.Select(w => w.Id))}";
     }
 }

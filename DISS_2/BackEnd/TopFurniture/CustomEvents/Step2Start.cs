@@ -23,8 +23,22 @@ public class Step2Start(int startTime, Order order, Worker worker) : OrderEvent(
 
     private void PlanStep2End(TopFurnitureSimulation sim)
     {
-        Generator<double> gen = sim.Generators.GetStepGenerator(Order, 2);
-        int timeToFinishStep2 = (int)Math.Round(gen.Generate());
-        sim.Calendar.PlanNewEvent(new Step2End(sim.CurrentSimTime + timeToFinishStep2, Order, Worker));
+        if (Order.Location == null)
+        {
+            throw new Exception($"No location found in order! {GetType().Name}");
+        }
+
+        int timeToFinishStep2 = 0;
+
+        int travelTime = sim.GetTravelTimeToLocation(Worker, Order.Location);
+        timeToFinishStep2 = travelTime;
+
+        Order.Location.Occupy(Worker, Order);
+
+        var genStep = sim.Generators.GetStepGenerator(Order, 2);
+        timeToFinishStep2 += (int)Math.Round(genStep.Generate());
+
+        sim.Calendar.PlanNewEvent(new Step2End(sim.CurrentSimTime + timeToFinishStep2, Order,
+            Worker));
     }
 }

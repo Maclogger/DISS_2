@@ -31,6 +31,7 @@ public abstract class Event : IComparable<Event>
 
     public virtual Task AfterEvent(SimCore sim)
     {
+        if (Config.DebugMode) sim.PrintState(this);
         return Task.CompletedTask;
     }
 }

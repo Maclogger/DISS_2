@@ -10,6 +10,7 @@ public class OrderArrival(int startTime) : Event(startTime)
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
         Order order = CreateOrder(sim);
+        if (Config.DebugMode) sim.Orders.Add(order);
 
         PlanNextArrival(sim);
         PlanStep1StartOrQueue(sim, order);

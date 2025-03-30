@@ -10,6 +10,7 @@ public abstract class Order
     public int TimeArrivalAtQueue2 { get; set; }
     public int TimeArrivalAtQueue3 { get; set; }
     public int TimeArrivalAtQueue4 { get; set; }
+    public Location? Location { get; set; } = null;
 
     protected Order(int timeArrival)
     {
@@ -31,5 +32,10 @@ public abstract class Order
         }
 
         return new Wardrobe(simTime);
+    }
+
+    public override string ToString()
+    {
+        return $"Order: Location={Location?.Id} Type={GetType().Name}";
     }
 }

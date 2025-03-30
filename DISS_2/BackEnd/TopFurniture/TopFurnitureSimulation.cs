@@ -21,11 +21,13 @@ public class TopFurnitureSimulation : SimCore
     public Worker[] WorkersC { get; set; }
     private int _busyC = 0;
 
+    public List<Location> Locations { get; set; } = new();
+
     public FurnitureSink Sink { get; set; }
 
     public TopFurnitureSimulation()
     {
-        InitializeWorkers(1, 1, 1);
+        InitializeWorkersAndLocations(1, 1, 1);
 
         Queues =
         [
@@ -54,7 +56,7 @@ public class TopFurnitureSimulation : SimCore
         ];
     }
 
-    private void InitializeWorkers(int a, int b, int c)
+    private void InitializeWorkersAndLocations(int a, int b, int c)
     {
         WorkersA = new Worker[a];
         WorkersB = new Worker[b];
@@ -62,6 +64,8 @@ public class TopFurnitureSimulation : SimCore
         _busyA = 0;
         _busyB = 0;
         _busyC = 0;
+
+        Locations.Clear();
 
         int idWorker = 0;
         for (int i = 0; i < WorkersA.Length; i++)
@@ -83,7 +87,7 @@ public class TopFurnitureSimulation : SimCore
     public void Reinitialize(int a, int b, int c, int days)
     {
         ResetSimulation();
-        InitializeWorkers(a, b, c);
+        InitializeWorkersAndLocations(a, b, c);
         OneReplicationLengthInSeconds = 60 * 60 * 8 * days;
     }
 
@@ -145,6 +149,7 @@ public class TopFurnitureSimulation : SimCore
 
     public FurnitureGenerators Generators { get; } = new();
     public int CompletedOrders { get; set; } = 0;
+    public List<Order> Orders { get; set; } = new(); // ONLY USED IN DEBUG MODE
 
     public override void ResetSimulation()
     {
@@ -155,13 +160,45 @@ public class TopFurnitureSimulation : SimCore
             queue.Clear();
         }
 
-        InitializeWorkers(1, 1, 1);
+        InitializeWorkersAndLocations(1, 1, 1);
 
         ChairsInSystem = 0;
         TablesInSystem = 0;
         WardrobesInSystem = 0;
 
         CompletedOrders = 0;
+    }
+
+
+    public override void PrintState(Event @event)
+    {
+        if (@event is SysEvent) return;
+        Console.WriteLine($"-----------------------------------------\nAfter Event: {@event}\n");
+        Console.WriteLine("Locations:");
+        foreach (Location location in Locations)
+        {
+            Console.WriteLine(location);
+        }
+
+        Console.WriteLine("Orders:");
+        foreach (Order order in Orders)
+        {
+            Console.WriteLine(order);
+        }
+
+        Console.WriteLine("Workers:");
+        foreach (Worker worker in WorkersA)
+        {
+            Console.WriteLine(worker);
+        }
+        foreach (Worker worker in WorkersB)
+        {
+            Console.WriteLine(worker);
+        }
+        foreach (Worker worker in WorkersC)
+        {
+            Console.WriteLine(worker);
+        }
     }
 
     protected override void BeforeReplicationRun(SimCore simCore)
@@ -225,5 +262,39 @@ public class TopFurnitureSimulation : SimCore
         }
 
         throw new Exception("Unknown worker type");
+    }
+
+    public Location GetFirstAvailableLocation()
+    {
+        foreach (Location location in Locations)
+        {
+            if (location.CurrentOrder == null)
+            {
+                return location;
+            }
+        }
+
+        Location newLocation = new(Locations.Count);
+        Locations.Add(newLocation);
+        return newLocation;
+    }
+
+    public int GetTravelTimeToLocation(Worker worker, Location location)
+    {
+        bool workerIsInWarehouse = worker.CurrentLocation == null;
+        if (workerIsInWarehouse)
+        {
+            var genTravelTime = Generators.WarehouseTravelTimeGen;
+            return (int)Math.Round(genTravelTime.Generate());
+        }
+
+        bool workerIsAlreadyAtTheRightLocation = worker.CurrentLocation == location;
+        if (!workerIsAlreadyAtTheRightLocation)
+        {
+            var genTravelTime = Generators.InterLocationTravelTimeGen;
+            return (int)Math.Round(genTravelTime.Generate());
+        }
+
+        return 0;
     }
 }

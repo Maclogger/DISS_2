@@ -50,14 +50,14 @@ public class FurnitureGenerators
     private UniformGenerator<double> Wardrobe4Gen { get; } = UniformGeneratorFactory
         .CreateRealUniformGenerator(15, 25);
 
-    public TriangularIntGenerator WarehouseTravelTimeGen { get; } =
-        new TriangularIntGenerator(60, 120, 480);
+    public TriangularRealGenerator WarehouseTravelTimeGen { get; } =
+        new TriangularRealGenerator(60, 120, 480);
 
-    public TriangularIntGenerator WarehouseMaterialPrepTimeGen { get; } =
-        new TriangularIntGenerator(300, 500, 900);
+    public TriangularRealGenerator WarehouseMaterialPrepTimeGen { get; } =
+        new TriangularRealGenerator(300, 500, 900);
 
-    public TriangularIntGenerator InterLocationTravelTimeGen { get; } =
-        new TriangularIntGenerator(120, 150, 500);
+    public TriangularRealGenerator InterLocationTravelTimeGen { get; } =
+        new TriangularRealGenerator(120, 150, 500);
 
 
     public Generator<double> GetStepGenerator(Order order, int step)
