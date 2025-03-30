@@ -4,6 +4,7 @@
 @using DISS_2.BackEnd.Statistics
 @using DISS_2.BackEnd.TopFurniture
 @using DISS_2.Components.Basic.Simulation
+@using DISS_2.Components.Basic.Chart
 @*
 @using DISS_2.Components.Basic.Chart
 *@
@@ -57,21 +58,14 @@
             </div>
         </div>
         <div class="row">
-            @*
             <RealTimeChart @ref="_chart" Title="Average time of Order in system" XAxisLabel="Replication" YAxisLabel="Time"/>
-        *@
         </div>
     </div>
 </div>
 
-
-
-
 @code {
 
-    /*
     RealTimeChart _chart = new();
-    */
     public TopFurnitureSimulation Sim { get; set; } = MainApp.Instance.TopFurnitureRepSimulation ?? new();
     private int _replicationCount = 100;
     private int _currentReplication = 0;
@@ -116,6 +110,7 @@
             statistic.Clear();
         }
         Sim.Reinitialize(A, B, C, Config.DayCount);
+        await _chart.Reset();
         await Sim.RunSimulation(_replicationCount);
     }
 
@@ -135,7 +130,10 @@
             _replicationCount = Sim.ReplicationCount;
         }
         _statistics = simCore.RepStatistics;
+        if (_currentReplication > 0.03 * _replicationCount)
+        {
+            await _chart.AddValue(_statistics[11].CalcMean());
+        }
         await InvokeAsync(StateHasChanged);
     }
-
 }
