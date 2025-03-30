@@ -7,5 +7,5 @@ public interface ISimDelegate
 
 public interface IRepDelegate
 {
-    void UpdateUi(SimCore simCore);
+    Task UpdateUi(SimCore simCore);
 }

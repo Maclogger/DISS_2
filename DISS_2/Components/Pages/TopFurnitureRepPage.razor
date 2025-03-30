@@ -1,7 +1,9 @@
 @page "/TopFurnitureRepPage"
 @using DISS_2.BackEnd
 @using DISS_2.BackEnd.Core
+@using DISS_2.BackEnd.Statistics
 @using DISS_2.BackEnd.TopFurniture
+@using DISS_2.Components.Basic.Simulation
 @*
 @using DISS_2.Components.Basic.Chart
 *@
@@ -12,13 +14,13 @@
         <div class="row">
             <h1 class="m-0 p-0">Top Furniture, LCC - Replications</h1>
         </div>
-
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-md-4 p-0">
                 <div class="d-flex justify-content-between flex-column p-0 ">
-                    <div class="d-flex align-items-center mt-3">
+                    <div class="d-flex align-items-center ">
                         <label class="card bg-primary text-white me-2 fs-4 text-center" style="min-width: 15rem;">Replication Count</label>
-                        <input class="form-control flex-grow-1" type="number" @bind="_replicationCount" min="1" step="10"/>
+                        <input class="form-control flex-grow-1" type="number" @bind="_replicationCount" min="1" step="10"
+                               disabled="@IsRunning()"/>
                     </div>
                     <div class="d-flex align-items-center mt-3">
                         <label class="card bg-primary text-white me-2 fs-4 text-center" style="min-width: 3rem;">A</label>
@@ -41,6 +43,17 @@
                     <button @onclick="Run" class="btn btn-primary w-100" disabled="@IsRunning()">Run</button>
                     <button @onclick="Stop" class="btn btn-danger w-100" disabled="@IsNotRunning()">Stop</button>
                 </div>
+
+                <div class="card rounded-3 bg-white mt-3">
+                    <p class="fs-4 m-0 p-0 ps-2">Current Replication: @_currentReplication / @_replicationCount</p>
+                </div>
+            </div>
+            <div class="col-md-8 p-0 ps-4">
+                <div class="container-fluid">
+                    <div class="row">
+                        <StatisticsComp Statistics="_statistics"/>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -60,12 +73,14 @@
     RealTimeChart _chart = new();
     */
     public TopFurnitureSimulation Sim { get; set; } = MainApp.Instance.TopFurnitureRepSimulation ?? new();
-    private int _replicationCount = 0;
-    public int A { get; set; }
-    public int B { get; set; }
-    public int C { get; set; }
+    private int _replicationCount = 100;
+    private int _currentReplication = 0;
+    private List<Statistics> _statistics = new();
+    public int A { get; set; } = 2;
+    public int B { get; set; } = 2;
+    public int C { get; set; } = 18;
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
@@ -79,11 +94,10 @@
             }
 
             Sim.RepDelegates.Add(this);
-            UpdateUi(Sim);
-            InvokeAsync(StateHasChanged);
+            await UpdateUi(Sim);
+            await InvokeAsync(StateHasChanged);
         }
     }
-
 
     private bool IsRunning()
     {
@@ -97,6 +111,10 @@
 
     public async Task Run()
     {
+        foreach (Statistics statistic in Sim.RepStatistics)
+        {
+            statistic.Clear();
+        }
         Sim.Reinitialize(A, B, C, Config.DayCount);
         await Sim.RunSimulation(_replicationCount);
     }
@@ -106,10 +124,13 @@
         Sim.IsRunning = false;
     }
 
-    public void UpdateUi(SimCore simCore)
+    public async Task UpdateUi(SimCore simCore)
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
         Sim = sim;
+        _currentReplication = Sim.CurrReplication + 1;
+        _statistics = simCore.RepStatistics;
+        await InvokeAsync(StateHasChanged);
     }
 
 }

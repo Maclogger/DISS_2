@@ -2,18 +2,16 @@ namespace DISS_2.BackEnd.Statistics
 {
     public class SampleStat(string name) : Statistics(name)
     {
-        private double _mean = 0.0;
-
-        public override double CalcMean() => _mean;
+        public override double CalcMean() => Mean;
         public override string GetTypeString()
         {
             return "Sample statistics";
         }
 
-        public void AddValue(int value)
+        public void AddValue(double value)
         {
             Count++;
-            _mean += (value - _mean) / Count;
+            Mean += (value - Mean) / Count;
         }
 
         public override string ToString()
@@ -25,7 +23,7 @@ namespace DISS_2.BackEnd.Statistics
 
         public override void Clear()
         {
-            _mean = 0.0;
+            Mean = 0.0;
             base.Clear();
         }
     }

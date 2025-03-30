@@ -27,9 +27,9 @@ public class TicketSimulation : SimCore
         await RunOneSimulation();
     }
 
-    protected override void BeforeReplicationRun(SimCore simCore)
+    protected override void BeforeReplicationRun()
     {
-        simCore.Calendar.PlanNewEvent(new CustomerArrival(0));
+        Calendar.PlanNewEvent(new CustomerArrival(0));
     }
 
     public override void ResetSimulation()
@@ -43,19 +43,19 @@ public class TicketSimulation : SimCore
     {
     }
 
-    protected override void AfterReplicationRun(SimCore simCore)
+    protected override void AfterReplicationRun()
     {
-        Console.WriteLine(simCore.Statistics[0]);
-        Console.WriteLine(simCore.Statistics[1]);
-        base.AfterReplicationRun(simCore);
+        Console.WriteLine(Statistics[0]);
+        Console.WriteLine(Statistics[1]);
+        base.AfterReplicationRun();
     }
 }
 
-
 public class TicketGenerators
 {
-    public  UniformGenerator<int> ArrivalGen { get; }=
+    public UniformGenerator<int> ArrivalGen { get; } =
         UniformGeneratorFactory.CreateDiscreteUniformGenerator(5, 10);
-    public UniformGenerator<int> OperationDurationGen { get; }=
+
+    public UniformGenerator<int> OperationDurationGen { get; } =
         UniformGeneratorFactory.CreateDiscreteUniformGenerator(5, 8);
 }

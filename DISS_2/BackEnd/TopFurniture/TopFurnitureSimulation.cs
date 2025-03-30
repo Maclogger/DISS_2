@@ -56,6 +56,25 @@ public class TopFurnitureSimulation : SimCore
 
             new SampleStat("Average time of Order in system"), // 11
         ];
+
+        RepStatistics =
+        [
+            new SampleStat("Average times of Chairs in system"), // 0
+            new SampleStat("Average times of Tables in system"), // 1
+            new SampleStat("Average times eof Wardrobes in system"), // 2
+
+            new SampleStat("Average waiting times in queue before technological STEP 1"), // 3
+            new SampleStat("Average waiting times in queue before technological STEP 2"), // 4
+            new SampleStat("Average waiting times in queue before technological STEP 3"), // 5
+            new SampleStat("Average waiting times in queue before technological STEP 4"), // 6
+
+            new SampleStat("Weighted average queue lengths before technological STEP 1"), // 7
+            new SampleStat("Weighted average queue lengths before technological STEP 2"), // 8
+            new SampleStat("Weighted average queue lengths before technological STEP 3"), // 9
+            new SampleStat("Weighted average queue lengths before technological STEP 4"), // 10
+
+            new SampleStat("Average times of Order in system"), // 11
+        ];
     }
 
     private void InitializeWorkersAndLocations(int a, int b, int c)
@@ -92,6 +111,23 @@ public class TopFurnitureSimulation : SimCore
         ResetSimulation();
         InitializeWorkersAndLocations(a, b, c);
         OneReplicationLengthInSeconds = 60 * 60 * 8 * days;
+    }
+
+
+    protected override void AfterReplicationRun()
+    {
+        ((SampleStat)RepStatistics[0]).AddValue(Statistics[0].CalcMean());
+        ((SampleStat)RepStatistics[1]).AddValue(Statistics[1].CalcMean());
+        ((SampleStat)RepStatistics[2]).AddValue(Statistics[2].CalcMean());
+        ((SampleStat)RepStatistics[3]).AddValue(Statistics[3].CalcMean());
+        ((SampleStat)RepStatistics[4]).AddValue(Statistics[4].CalcMean());
+        ((SampleStat)RepStatistics[5]).AddValue(Statistics[5].CalcMean());
+        ((SampleStat)RepStatistics[6]).AddValue(Statistics[6].CalcMean());
+        ((SampleStat)RepStatistics[7]).AddValue(Statistics[7].CalcMean());
+        ((SampleStat)RepStatistics[8]).AddValue(Statistics[8].CalcMean());
+        ((SampleStat)RepStatistics[9]).AddValue(Statistics[9].CalcMean());
+        ((SampleStat)RepStatistics[10]).AddValue(Statistics[10].CalcMean());
+        ((SampleStat)RepStatistics[11]).AddValue(Statistics[11].CalcMean());
     }
 
     public bool IsAvailable(WorkerType group)
@@ -182,6 +218,7 @@ public class TopFurnitureSimulation : SimCore
         WardrobesInSystem = 0;
 
         CompletedOrders = 0;
+        Orders.Clear();
     }
 
 
@@ -208,20 +245,22 @@ public class TopFurnitureSimulation : SimCore
         {
             Console.WriteLine(worker);
         }
+
         foreach (Worker worker in WorkersB)
         {
             Console.WriteLine(worker);
         }
+
         foreach (Worker worker in WorkersC)
         {
             Console.WriteLine(worker);
         }
     }
 
-    protected override void BeforeReplicationRun(SimCore simCore)
+    protected override void BeforeReplicationRun()
     {
-        base.BeforeReplicationRun(simCore);
-        simCore.Calendar.PlanNewEvent(new OrderArrival(0));
+        base.BeforeReplicationRun();
+        Calendar.PlanNewEvent(new OrderArrival(0));
     }
 
     public Worker GetFirstAvailableWorkerAndMakeHimBusy(WorkerType workerType)
@@ -238,6 +277,7 @@ public class TopFurnitureSimulation : SimCore
             throw new Exception($"Worker's type doesn't match workerType." +
                                 $" workerType: {workerType} Worker.Type: {worker.Type}");
         }
+
         ref int busy = ref GetBusyWorkerCountRef(workerType);
         busy++;
         worker.IsBusy = true;
@@ -257,6 +297,7 @@ public class TopFurnitureSimulation : SimCore
         {
             throw new Exception("Worker is already set to AVAILABLE!!!");
         }
+
         worker.IsBusy = false;
         ref int busy = ref GetBusyWorkerCountRef(worker.Type);
         busy--;

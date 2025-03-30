@@ -19,6 +19,8 @@ public abstract class SimCore
 
     public List<Statistics.Statistics> Statistics { get; set; } = new();
 
+    public List<Statistics.Statistics> RepStatistics { get; set; } = new();
+
     public SimCore()
     {
         Calendar = new EventCalendar(this);
@@ -61,7 +63,8 @@ public abstract class SimCore
 
     private async Task RunOneReplication()
     {
-        BeforeReplicationRun(this);
+        ResetSimulation();
+        BeforeReplicationRun();
         while (!Calendar.IsEmpty() && CurrentSimTime < OneReplicationLengthInSeconds)
         {
             if (!IsRunning) break;
@@ -74,9 +77,16 @@ public abstract class SimCore
         }
 
         RefreshGuiAfterRep();
-        AfterReplicationRun(this);
+        AfterReplicationRun();
     }
 
+    private void ResetSimStatistics()
+    {
+        foreach (Statistics.Statistics statistic in Statistics)
+        {
+            statistic.Clear();
+        }
+    }
 
     private void RefreshGuiAfterEvent(Event currentEvent)
     {
@@ -105,11 +115,11 @@ public abstract class SimCore
     }
 
 
-    protected virtual void BeforeReplicationRun(SimCore simCore)
+    protected virtual void BeforeReplicationRun()
     {
     }
 
-    protected virtual void AfterReplicationRun(SimCore simCore)
+    protected virtual void AfterReplicationRun()
     {
     }
 
@@ -133,11 +143,7 @@ public abstract class SimCore
         Calendar.Reset();
         CurrentSimTime = 0;
         Frame = 0;
-        IsRunning = false;
-        foreach (Statistics.Statistics statistic in Statistics)
-        {
-            statistic.Clear();
-        }
+        ResetSimStatistics();
     }
 
     public abstract void PrintState(Event @event);
