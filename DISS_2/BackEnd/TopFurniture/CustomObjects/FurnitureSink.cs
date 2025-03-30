@@ -12,8 +12,17 @@ public class FurnitureSink(SimCore core) : Sink<Order>(core)
     protected override void AfterSink(Order item)
     {
         Sim.CompletedOrders++;
-        Sim.Orders.Remove(item);
+        if (item.Location == null)
+        {
+            throw new Exception($"No location found in order! {GetType().Name}");
+        }
 
+        item.Location.CurrentOrder = null;
+
+        if (Config.DebugMode) Sim.Orders.Remove(item);
+
+
+        ((SampleStat)Sim.Statistics[11]).AddValue(Sim.CurrentSimTime - item.TimeArrival);
         if (item is Chair)
         {
             Sim.ChairsInSystem--;

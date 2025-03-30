@@ -27,7 +27,7 @@ public class Worker
 
     public override string ToString()
     {
-        return $"WORKER: {Id} - {Type} - IsBusy:{IsBusy} - CurrentLocation:{CurrentLocation?.Id}";
+        return $"   WORKER: {Id} - {Type} - IsBusy:{IsBusy} - CurrentLocation:{CurrentLocation?.Id}";
     }
 }
 

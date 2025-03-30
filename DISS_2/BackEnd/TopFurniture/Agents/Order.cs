@@ -36,6 +36,6 @@ public abstract class Order
 
     public override string ToString()
     {
-        return $"Order: Location={Location?.Id} Type={GetType().Name}";
+        return $"   Order: Location={Location?.Id} Type={GetType().Name}";
     }
 }

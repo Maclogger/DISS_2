@@ -13,6 +13,7 @@ public class Step4End(int startTime, Order order, Worker worker) : OrderEvent(st
 
         sim.ReleaseWorker(Worker);
         PlanStep4OrStep2(sim);
+        sim.Sink.SinkItem(Order);
 
         return Task.CompletedTask;
     }
@@ -30,11 +31,5 @@ public class Step4End(int startTime, Order order, Worker worker) : OrderEvent(st
             Worker worker = sim.GetFirstAvailableWorkerAndMakeHimBusy(WorkerType.C);
             sim.Calendar.PlanNewEvent(new Step2Start(startTime, orderFromQueue2, worker));
         }
-    }
-
-    public override Task AfterEvent(SimCore sim)
-    {
-        ((TopFurnitureSimulation)sim).Sink.SinkItem(Order);
-        return base.AfterEvent(sim);
     }
 }

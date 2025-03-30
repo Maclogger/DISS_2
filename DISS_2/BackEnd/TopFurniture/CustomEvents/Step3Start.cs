@@ -31,6 +31,7 @@ public class Step3Start(int startTime, Order order, Worker worker) : OrderEvent(
         int timeToFinishStep3 = 0;
 
         int travelTime = sim.GetTravelTimeToLocation(Worker, Order.Location);
+        Order.Location.Occupy(Worker, Order);
         timeToFinishStep3 += travelTime;
 
         Generator<double> gen = sim.Generators.GetStepGenerator(Order, 3);

@@ -12,4 +12,9 @@ public abstract class OrderEvent : Event
         Order = order;
     }
     public abstract override Task Execute(SimCore sim);
+
+    public override string ToString()
+    {
+        return $"{TimeHandler.ToReadableDateTime(StartTime)}: {GetType().Name} with{Order}";
+    }
 }

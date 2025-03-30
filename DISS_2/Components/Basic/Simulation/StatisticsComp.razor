@@ -24,7 +24,14 @@
             <td>@statistic.Name</td>
             @if (statistic is SampleStat)
             {
-              <td>@(TimeHandler.ToReadableTime(statistic.CalcMean()))</td>
+              @if (Config.NiceTimeFormat)
+              {
+                <td>@(TimeHandler.ToReadableTime(statistic.CalcMean()))</td>
+              }
+              else
+              {
+                <td>@statistic.CalcMean().ToString(Config.StatisticFloatFormat)</td>
+              }
             }
             else
             {

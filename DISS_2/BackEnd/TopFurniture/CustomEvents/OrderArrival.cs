@@ -21,6 +21,9 @@ public class OrderArrival(int startTime) : Event(startTime)
     private static Order CreateOrder(TopFurnitureSimulation sim)
     {
         Order order = Order.CreateRandomOrder(sim.Generators.OrderTypeGen, sim.CurrentSimTime);
+        Location location = sim.GetFirstAvailableOrNewLocation();
+        location.CurrentOrder = order;
+        order.Location = location;
 
         if (order is Chair)
         {

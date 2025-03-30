@@ -53,6 +53,8 @@ public class TopFurnitureSimulation : SimCore
             new WeightedStat("Weighted average queue length before technological STEP 2"), // 8
             new WeightedStat("Weighted average queue length before technological STEP 3"), // 9
             new WeightedStat("Weighted average queue length before technological STEP 4"), // 10
+
+            new SampleStat("Average time of Order in system"), // 11
         ];
     }
 
@@ -70,17 +72,18 @@ public class TopFurnitureSimulation : SimCore
         int idWorker = 0;
         for (int i = 0; i < WorkersA.Length; i++)
         {
-            WorkersA[i] = new Worker(idWorker, WorkerType.A);
+            WorkersA[i] = new Worker(idWorker + i, WorkerType.A);
         }
 
         for (int i = 0; i < WorkersB.Length; i++)
         {
-            WorkersB[i] = new Worker(idWorker, WorkerType.B);
+            WorkersB[i] = new Worker(idWorker + WorkersA.Length + i, WorkerType.B);
         }
 
         for (int i = 0; i < WorkersC.Length; i++)
         {
-            WorkersC[i] = new Worker(idWorker, WorkerType.C);
+            WorkersC[i] = new Worker(idWorker + WorkersA.Length + WorkersB.Length + i, WorkerType
+                .C);
         }
     }
 
@@ -93,7 +96,19 @@ public class TopFurnitureSimulation : SimCore
 
     public bool IsAvailable(WorkerType group)
     {
-        return WorkersA.Length - GetBusyWorkerCount(group) > 0;
+        return GetAllWorkersCount(group) - GetBusyWorkerCount(group) > 0;
+    }
+
+    private int GetAllWorkersCount(WorkerType group)
+    {
+        switch (group)
+        {
+            case WorkerType.A: return WorkersA.Length;
+            case WorkerType.B: return WorkersB.Length;
+            case WorkerType.C: return WorkersC.Length;
+        }
+
+        throw new Exception("Invalid worker type in GetAllWorkersCount!!!");
     }
 
     public int GetBusyWorkerCount(WorkerType group)
@@ -173,7 +188,9 @@ public class TopFurnitureSimulation : SimCore
     public override void PrintState(Event @event)
     {
         if (@event is SysEvent) return;
-        Console.WriteLine($"-----------------------------------------\nAfter Event: {@event}\n");
+        Console.WriteLine($"-----------------------------------------------------" +
+                          $"--------------------------------------" +
+                          $"----------\nAfter Event: {@event}\n");
         Console.WriteLine("Locations:");
         foreach (Location location in Locations)
         {
@@ -264,7 +281,7 @@ public class TopFurnitureSimulation : SimCore
         throw new Exception("Unknown worker type");
     }
 
-    public Location GetFirstAvailableLocation()
+    public Location GetFirstAvailableOrNewLocation()
     {
         foreach (Location location in Locations)
         {

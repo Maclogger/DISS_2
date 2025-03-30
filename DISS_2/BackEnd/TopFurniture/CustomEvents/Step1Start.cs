@@ -33,8 +33,12 @@ public class Step1Start(int startTime, Order order, Worker worker) : OrderEvent(
             timeToFinishStep1 += timeFromLocationToWarehouse;
         }
 
-        Location location = sim.GetFirstAvailableLocation();
-        location.Occupy(worker, Order);
+        if (Order.Location == null)
+        {
+            throw new Exception($"No location found in order! {GetType().Name}");
+        }
+
+        Order.Location.Occupy(worker, Order);
 
         var warehouseMaterialPrepTimeGen = sim.Generators.WarehouseMaterialPrepTimeGen;
         int timeToPrepareMaterial = (int)Math.Round(warehouseMaterialPrepTimeGen.Generate());

@@ -25,12 +25,12 @@ public class Location(int id)
             throw new Exception($"Location {ToString()} is already occupied");
         }
 
+        worker.LeaveLocation();
         if (!IsWorkerPresent(worker))
         {
             Workers.Add(worker);
         }
 
-        worker.LeaveLocation();
         worker.CurrentLocation = this;
         order.Location = this;
         CurrentOrder = order;
@@ -51,7 +51,7 @@ public class Location(int id)
     public override string ToString()
     {
         return
-            $"Location: {Id} - {CurrentOrder} - " +
+            $"   Location: {Id} - {CurrentOrder} - " +
             $"Workers: {string.Join(", ", Workers.Select(w => w.Id))}";
     }
 }

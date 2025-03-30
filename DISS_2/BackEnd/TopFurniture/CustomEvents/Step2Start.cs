@@ -38,7 +38,7 @@ public class Step2Start(int startTime, Order order, Worker worker) : OrderEvent(
         var genStep = sim.Generators.GetStepGenerator(Order, 2);
         timeToFinishStep2 += (int)Math.Round(genStep.Generate());
 
-        sim.Calendar.PlanNewEvent(new Step2End(sim.CurrentSimTime + timeToFinishStep2, Order,
-            Worker));
+        sim.Calendar.PlanNewEvent(
+            new Step2End(sim.CurrentSimTime + timeToFinishStep2, Order, Worker));
     }
 }
