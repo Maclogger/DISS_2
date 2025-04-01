@@ -36,38 +36,8 @@
                                disabled="@MainApp.Instance.TopFurnitureSimulation.IsRunning"/>
                     </div>
                 </div>
-
                 <div class="col-9 p-0">
-                    <div class="card bg-dark d-flex flex-row gap-4 text-center align-items-center p-4  ms-4">
-                        <div class="card bg-white flex-grow-1 d-flex justify-content-center align-items-center"
-                             style="aspect-ratio: 1/1; width: 20%;">
-                            <div>
-                                <p class="m-0 mb-2 " style="font-size: 1vw;">Chairs</p>
-                                <h3>@_chairsInSystem</h3>
-                            </div>
-                        </div>
-                        <div class="card flex-grow-1 d-flex justify-content-center align-items-center"
-                             style="aspect-ratio: 1/1; width: 20%;">
-                            <div>
-                                <p class="m-0 mb-2 " style="font-size: 1vw;">Tables</p>
-                                <h3>@_tablesInSystem</h3>
-                            </div>
-                        </div>
-                        <div class="card flex-grow-1 d-flex justify-content-center align-items-center"
-                             style="aspect-ratio: 1/1; width: 20%;">
-                            <div>
-                                <p class="m-0 mb-2 " style="font-size: 1vw;">Wardrobes</p>
-                                <h3>@_wardrobesInSystem</h3>
-                            </div>
-                        </div>
-                        <div class="card bg-white flex-grow-1 d-flex justify-content-center align-items-center"
-                             style="aspect-ratio: 1/1; width: 20%;">
-                            <div>
-                                <p class="m-0 mb-2 " style="font-size: 1vw;">Sum</p>
-                                <h3>@(_chairsInSystem + _tablesInSystem + _wardrobesInSystem)</h3>
-                            </div>
-                        </div>
-                    </div>
+                    <TopStatsComp WardrobesInSystem="_wardrobesInSystem" TablesInSystem="_tablesInSystem" ChairsInSystem="_chairsInSystem"/>
                 </div>
 
             </div>

@@ -1,0 +1,37 @@
+@rendermode InteractiveServer
+<div class="card bg-dark d-flex flex-row gap-4 text-center align-items-center p-4  ms-4">
+    <div class="card bg-white flex-grow-1 d-flex justify-content-center align-items-center"
+         style="aspect-ratio: 1/1; width: 20%;">
+        <div>
+            <p class="m-0 mb-2 " style="font-size: 1vw;">Chairs</p>
+            <h3>@ChairsInSystem</h3>
+        </div>
+    </div>
+    <div class="card flex-grow-1 d-flex justify-content-center align-items-center"
+         style="aspect-ratio: 1/1; width: 20%;">
+        <div>
+            <p class="m-0 mb-2 " style="font-size: 1vw;">Tables</p>
+            <h3>@TablesInSystem</h3>
+        </div>
+    </div>
+    <div class="card flex-grow-1 d-flex justify-content-center align-items-center"
+         style="aspect-ratio: 1/1; width: 20%;">
+        <div>
+            <p class="m-0 mb-2 " style="font-size: 1vw;">Wardrobes</p>
+            <h3>@WardrobesInSystem</h3>
+        </div>
+    </div>
+    <div class="card bg-white flex-grow-1 d-flex justify-content-center align-items-center"
+         style="aspect-ratio: 1/1; width: 20%;">
+        <div>
+            <p class="m-0 mb-2 " style="font-size: 1vw;">Sum</p>
+            <h3>@(ChairsInSystem + TablesInSystem + WardrobesInSystem)</h3>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public int ChairsInSystem { get; set; }
+    [Parameter, EditorRequired] public int WardrobesInSystem { get; set; }
+    [Parameter, EditorRequired] public int TablesInSystem { get; set; }
+}
