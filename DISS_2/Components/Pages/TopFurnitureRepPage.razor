@@ -109,6 +109,7 @@
         {
             statistic.Clear();
         }
+
         Sim.Reinitialize(A, B, C, Config.DayCount);
         await _chart.Reset();
         await Sim.RunSimulation(_replicationCount);
@@ -129,11 +130,26 @@
         {
             _replicationCount = Sim.ReplicationCount;
         }
+
         _statistics = simCore.RepStatistics;
-        if (_currentReplication > 0.03 * _replicationCount)
-        {
-            //await _chart.AddValue(_statistics[11].CalcMean());
-        }
+
         await InvokeAsync(StateHasChanged);
+
+        bool shouldBePrinted = IsNth() && !IsInCutOff();
+        if (shouldBePrinted)
+        {
+            await _chart.AddValue(_statistics[11].CalcMean());
+        }
+    }
+
+    private bool IsInCutOff()
+    {
+        return _currentReplication <= 0.02 * _replicationCount;
+    }
+
+    private bool IsNth()
+    {
+        double interval = (double)_replicationCount / 1000;
+        return _currentReplication % Math.Max(1, interval) < 1;
     }
 }

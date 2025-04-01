@@ -8,6 +8,9 @@ public abstract class Statistics(string name, bool useTimeFormat = true)
 
     public bool UseTimeFormat { get; set; } = useTimeFormat;
     public abstract double CalcMean();
+    public abstract double CalcStdDev();
+    public abstract double CalcLowerIS();
+    public abstract double CalcUpperIS();
 
     public virtual string GetTypeString()
     {

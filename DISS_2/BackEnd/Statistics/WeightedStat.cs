@@ -7,6 +7,20 @@ namespace DISS_2.BackEnd.Statistics
         private long _prevSimTime = 0;
 
         public override double CalcMean() => Mean;
+        public override double CalcStdDev()
+        {
+            return 0;
+        }
+
+        public override double CalcLowerIS()
+        {
+            return 0;
+        }
+
+        public override double CalcUpperIS()
+        {
+            return 0;
+        }
 
         public override string GetTypeString()
         {

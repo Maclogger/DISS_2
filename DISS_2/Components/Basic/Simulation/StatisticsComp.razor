@@ -13,11 +13,15 @@
           <th scope="col">Type</th>
           <th scope="col">Name</th>
           <th scope="col">Mean</th>
+          <th scope="col">Lower IS (95%)</th>
+          <th scope="col">Upper IS (95%)</th>
+          <th scope="col">Count</th>
           @if (Config.PrintInSecondsAlso)
           {
             <th scope="col">Mean (sec)</th>
+            <th scope="col">Lower IS</th>
+            <th scope="col">Upper IS</th>
           }
-          <th scope="col">Count</th>
         </tr>
         </thead>
         <tbody class="table-dark">
@@ -30,16 +34,22 @@
             @if (statistic.UseTimeFormat)
             {
               <td>@(TimeHandler.ToReadableTime(statistic.CalcMean()))</td>
+              <td>@(TimeHandler.ToReadableTime(statistic.CalcLowerIS()))</td>
+              <td>@(TimeHandler.ToReadableTime(statistic.CalcUpperIS()))</td>
             }
             else
             {
               <td>@statistic.CalcMean().ToString(Config.StatisticFloatFormat)</td>
+              <td>@statistic.CalcLowerIS().ToString(Config.StatisticFloatFormat)</td>
+              <td>@statistic.CalcUpperIS().ToString(Config.StatisticFloatFormat)</td>
             }
+            <td>@statistic.Count</td>
             @if (PrintInSecondsAlso)
             {
               <td>@statistic.CalcMean().ToString(Config.StatisticFloatFormat)</td>
+              <td>@statistic.CalcLowerIS().ToString(Config.StatisticFloatFormat)</td>
+              <td>@statistic.CalcUpperIS().ToString(Config.StatisticFloatFormat)</td>
             }
-            <td>@statistic.Count</td>
           </tr>
         }
         </tbody>
