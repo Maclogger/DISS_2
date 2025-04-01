@@ -74,66 +74,20 @@
         </div>
 
         <div class="card rounded-3  p-4 bg-light mt-4">
-            <h3 class="card-title mb-3">Queues</h3>
-            <div class="table-responsive">
-                <table class="table table-bordered custom-rounded m-0">
-                    <thead class="table-dark">
-                    <tr>
-                        <th>Order Type</th>
-                        <th>Queue 1</th>
-                        <th>Queue 2</th>
-                        <th>Queue 3</th>
-                        <th>Queue 4</th>
-                    </tr>
-                    </thead>
-                    <tbody class="table-dark">
-                    <tr>
-                        <td class="fw-bold">Chair</td>
-                        <td>@GetQueueCount(_queue1CountsByTypes, "Chair")</td>
-                        <td>@GetQueueCount(_queue2CountsByTypes, "Chair")</td>
-                        <td>@GetQueueCount(_queue3CountsByTypes, "Chair")</td>
-                        <td>@GetQueueCount(_queue4CountsByTypes, "Chair")</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Table</td>
-                        <td>@GetQueueCount(_queue1CountsByTypes, "Table")</td>
-                        <td>@GetQueueCount(_queue2CountsByTypes, "Table")</td>
-                        <td>@GetQueueCount(_queue3CountsByTypes, "Table")</td>
-                        <td>@GetQueueCount(_queue4CountsByTypes, "Table")</td>
-                    </tr>
-                    <tr>
-                        <td class="fw-bold">Wardrobe</td>
-                        <td>@GetQueueCount(_queue1CountsByTypes, "Wardrobe")</td>
-                        <td>@GetQueueCount(_queue2CountsByTypes, "Wardrobe")</td>
-                        <td>@GetQueueCount(_queue3CountsByTypes, "Wardrobe")</td>
-                        <td>@GetQueueCount(_queue4CountsByTypes, "Wardrobe")</td>
-                    </tr>
-                    </tbody>
-                    <tfoot class="table-dark">
-                    <tr>
-                        <th>Total</th>
-                        <th>@_queue1CountsByTypes.Values.Sum()</th>
-                        <th>@_queue2CountsByTypes.Values.Sum()</th>
-                        <th>@_queue3CountsByTypes.Values.Sum()</th>
-                        <th>@_queue4CountsByTypes.Values.Sum()</th>
-                    </tr>
-                    </tfoot>
-                </table>
-            </div>
+            <QueuesComp Queue4CountsByTypes="_queue4CountsByTypes" Queue3CountsByTypes="_queue3CountsByTypes"
+                        Queue2CountsByTypes="_queue2CountsByTypes" Queue1CountsByTypes="_queue1CountsByTypes"/>
         </div>
 
         <div class="container-fluid mt-4">
             <div class="row">
                 <div class="col-6 p-0">
-                    <WorkersComp Workers="_workers" />
+                    <WorkersComp Workers="_workers"/>
                 </div>
                 <div class="col-6 p-0 ps-4 d-flex flex-grow-1 flex-column">
-                    <LocationsComp Locations="_locations" />
+                    <LocationsComp Locations="_locations"/>
                 </div>
             </div>
         </div>
-
-
     </SimulationComp>
 }
 
@@ -143,10 +97,6 @@
     public int C { get; set; } = 18;
     public int Days { get; set; } = 249;
 
-    private Dictionary<string, int> _queue1CountsByTypes = new();
-    private Dictionary<string, int> _queue2CountsByTypes = new();
-    private Dictionary<string, int> _queue3CountsByTypes = new();
-    private Dictionary<string, int> _queue4CountsByTypes = new();
 
     private int _chairsInSystem = 0;
     private int _tablesInSystem = 0;
@@ -155,6 +105,11 @@
     private int _completedOrders = 0;
     private List<Worker> _workers = new();
     private List<Location> _locations = new();
+
+    private Dictionary<string, int> _queue1CountsByTypes = new();
+    private Dictionary<string, int> _queue2CountsByTypes = new();
+    private Dictionary<string, int> _queue4CountsByTypes = new();
+    private Dictionary<string, int> _queue3CountsByTypes = new();
 
     protected override void OnInitialized()
     {
@@ -190,11 +145,6 @@
     {
         MainApp.Instance.TopFurnitureSimulation!.Reinitialize(A, B, C, Days);
         UpdateUi(MainApp.Instance.TopFurnitureSimulation);
-    }
-
-    private int GetQueueCount(Dictionary<string, int> queue, string itemType)
-    {
-        return queue.GetValueOrDefault(itemType, 0);
     }
 
 }

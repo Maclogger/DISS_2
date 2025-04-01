@@ -1,0 +1,59 @@
+<h3 class="card-title mb-3">Queues</h3>
+<div class="table-responsive">
+    <table class="table table-bordered custom-rounded m-0">
+        <thead class="table-dark">
+        <tr>
+            <th>Order Type</th>
+            <th>Queue 1</th>
+            <th>Queue 2</th>
+            <th>Queue 3</th>
+            <th>Queue 4</th>
+        </tr>
+        </thead>
+        <tbody class="table-dark">
+        <tr>
+            <td class="fw-bold">Chair</td>
+            <td>@GetQueueCount(Queue1CountsByTypes, "Chair")</td>
+            <td>@GetQueueCount(Queue2CountsByTypes, "Chair")</td>
+            <td>@GetQueueCount(Queue3CountsByTypes, "Chair")</td>
+            <td>@GetQueueCount(Queue4CountsByTypes, "Chair")</td>
+        </tr>
+        <tr>
+            <td class="fw-bold">Table</td>
+            <td>@GetQueueCount(Queue1CountsByTypes, "Table")</td>
+            <td>@GetQueueCount(Queue2CountsByTypes, "Table")</td>
+            <td>@GetQueueCount(Queue3CountsByTypes, "Table")</td>
+            <td>@GetQueueCount(Queue4CountsByTypes, "Table")</td>
+        </tr>
+        <tr>
+            <td class="fw-bold">Wardrobe</td>
+            <td>@GetQueueCount(Queue1CountsByTypes, "Wardrobe")</td>
+            <td>@GetQueueCount(Queue2CountsByTypes, "Wardrobe")</td>
+            <td>@GetQueueCount(Queue3CountsByTypes, "Wardrobe")</td>
+            <td>@GetQueueCount(Queue4CountsByTypes, "Wardrobe")</td>
+        </tr>
+        </tbody>
+        <tfoot class="table-dark">
+        <tr>
+            <th>Total</th>
+            <th>@Queue1CountsByTypes.Values.Sum()</th>
+            <th>@Queue2CountsByTypes.Values.Sum()</th>
+            <th>@Queue3CountsByTypes.Values.Sum()</th>
+            <th>@Queue4CountsByTypes.Values.Sum()</th>
+        </tr>
+        </tfoot>
+    </table>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public Dictionary<string, int> Queue1CountsByTypes { get; set; } = new();
+    [Parameter, EditorRequired] public Dictionary<string, int> Queue2CountsByTypes { get; set; } = new();
+    [Parameter, EditorRequired] public Dictionary<string, int> Queue3CountsByTypes { get; set; } = new();
+    [Parameter, EditorRequired] public Dictionary<string, int> Queue4CountsByTypes { get; set; } = new();
+
+    private int GetQueueCount(Dictionary<string, int> queue, string itemType)
+    {
+        return queue.GetValueOrDefault(itemType, 0);
+    }
+
+}
