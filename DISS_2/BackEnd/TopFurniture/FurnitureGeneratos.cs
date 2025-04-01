@@ -1,6 +1,7 @@
 using DISS_2.BackEnd.Generators;
 using DISS_2.BackEnd.Generators.Empiric;
 using DISS_2.BackEnd.Generators.Exponential;
+using DISS_2.BackEnd.Generators.Testers;
 using DISS_2.BackEnd.Generators.Triangular;
 using DISS_2.BackEnd.Generators.Uniform;
 using DISS_2.BackEnd.TopFurniture.Agents;
@@ -12,43 +13,38 @@ public class FurnitureGenerators
     public UniformGenerator<double> OrderTypeGen { get; } = UniformGeneratorFactory
         .CreateRealUniformGenerator(0.0, 1.0);
 
-    public ExponentialGenerator ArrivalGen { get; } =
-        new((double)1 / (30 * 60)); // 2 order per hour -> 30 min interval
+    public Generator<double> ArrivalGen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
 
-    private EmpiricGenerator<double> Table1Gen { get; } =
-        EmpiricGeneratorFactory.CreateRealGenerator([
-            (10 * 60, 25 * 60, 0.6),
-            (25 * 60, 50 * 60, 0.4),
-        ]);
-
+    private Generator<double> Table1Gen { get; } = UniformGeneratorFactory
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
     private UniformGenerator<double> Table2Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(200 * 60, 610 * 60);
-
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
     private UniformGenerator<double> Table3Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(30 * 60, 60 * 60);
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
 
 
     private UniformGenerator<double> Chair1Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(12 * 60, 16 * 60);
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
 
     private UniformGenerator<double> Chair2Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(210 * 60, 540 * 60);
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
 
     private UniformGenerator<double> Chair3Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(14 * 60, 24 * 60);
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
 
 
     private UniformGenerator<double> Wardrobe1Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(15 * 60, 80 * 60);
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
 
     private UniformGenerator<double> Wardrobe2Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(600 * 60, 700 * 60);
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
 
     private UniformGenerator<double> Wardrobe3Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(35 * 60, 75 * 60);
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
 
     private UniformGenerator<double> Wardrobe4Gen { get; } = UniformGeneratorFactory
-        .CreateRealUniformGenerator(15 * 60, 25 * 60);
+        .CreateRealUniformGenerator(10 * 60, 10 * 60);
 
     public TriangularRealGenerator WarehouseTravelTimeGen { get; } =
         new TriangularRealGenerator(60, 120, 480);

@@ -343,9 +343,18 @@ public class TopFurnitureSimulation : SimCore
 
     public int GetTravelTimeToLocation(Worker worker, Location location)
     {
+        return 0;
+
         bool workerIsInWarehouse = worker.CurrentLocation == null;
+
+
         if (workerIsInWarehouse)
         {
+            if (worker.Type == WorkerType.A)
+            {
+                Console.WriteLine($"Worker : {worker} je v sklade.");
+            }
+
             var genTravelTime = Generators.WarehouseTravelTimeGen;
             return (int)Math.Round(genTravelTime.Generate());
         }

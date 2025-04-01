@@ -27,11 +27,12 @@ public class Step1Start(int startTime, Order order, Worker worker) : OrderEvent(
 
         int timeToFinishStep1 = 0;
         bool isInWarehouse = Worker.CurrentLocation == null;
-        if (!isInWarehouse)
-        {
+
+       // if (!isInWarehouse)
+        //{
             int timeFromLocationToWarehouse = (int)Math.Round(warehouseTravelTimeGen.Generate());
             timeToFinishStep1 += timeFromLocationToWarehouse;
-        }
+        //}
 
         if (Order.Location == null)
         {
@@ -41,14 +42,14 @@ public class Step1Start(int startTime, Order order, Worker worker) : OrderEvent(
         Order.Location.Occupy(worker, Order);
 
         var warehouseMaterialPrepTimeGen = sim.Generators.WarehouseMaterialPrepTimeGen;
-        int timeToPrepareMaterial = (int)Math.Round(warehouseMaterialPrepTimeGen.Generate());
-        timeToFinishStep1 += timeToPrepareMaterial;
+        //int timeToPrepareMaterial = (int)Math.Round(warehouseMaterialPrepTimeGen.Generate());
+        //timeToFinishStep1 += timeToPrepareMaterial;
 
         int timeFromWarehouseToLocation = (int)Math.Round(warehouseTravelTimeGen.Generate());
         timeToFinishStep1 += timeFromWarehouseToLocation;
 
         Generator<double> stepGenerator = sim.Generators.GetStepGenerator(Order, 1);
-        timeToFinishStep1 += (int)Math.Round(stepGenerator.Generate());
+        timeToFinishStep1 = (int)Math.Round(stepGenerator.Generate());
         sim.Calendar.PlanNewEvent(
             new Step1End(sim.CurrentSimTime + timeToFinishStep1, Order, Worker));
     }
