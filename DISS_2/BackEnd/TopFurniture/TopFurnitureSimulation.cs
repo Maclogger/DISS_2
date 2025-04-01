@@ -55,6 +55,11 @@ public class TopFurnitureSimulation : SimCore
             new WeightedStat("Weighted average queue length before technological STEP 4"), // 10
 
             new SampleStat("Average time of Order in system"), // 11
+
+            new SampleStat("Average time of Order during Step1"), // 12
+            new SampleStat("Average time of Order during Step2"), // 13
+            new SampleStat("Average time of Order during Step3"), // 14
+            new SampleStat("Average time of Order during Step4"), // 15
         ];
 
         RepStatistics =
@@ -68,12 +73,21 @@ public class TopFurnitureSimulation : SimCore
             new SampleStat("Average waiting times in queue before technological STEP 3"), // 5
             new SampleStat("Average waiting times in queue before technological STEP 4"), // 6
 
-            new SampleStat("Weighted average queue lengths before technological STEP 1"), // 7
-            new SampleStat("Weighted average queue lengths before technological STEP 2"), // 8
-            new SampleStat("Weighted average queue lengths before technological STEP 3"), // 9
-            new SampleStat("Weighted average queue lengths before technological STEP 4"), // 10
+            new SampleStat(
+                "Weighted average queue lengths before technological STEP 1", false), // 7
+            new SampleStat(
+                "Weighted average queue lengths before technological STEP 2", false), // 8
+            new SampleStat(
+                "Weighted average queue lengths before technological STEP 3", false), // 9
+            new SampleStat(
+                "Weighted average queue lengths before technological STEP 4", false), // 10
 
             new SampleStat("Average times of Order in system"), // 11
+
+            new SampleStat("Average times of Order during Step1"), // 12
+            new SampleStat("Average times of Order during Step2"), // 13
+            new SampleStat("Average times of Order during Step3"), // 14
+            new SampleStat("Average times of Order during Step4"), // 15
         ];
     }
 
@@ -120,18 +134,15 @@ public class TopFurnitureSimulation : SimCore
 
     protected override void AfterReplicationRun()
     {
-        ((SampleStat)RepStatistics[0]).AddValue(Statistics[0].CalcMean());
-        ((SampleStat)RepStatistics[1]).AddValue(Statistics[1].CalcMean());
-        ((SampleStat)RepStatistics[2]).AddValue(Statistics[2].CalcMean());
-        ((SampleStat)RepStatistics[3]).AddValue(Statistics[3].CalcMean());
-        ((SampleStat)RepStatistics[4]).AddValue(Statistics[4].CalcMean());
-        ((SampleStat)RepStatistics[5]).AddValue(Statistics[5].CalcMean());
-        ((SampleStat)RepStatistics[6]).AddValue(Statistics[6].CalcMean());
-        ((SampleStat)RepStatistics[7]).AddValue(Statistics[7].CalcMean());
-        ((SampleStat)RepStatistics[8]).AddValue(Statistics[8].CalcMean());
-        ((SampleStat)RepStatistics[9]).AddValue(Statistics[9].CalcMean());
-        ((SampleStat)RepStatistics[10]).AddValue(Statistics[10].CalcMean());
-        ((SampleStat)RepStatistics[11]).AddValue(Statistics[11].CalcMean());
+        if (RepStatistics.Count != Statistics.Count)
+        {
+            throw new Exception("Not all statistics are in REP Statistics!!!");
+        }
+
+        for (int i = 0; i < Statistics.Count; i++)
+        {
+            ((SampleStat)RepStatistics[i]).AddValue(Statistics[i].CalcMean());
+        }
     }
 
     public bool IsAvailable(WorkerType group)
@@ -358,5 +369,15 @@ public class TopFurnitureSimulation : SimCore
         }
 
         return 0;
+    }
+
+    public IEnumerable<Worker> GetAllWorkers()
+    {
+
+        List<Worker> allWorkers = new();
+        allWorkers.AddRange(WorkersA);
+        allWorkers.AddRange(WorkersB);
+        allWorkers.AddRange(WorkersC);
+        return allWorkers;
     }
 }

@@ -34,14 +34,7 @@ namespace DISS_2.BackEnd.Core
 
             string formattedSeconds = seconds.ToString("00.0000");
 
-            if (totalHours == 0)
-            {
-                return $"{minutes:D2}:{formattedSeconds}";
-            }
-            else
-            {
-                return $"{totalHours:D2}:{minutes:D2}:{formattedSeconds}";
-            }
+            return $"{totalHours:D2}:{minutes:D2}:{formattedSeconds}";
         }
     }
 }

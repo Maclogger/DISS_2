@@ -1,5 +1,6 @@
 using DISS_2.BackEnd.Core;
 using DISS_2.BackEnd.Generators;
+using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture.CustomEvents;
@@ -51,5 +52,11 @@ public class Step1Start(int startTime, Order order, Worker worker) : OrderEvent(
         timeToFinishStep1 += (int)Math.Round(stepGenerator.Generate());
         sim.Calendar.PlanNewEvent(
             new Step1End(sim.CurrentSimTime + timeToFinishStep1, Order, Worker));
+    }
+
+    public override Task BeforeEvent(SimCore sim)
+    {
+        Order.TimeOfStep1Start = sim.CurrentSimTime;
+        return base.BeforeEvent(sim);
     }
 }

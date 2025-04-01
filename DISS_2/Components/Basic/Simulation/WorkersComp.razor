@@ -1,0 +1,40 @@
+@using DISS_2.BackEnd.TopFurniture
+@rendermode InteractiveServer
+<div class="card rounded-3 p-4 bg-light">
+    <h3 class="card-title mb-3">Workers</h3>
+    <div style="max-height: 25rem; overflow-y: auto;">
+        <div class="table-responsive">
+            <table class="table table-bordered custom-rounded m-0">
+                <thead class="table-dark">
+                <tr>
+                    <th>Worker Group</th>
+                    <th>ID</th>
+                    <th>Location</th>
+                    <th>Busy</th>
+                </tr>
+                </thead>
+                <tbody class="table-dark">
+                @foreach (Worker worker in Workers)
+                {
+                    <tr>
+                        <td class="fw-bold">@worker.Type</td>
+                        <td>@worker.Id</td>
+                        <td>@(worker.CurrentLocation?.Id)</td>
+                        <td>@GetVerbalStateOWorker(worker)</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public List<Worker> Workers { get; set; } = null!;
+
+    private string GetVerbalStateOWorker(Worker worker)
+    {
+        return worker.IsBusy ? "🔴" : "🟢";
+    }
+
+}

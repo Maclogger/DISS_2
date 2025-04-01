@@ -13,6 +13,10 @@
           <th scope="col">Type</th>
           <th scope="col">Name</th>
           <th scope="col">Mean</th>
+          @if (Config.PrintInSecondsAlso)
+          {
+            <th scope="col">Mean (sec)</th>
+          }
           <th scope="col">Count</th>
         </tr>
         </thead>
@@ -22,18 +26,16 @@
           <tr>
             <td>@statistic.GetTypeString()</td>
             <td>@statistic.Name</td>
-            @if (statistic is SampleStat)
+
+            @if (statistic.UseTimeFormat)
             {
-              @if (Config.NiceTimeFormat)
-              {
-                <td>@(TimeHandler.ToReadableTime(statistic.CalcMean()))</td>
-              }
-              else
-              {
-                <td>@statistic.CalcMean().ToString(Config.StatisticFloatFormat)</td>
-              }
+              <td>@(TimeHandler.ToReadableTime(statistic.CalcMean()))</td>
             }
             else
+            {
+              <td>@statistic.CalcMean().ToString(Config.StatisticFloatFormat)</td>
+            }
+            @if (PrintInSecondsAlso)
             {
               <td>@statistic.CalcMean().ToString(Config.StatisticFloatFormat)</td>
             }
@@ -52,4 +54,6 @@
 
 @code {
   [Parameter, EditorRequired] public List<Statistics> Statistics { get; set; } = new();
+
+  private bool PrintInSecondsAlso { get; set; } = true;
 }

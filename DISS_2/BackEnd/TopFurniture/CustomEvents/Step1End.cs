@@ -1,4 +1,5 @@
 using DISS_2.BackEnd.Core;
+using DISS_2.BackEnd.Statistics;
 using DISS_2.BackEnd.TicketSelling.CustomEvents;
 using DISS_2.BackEnd.TopFurniture.Agents;
 
@@ -40,5 +41,11 @@ public class Step1End(int startTime, Order order, Worker worker) : OrderEvent(st
             Worker worker = sim.GetFirstAvailableWorkerAndMakeHimBusy(WorkerType.A);
             sim.Calendar.PlanNewEvent(new Step1Start(sim.CurrentSimTime, orderFromQueue, worker));
         }
+    }
+
+    public override Task AfterEvent(SimCore sim)
+    {
+        ((SampleStat)sim.Statistics[12]).AddValue(sim.CurrentSimTime - Order.TimeOfStep1Start);
+        return base.AfterEvent(sim);
     }
 }

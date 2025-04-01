@@ -2,14 +2,16 @@
 <div class="col-4 p-0 pe-4">
     <div class="card rounded-3 bg-white p-3 h-100">
         <h3>Event Calendar</h3>
-        @foreach (Event eventVar in SortedEventList)
-        {
-            <div class="card rounded-3 bg-primary p-2 text-white mt-1 mb-1">
-                <p class="m-0 p-0">
-                    @eventVar.ToString()
-                </p>
-            </div>
-        }
+        <div style="max-height: 100vh; overflow-y: auto;">
+            @foreach (Event eventVar in SortedEventList)
+            {
+                <div class="card rounded-3 bg-primary p-2 text-white mt-1 mb-1">
+                    <p class="m-0 p-0">
+                        @eventVar.ToString()
+                    </p>
+                </div>
+            }
+        </div>
     </div>
 </div>
 

@@ -41,4 +41,10 @@ public class Step2Start(int startTime, Order order, Worker worker) : OrderEvent(
         sim.Calendar.PlanNewEvent(
             new Step2End(sim.CurrentSimTime + timeToFinishStep2, Order, Worker));
     }
+
+    public override Task BeforeEvent(SimCore sim)
+    {
+        Order.TimeOfStep2Start = sim.CurrentSimTime;
+        return base.BeforeEvent(sim);
+    }
 }

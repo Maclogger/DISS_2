@@ -1,6 +1,6 @@
 namespace DISS_2.BackEnd.Statistics
 {
-    public class SampleStat(string name) : Statistics(name)
+    public class SampleStat(string name, bool useTimeFormat = true) : Statistics(name, useTimeFormat)
     {
         public override double CalcMean() => Mean;
         public override string GetTypeString()

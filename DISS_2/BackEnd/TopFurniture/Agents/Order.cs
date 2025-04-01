@@ -10,6 +10,13 @@ public abstract class Order
     public int TimeArrivalAtQueue2 { get; set; }
     public int TimeArrivalAtQueue3 { get; set; }
     public int TimeArrivalAtQueue4 { get; set; }
+
+    public int TimeOfStep1Start { get; set; }
+    public int TimeOfStep2Start { get; set; }
+    public int TimeOfStep3Start { get; set; }
+    public int TimeOfStep4Start { get; set; }
+
+
     public Location? Location { get; set; } = null;
 
     protected Order(int timeArrival)
