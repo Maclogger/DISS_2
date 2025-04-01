@@ -132,7 +132,7 @@
         _statistics = simCore.RepStatistics;
         if (_currentReplication > 0.03 * _replicationCount)
         {
-            await _chart.AddValue(_statistics[11].CalcMean());
+            //await _chart.AddValue(_statistics[11].CalcMean());
         }
         await InvokeAsync(StateHasChanged);
     }

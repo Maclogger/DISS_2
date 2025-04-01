@@ -36,6 +36,10 @@ public class Step4Start(int startTime, Order order, Worker worker) : OrderEvent(
 
         Generator<double> gen = sim.Generators.GetStepGenerator(Order, 4);
         int timeToFinishStep4 = (int)Math.Round(gen.Generate());
+
+        int travelTime = sim.GetTravelTimeToLocation(Worker, Order.Location);
+        timeToFinishStep4 += travelTime;
+
         Order.Location.Occupy(Worker, Order);
 
         sim.Calendar.PlanNewEvent(new Step4End(sim.CurrentSimTime + timeToFinishStep4, Order, Worker));

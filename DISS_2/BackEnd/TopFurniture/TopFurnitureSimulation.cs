@@ -353,8 +353,8 @@ public class TopFurnitureSimulation : SimCore
         bool workerIsAlreadyAtTheRightLocation = worker.CurrentLocation == location;
         if (!workerIsAlreadyAtTheRightLocation)
         {
-            var genTravelTime = Generators.InterLocationTravelTimeGen;
-            return (int)Math.Round(genTravelTime.Generate());
+            var genTravelTimeGen = Generators.InterLocationTravelTimeGen;
+            return (int)Math.Round(genTravelTimeGen.Generate());
         }
 
         return 0;
