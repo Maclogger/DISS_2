@@ -44,7 +44,15 @@
         {
             return "";
         }
-        IEnumerable<int> workerIds = location.Workers.Select(worker => worker.Id);
-        return string.Join(",", workerIds);
+
+        try
+        {
+            IEnumerable<int> workerIds = location.Workers.Select(worker => worker.Id);
+            return string.Join(",", workerIds);
+        }
+        catch (Exception e)
+        {
+            return "";
+        }
     }
 }

@@ -95,7 +95,7 @@ public class TopFurnitureSimulation : SimCore
 
     public const int IndexOfAutoStats = 16;
 
-    private void ReinitializeWorkerStats()
+    public void ReinitializeWorkerStats()
     {
         if (RepStatistics.Count >= IndexOfAutoStats)
         {
@@ -140,14 +140,13 @@ public class TopFurnitureSimulation : SimCore
             WorkersC[i] = new Worker(idWorker + WorkersA.Length + WorkersB.Length + i, WorkerType
                 .C);
         }
-
-        ReinitializeWorkerStats();
     }
 
     public void Reinitialize(int a, int b, int c, int days)
     {
         ResetSimulation();
         InitializeWorkersAndLocations(a, b, c);
+        ReinitializeWorkerStats();
         OneReplicationLengthInSeconds = 60 * 60 * 8 * days;
     }
 
@@ -163,10 +162,20 @@ public class TopFurnitureSimulation : SimCore
         for (int i = 0; i < allWorkers.Count; i++)
         {
             Worker worker = allWorkers[i];
-            ((SampleStat)RepStatistics[i + IndexOfAutoStats]).AddValue(
-                (double)worker.WorkTime /
-                OneReplicationLengthInSeconds);
+            double workTime = (double)worker.WorkTime / OneReplicationLengthInSeconds;
+            ((SampleStat)RepStatistics[i + IndexOfAutoStats]).AddValue(workTime);
         }
+
+        /*
+        for (var i = 0; i < RepStatistics.Count; i++)
+        {
+            var statistic = RepStatistics[i];
+            Console.WriteLine($"{i}: ");
+            Console.WriteLine(statistic);
+            Console.WriteLine($"-------------------------------------------------");
+        }
+        */
+
         return Task.CompletedTask;
     }
 

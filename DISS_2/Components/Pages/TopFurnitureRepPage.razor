@@ -151,8 +151,8 @@
 
         await InvokeAsync(StateHasChanged);
 
-        bool shouldBePrinted = IsNth() && !IsInCutOff();
-        if (shouldBePrinted)
+        bool shouldBePrintedToChart = IsNth() && !IsInCutOff();
+        if (shouldBePrintedToChart)
         {
             double lower = _statistics[11].CalcLowerIS();
             double value = _statistics[11].CalcMean();
