@@ -17,6 +17,13 @@ public class Worker
         IsBusy = false;
     }
 
+    public Worker(Worker other)
+    {
+        Id = other.Id;
+        Type = other.Type;
+        IsBusy = other.IsBusy;
+    }
+
     public void LeaveLocation()
     {
         if (CurrentLocation != null)

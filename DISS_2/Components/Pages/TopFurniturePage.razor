@@ -104,11 +104,25 @@
         _wardrobesInSystem = sim.WardrobesInSystem;
 
         _workers = new(sim.GetAllWorkers());
-        _locations = new(sim.Locations);
+
+        _locations = CreateDeepCopyOfLocations(sim.Locations);
 
         _completedOrders = sim.CompletedOrders;
 
         await InvokeAsync(StateHasChanged);
+    }
+
+    private List<Location> CreateDeepCopyOfLocations(List<Location> simLocations)
+    {
+        List<Location> locations = new();
+
+        foreach (Location location in simLocations)
+        {
+            Location copyLocation = new Location(location);
+            locations.Add(location);
+        }
+
+        return locations;
     }
 
     private async Task ResetSimulation()

@@ -2,9 +2,37 @@ using DISS_2.BackEnd.TopFurniture.Agents;
 
 namespace DISS_2.BackEnd.TopFurniture;
 
-public class Location(int id)
+public class Location
 {
-    public int Id { get; set; } = id;
+
+    public Location(int id)
+    {
+        Id = id;
+    }
+    public Location(Location other)
+    {
+        Id = other.Id;
+        Workers = new();
+        foreach (Worker worker in other.Workers)
+        {
+            Worker copyWorker = new Worker(worker);
+            copyWorker.CurrentLocation = this;
+            Workers.Add(copyWorker);
+        }
+
+        if (other.CurrentOrder is Chair chair)
+        {
+            CurrentOrder = new Chair(chair);
+        } else if (other.CurrentOrder is Table table)
+        {
+            CurrentOrder = new Table(table);
+        } else if (other.CurrentOrder is Wardrobe wardrobe)
+        {
+            CurrentOrder = new Wardrobe(wardrobe);
+        }
+    }
+
+    public int Id { get; set; }
     public HashSet<Worker> Workers { get; set; } = new();
     public Order? CurrentOrder { get; set; }
 
