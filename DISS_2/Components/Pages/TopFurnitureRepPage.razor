@@ -138,7 +138,11 @@
         bool shouldBePrinted = IsNth() && !IsInCutOff();
         if (shouldBePrinted)
         {
-            await _chart.AddValue(_statistics[11].CalcMean());
+            double lower = _statistics[11].CalcLowerIS();
+            double value = _statistics[11].CalcMean();
+            double upper = _statistics[11].CalcUpperIS();
+
+            await _chart.AddValue(lower, value, upper);
         }
     }
 

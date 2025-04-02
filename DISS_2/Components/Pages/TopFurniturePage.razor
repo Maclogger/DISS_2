@@ -81,16 +81,16 @@
     private Dictionary<string, int> _queue4CountsByTypes = new();
     private Dictionary<string, int> _queue3CountsByTypes = new();
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         if (MainApp.Instance.TopFurnitureSimulation == null)
         {
             MainApp.Instance.TopFurnitureSimulation = new TopFurnitureSimulation();
-            ResetSimulation();
+            await ResetSimulation();
         }
     }
 
-    private void UpdateUi(SimCore simCore)
+    private async Task UpdateUi(SimCore simCore)
     {
         TopFurnitureSimulation sim = (TopFurnitureSimulation)simCore;
 
@@ -108,13 +108,13 @@
 
         _completedOrders = sim.CompletedOrders;
 
-        InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
     }
 
-    private void ResetSimulation()
+    private async Task ResetSimulation()
     {
         MainApp.Instance.TopFurnitureSimulation!.Reinitialize(A, B, C, Days);
-        UpdateUi(MainApp.Instance.TopFurnitureSimulation);
+        await UpdateUi(MainApp.Instance.TopFurnitureSimulation);
     }
 
 }

@@ -20,27 +20,27 @@
     private bool _windowIsBusy = false;
     private int _peopleInQueue = 0;
 
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         if (MainApp.Instance.TicketSimulation == null)
         {
             MainApp.Instance.TicketSimulation = new();
-            ResetSimulation();
+            await ResetSimulation();
         }
     }
 
-    public void UpdateUi(SimCore simCore)
+    public async Task UpdateUi(SimCore simCore)
     {
         TicketSimulation sim = (TicketSimulation)simCore;
         _windowIsBusy = sim.IsBusy;
         _peopleInQueue = sim.CustomerQueue.Count;
-        InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
     }
 
-    private void ResetSimulation()
+    private async Task ResetSimulation()
     {
         MainApp.Instance.TicketSimulation!.ResetSimulation();
-        UpdateUi(MainApp.Instance.TicketSimulation);
+        await UpdateUi(MainApp.Instance.TicketSimulation);
     }
 
 }

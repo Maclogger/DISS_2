@@ -42,7 +42,9 @@ public class Step4Start(int startTime, Order order, Worker worker) : OrderEvent(
 
         Order.Location.Occupy(Worker, Order);
 
-        sim.Calendar.PlanNewEvent(new Step4End(sim.CurrentSimTime + timeToFinishStep4, Order, Worker));
+        sim.Calendar.PlanNewEvent(new Step4End(
+            sim.CurrentSimTime + timeToFinishStep4, Order, Worker)
+        );
     }
 
     public override Task BeforeEvent(SimCore sim)

@@ -57,9 +57,9 @@
 
     [Parameter, EditorRequired] public string Headline { get; set; } = "Simulation";
 
-    [Parameter, EditorRequired] public Action<SimCore>? UpdateUi { get; set; }
+    [Parameter, EditorRequired] public Func<SimCore, Task>? UpdateUi { get; set; }
 
-    [Parameter, EditorRequired] public Action? InitializeSimulation { get; set; }
+    [Parameter, EditorRequired] public Func<Task>? InitializeSimulation { get; set; }
 
     [Parameter, EditorRequired] public SimCore Simulation { get; set; } = null!;
 

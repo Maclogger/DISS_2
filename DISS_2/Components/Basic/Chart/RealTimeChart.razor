@@ -35,19 +35,24 @@
         }
     }
 
-    public async Task AddValue(double value)
+    public async Task AddValue(double lower, double value, double upper)
     {
         if (_module is not null)
         {
             try
             {
-                await _module.InvokeVoidAsync("addDataPoint", _canvasId, value);
+                await _module.InvokeVoidAsync("addDataPoint", _canvasId, lower, value, upper);
             }
             catch (Exception e)
             {
                 // ignored
             }
         }
+    }
+
+    public async Task AddValue(double value)
+    {
+        await AddValue((int)value, (int)value, (int)value);
     }
 
     public class RealTimeChartConfiguration
@@ -64,5 +69,4 @@
             await _module.InvokeVoidAsync("reset", _canvasId);
         }
     }
-
 }
