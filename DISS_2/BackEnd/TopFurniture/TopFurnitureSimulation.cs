@@ -104,9 +104,13 @@ public class TopFurnitureSimulation : SimCore
 
         foreach (Worker worker in GetAllWorkers())
         {
-            RepStatistics.Add(new SampleStat($"Average work times of worker {worker.Id} - " +
+            RepStatistics.Add(new SampleStat($"Utilization of worker {worker.Id} - " +
                                              $"{worker.Type}"));
         }
+
+        RepStatistics.Add(new SampleStat($"Utilization of group A"));
+        RepStatistics.Add(new SampleStat($"Utilization of group B"));
+        RepStatistics.Add(new SampleStat($"Utilization of group C"));
     }
 
     private void InitializeWorkersAndLocations(int a, int b, int c)
@@ -162,19 +166,43 @@ public class TopFurnitureSimulation : SimCore
         for (int i = 0; i < allWorkers.Count; i++)
         {
             Worker worker = allWorkers[i];
-            double workTime = (double)worker.WorkTime / OneReplicationLengthInSeconds;
-            ((SampleStat)RepStatistics[i + IndexOfAutoStats]).AddValue(workTime);
+            double utilization = (double)worker.WorkTime / OneReplicationLengthInSeconds;
+            ((SampleStat)RepStatistics[i + IndexOfAutoStats]).AddValue(utilization);
         }
 
-        /*
-        for (var i = 0; i < RepStatistics.Count; i++)
+        double utilizationOfGroupA = 0.0;
+        foreach (Worker worker in WorkersA)
         {
-            var statistic = RepStatistics[i];
-            Console.WriteLine($"{i}: ");
-            Console.WriteLine(statistic);
-            Console.WriteLine($"-------------------------------------------------");
+            double utilization = (double)worker.WorkTime / OneReplicationLengthInSeconds;
+            utilizationOfGroupA += utilization;
         }
-        */
+        utilizationOfGroupA /= WorkersA.Length;
+        ((SampleStat)RepStatistics[IndexOfAutoStats + allWorkers.Count])
+            .AddValue(utilizationOfGroupA);
+
+
+
+        double utilizationOfGroupB = 0.0;
+        foreach (Worker worker in WorkersB)
+        {
+            double utilization = (double)worker.WorkTime / OneReplicationLengthInSeconds;
+            utilizationOfGroupB += utilization;
+        }
+        utilizationOfGroupB /= WorkersB.Length;
+        ((SampleStat)RepStatistics[IndexOfAutoStats + allWorkers.Count + 1])
+            .AddValue(utilizationOfGroupB);
+
+
+
+        double utilizationOfGroupC = 0.0;
+        foreach (Worker worker in WorkersC)
+        {
+            double utilization = (double)worker.WorkTime / OneReplicationLengthInSeconds;
+            utilizationOfGroupC += utilization;
+        }
+        utilizationOfGroupC /= WorkersC.Length;
+        ((SampleStat)RepStatistics[IndexOfAutoStats + allWorkers.Count + 2])
+            .AddValue(utilizationOfGroupC);
 
         return Task.CompletedTask;
     }
