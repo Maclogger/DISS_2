@@ -80,7 +80,7 @@
         }
     }
 
-    void ISimDelegate.UpdateUi(SimCore simCore, Event currentEvent)
+    async Task ISimDelegate.UpdateUi(SimCore simCore, Event currentEvent)
     {
         _simTime = TimeHandler.ToReadableDateTime(simCore.CurrentSimTime);
         UpdateUi?.Invoke(simCore);
@@ -97,7 +97,7 @@
             _logsCollection.Add(currentEvent.ToString());
         }
 
-        InvokeAsync(StateHasChanged);
+        await InvokeAsync(StateHasChanged);
     }
 
     async Task RunSimulationImpl()

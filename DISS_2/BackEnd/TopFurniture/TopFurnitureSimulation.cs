@@ -89,6 +89,24 @@ public class TopFurnitureSimulation : SimCore
             new SampleStat("Average times of Order during Step3"), // 14
             new SampleStat("Average times of Order during Step4"), // 15
         ];
+
+        ReinitializeWorkerStats();
+    }
+
+    public const int IndexOfAutoStats = 16;
+
+    private void ReinitializeWorkerStats()
+    {
+        if (RepStatistics.Count >= IndexOfAutoStats)
+        {
+            RepStatistics.RemoveRange(IndexOfAutoStats, RepStatistics.Count - IndexOfAutoStats);
+        }
+
+        foreach (Worker worker in GetAllWorkers())
+        {
+            RepStatistics.Add(new SampleStat($"Average work times of worker {worker.Id} - " +
+                                             $"{worker.Type}"));
+        }
     }
 
     private void InitializeWorkersAndLocations(int a, int b, int c)
@@ -122,6 +140,8 @@ public class TopFurnitureSimulation : SimCore
             WorkersC[i] = new Worker(idWorker + WorkersA.Length + WorkersB.Length + i, WorkerType
                 .C);
         }
+
+        ReinitializeWorkerStats();
     }
 
     public void Reinitialize(int a, int b, int c, int days)
@@ -132,17 +152,22 @@ public class TopFurnitureSimulation : SimCore
     }
 
 
-    protected override void AfterReplicationRun()
+    protected override Task AfterReplicationRun()
     {
-        if (RepStatistics.Count != Statistics.Count)
-        {
-            throw new Exception("Not all statistics are in REP Statistics!!!");
-        }
-
         for (int i = 0; i < Statistics.Count; i++)
         {
             ((SampleStat)RepStatistics[i]).AddValue(Statistics[i].CalcMean());
         }
+
+        List<Worker> allWorkers = GetAllWorkers();
+        for (int i = 0; i < allWorkers.Count; i++)
+        {
+            Worker worker = allWorkers[i];
+            ((SampleStat)RepStatistics[i + IndexOfAutoStats]).AddValue(
+                (double)worker.WorkTime /
+                OneReplicationLengthInSeconds);
+        }
+        return Task.CompletedTask;
     }
 
     public bool IsAvailable(WorkerType group)
@@ -295,7 +320,7 @@ public class TopFurnitureSimulation : SimCore
 
         ref int busy = ref GetBusyWorkerCountRef(workerType);
         busy++;
-        worker.IsBusy = true;
+        worker.MakeBusy(CurrentSimTime);
     }
 
 
@@ -313,7 +338,7 @@ public class TopFurnitureSimulation : SimCore
             throw new Exception("Worker is already set to AVAILABLE!!!");
         }
 
-        worker.IsBusy = false;
+        worker.MakeAvailable(CurrentSimTime);
         ref int busy = ref GetBusyWorkerCountRef(worker.Type);
         busy--;
         if (busy < 0)

@@ -43,11 +43,11 @@ public class TicketSimulation : SimCore
     {
     }
 
-    protected override void AfterReplicationRun()
+    protected override Task AfterReplicationRun()
     {
         Console.WriteLine(Statistics[0]);
         Console.WriteLine(Statistics[1]);
-        base.AfterReplicationRun();
+        return base.AfterReplicationRun();
     }
 }
 

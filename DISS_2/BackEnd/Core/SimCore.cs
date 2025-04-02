@@ -80,11 +80,11 @@ public abstract class SimCore
             await currentEvent.BeforeEvent(this);
             await currentEvent.Execute(this);
             await currentEvent.AfterEvent(this);
-            RefreshGuiAfterEvent(currentEvent);
+            await RefreshGuiAfterEvent(currentEvent);
         }
 
-        RefreshGuiAfterRep();
-        AfterReplicationRun();
+        await RefreshGuiAfterRep();
+        await AfterReplicationRun();
     }
 
     private void ResetSimStatistics()
@@ -95,24 +95,24 @@ public abstract class SimCore
         }
     }
 
-    private void RefreshGuiAfterEvent(Event currentEvent)
+    private async Task RefreshGuiAfterEvent(Event currentEvent)
     {
         List<ISimDelegate> delegates = SimDelegates.ToList(); // thread safe
 
         foreach (ISimDelegate @delegate in delegates)
         {
-            @delegate.UpdateUi(this, currentEvent);
+            await @delegate.UpdateUi(this, currentEvent);
         }
     }
 
 
-    private void RefreshGuiAfterRep()
+    private async Task RefreshGuiAfterRep()
     {
         List<IRepDelegate> delegates = RepDelegates.ToList(); // thread safe
 
         foreach (IRepDelegate @delegate in delegates)
         {
-            @delegate.UpdateUi(this);
+            await @delegate.UpdateUi(this);
         }
     }
 
@@ -126,8 +126,9 @@ public abstract class SimCore
     {
     }
 
-    protected virtual void AfterReplicationRun()
+    protected virtual Task AfterReplicationRun()
     {
+        return Task.CompletedTask;
     }
 
     protected virtual void AfterSimulation()
