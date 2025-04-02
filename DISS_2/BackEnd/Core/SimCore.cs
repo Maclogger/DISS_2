@@ -40,6 +40,7 @@ public abstract class SimCore
             {
                 if (!IsRepsRunning) break;
                 await RunOneReplication();
+                ResetSimulation();
             }
 
             AfterSimulation();
@@ -54,6 +55,7 @@ public abstract class SimCore
         IsRunning = true;
         await Task.Run(async () =>
         {
+            ResetSimulation();
             Calendar.PlanNewEvent(new SysEvent(0));
             await RunOneReplication();
         });
@@ -83,7 +85,6 @@ public abstract class SimCore
 
         RefreshGuiAfterRep();
         AfterReplicationRun();
-        ResetSimulation();
     }
 
     private void ResetSimStatistics()

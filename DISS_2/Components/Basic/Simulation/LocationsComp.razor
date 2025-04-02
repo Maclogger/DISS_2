@@ -31,15 +31,15 @@
     [Parameter, EditorRequired] public List<Location> Locations { get; set; } = null!;
 
     private string GetCurrentOrder(Location location)
-    {
-        if (location.CurrentOrder is Chair) return "Chair";
-        if (location.CurrentOrder is Wardrobe) return "Wardrobe";
-        if (location.CurrentOrder is Table) return "Table";
-        return "🟢";
-    }
+        {
+            if (location.CurrentOrder is Chair) return "Chair";
+            if (location.CurrentOrder is Wardrobe) return "Wardrobe";
+            if (location.CurrentOrder is Table) return "Table";
+            return "🟢";
+        }
 
     private string GetWorkerIdsString(Location location)
-    {
+        {
         if (!location.Workers.Any())
         {
             return "";

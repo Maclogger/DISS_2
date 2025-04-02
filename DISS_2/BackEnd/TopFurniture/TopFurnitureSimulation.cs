@@ -371,9 +371,8 @@ public class TopFurnitureSimulation : SimCore
         return 0;
     }
 
-    public IEnumerable<Worker> GetAllWorkers()
+    public List<Worker> GetAllWorkers()
     {
-
         List<Worker> allWorkers = new();
         allWorkers.AddRange(WorkersA);
         allWorkers.AddRange(WorkersB);

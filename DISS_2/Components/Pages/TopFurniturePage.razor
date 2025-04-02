@@ -115,11 +115,12 @@
     private List<Location> CreateDeepCopyOfLocations(List<Location> simLocations)
     {
         List<Location> locations = new();
+        return simLocations;
 
         foreach (Location location in simLocations)
         {
             Location copyLocation = new Location(location);
-            locations.Add(location);
+            locations.Add(copyLocation);
         }
 
         return locations;

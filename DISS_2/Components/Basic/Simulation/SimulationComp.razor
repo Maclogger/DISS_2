@@ -103,7 +103,7 @@
     async Task RunSimulationImpl()
     {
         _logsCollection.Clear();
-        InitializeSimulation!();
+        await InitializeSimulation!();
         await Simulation.RunOneSimulation();
         await InvokeAsync(StateHasChanged);
     }
