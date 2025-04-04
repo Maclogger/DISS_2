@@ -60,7 +60,7 @@ public class FurnitureGenerators
         new TriangularRealGenerator(120, 150, 500);
 
     public TriangularIntGenerator OrderTakeTimeGen { get; } =
-        new TriangularIntGenerator(2, 4, 8);
+        new TriangularIntGenerator(2 * 60, 4 * 60, 8 * 60);
 
 
     public Generator<double> GetStepGenerator(Order order, int step)

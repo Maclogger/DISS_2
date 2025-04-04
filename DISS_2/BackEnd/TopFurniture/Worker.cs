@@ -19,6 +19,7 @@ public class Worker
         Id = id;
         Type = type;
         IsBusy = false;
+        IsTakingOrder = false;
     }
 
     public Worker(Worker other)
@@ -26,6 +27,7 @@ public class Worker
         Id = other.Id;
         Type = other.Type;
         IsBusy = other.IsBusy;
+        IsTakingOrder = other.IsTakingOrder;
     }
 
     public void LeaveLocation()
