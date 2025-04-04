@@ -12,6 +12,7 @@ public class Worker
 
     public int TimeOfWorkStart { get; set; } = -1;
     public int WorkTime { get; set; } = 0;
+    public bool IsTakingOrder { get; set; }
 
     public Worker(int id, WorkerType type)
     {

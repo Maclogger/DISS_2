@@ -59,6 +59,9 @@ public class FurnitureGenerators
     public TriangularRealGenerator InterLocationTravelTimeGen { get; } =
         new TriangularRealGenerator(120, 150, 500);
 
+    public TriangularIntGenerator OrderTakeTimeGen { get; } =
+        new TriangularIntGenerator(2, 4, 8);
+
 
     public Generator<double> GetStepGenerator(Order order, int step)
     {

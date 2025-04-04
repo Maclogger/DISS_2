@@ -44,7 +44,7 @@ public class OrderArrival(int startTime) : Event(startTime)
         if (sim.IsAvailable(WorkerType.A))
         {
             Worker worker = sim.GetFirstAvailableWorkerAndMakeHimBusy(WorkerType.A);
-            sim.Calendar.PlanNewEvent(new Step1Start(sim.CurrentSimTime, order, worker));
+            sim.Calendar.PlanNewEvent(new OrderTakeStart(sim.CurrentSimTime, order, worker));
         }
         else
         {
