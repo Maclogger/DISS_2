@@ -11,6 +11,7 @@
                     <th>ID</th>
                     <th>Location</th>
                     <th>Busy</th>
+                    <th>Taking Order</th>
                 </tr>
                 </thead>
                 <tbody class="table-dark">
@@ -21,6 +22,7 @@
                         <td>@worker.Id</td>
                         <td>@(worker.CurrentLocation?.Id)</td>
                         <td>@GetVerbalStateOWorker(worker)</td>
+                        <td>@(worker.IsTakingOrder)</td>
                     </tr>
                 }
                 </tbody>
